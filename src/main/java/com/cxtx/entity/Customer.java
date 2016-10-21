@@ -1,0 +1,139 @@
+package com.cxtx.entity;
+
+/**
+ * Created by jinchuyang on 16/10/21.
+ */
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import javax.persistence.*;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
+@Table(name = "CUSTOMER")
+public class Customer {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    /**
+     * 级别
+     */
+    @Column
+    private int lever;
+
+    /**
+     * 名字
+     */
+    @Column
+    private String nickname;
+
+    /**
+     * 密码
+     */
+    @Column
+    private String password;
+
+    /**
+     * 地址
+     */
+    @Column
+    private String address;
+
+    /**
+     * 邮编
+     */
+    @Column
+    private String zip;
+
+    /**
+     * 电话
+     */
+    @Column
+    private String tel;
+
+    /**
+     * 系统账户总额
+     */
+    @Column
+    private double money;
+
+    /**
+     * 头像
+     */
+    private String headUrl;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getLever() {
+        return lever;
+    }
+
+    public void setLever(int lever) {
+        this.lever = lever;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
+    }
+
+    public String getHeadUrl() {
+        return headUrl;
+    }
+
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
+    }
+}

@@ -45,6 +45,11 @@ public class Manager {
     @Column
     private double money;
 
+    /**
+     * 头像
+     */
+    private String headUrl;
+
     private int alive;
 
     public Long getId() {
