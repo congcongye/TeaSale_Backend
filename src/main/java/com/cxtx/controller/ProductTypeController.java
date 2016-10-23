@@ -18,7 +18,7 @@ public class ProductTypeController {
 
     @Autowired
     private ProductTypeService productTypeService;
-    
+
     /**
      * 茶产品类型的新增和修改,修改只能把state变成0,即不产品新增时,该商品不可用
      * @param list
