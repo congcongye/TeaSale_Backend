@@ -35,7 +35,13 @@ public class ProductType {
     public String url;
 
     /**
-     * 是否存在
+     * 是否可以使用 1可用,0不可用
+     */
+    @Column
+    public int state=1;
+
+    /**
+     * 是否存在(不能进行更改,只是为了和整体保持一致,变成软删除)
      */
     @Column
     public int alive=1;
