@@ -21,8 +21,8 @@ public class OrderItem {
     public Product product;//商品
 
     @ManyToOne
-    @JoinColumn(name = "order_id")
-    public Order order ;//对应订单
+    @JoinColumn(name = "orderen_id")
+    public OrderEn orderen ;//对应订单
 
     @Column
     public double num;// 商品数量

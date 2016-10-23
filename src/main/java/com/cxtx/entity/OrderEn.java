@@ -11,8 +11,8 @@ import java.util.Date;
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
-@Table(name = "ORDER")
-public class Order {
+@Table(name = "ORDEREN")
+public class OrderEn {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -67,18 +67,25 @@ public class Order {
 
     @Column
     public int isComment ;//是否评价
+
     @Column
     public double score;// 分数
+
     @Column
     public String comment ;//评价
+
     @Column
     public int Refund_state;//(未支付，全支付，部分支付)
+
     @Column
     public int type;//  订单类型（一般，众筹，众包）
+
     @Column
     public int customerDelete ;//消费者不想看
+
     @Column
     public int adminDelete;// 管理员不想看
+
     @Column
     public int sellerDelete;//茶农不想看
 }

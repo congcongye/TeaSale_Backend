@@ -19,7 +19,7 @@ public class Cart {
     public Long id;
 
     @ManyToOne
-    @JoinColumn(name = "Customer_id")
+    @JoinColumn(name = "customer_id")
     public Customer customer;//消费者
 
     @ManyToOne

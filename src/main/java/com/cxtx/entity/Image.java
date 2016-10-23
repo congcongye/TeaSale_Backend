@@ -1,10 +1,15 @@
 package com.cxtx.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 
 /**
  * Created by ycc on 16/10/23.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
+@Entity
+@Table(name = "IMAGE")
 public class Image {
 
     @Id
