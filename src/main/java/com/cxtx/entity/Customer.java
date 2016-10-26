@@ -30,11 +30,9 @@ public class Customer {
     @Column
     private String nickname;
 
-    /**
-     * 密码
-     */
-    @Column
-    private String password;
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     /**
      * 地址
@@ -89,14 +87,6 @@ public class Customer {
         this.nickname = nickname;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getAddress() {
         return address;
     }
@@ -135,5 +125,13 @@ public class Customer {
 
     public void setHeadUrl(String headUrl) {
         this.headUrl = headUrl;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }

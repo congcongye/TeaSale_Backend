@@ -39,11 +39,10 @@ public class TeaSeller {
      */
     @Column
     private String nickname;
-    /**
-     * 密码
-     */
-    @Column
-    private String password;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
     /**
      * 地址
      */
@@ -78,6 +77,10 @@ public class TeaSeller {
     @Column
     private String idCard;
 
+    @Column
+    private int  alive;
+
+
     public Long getId() {
         return id;
     }
@@ -108,14 +111,6 @@ public class TeaSeller {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getAddress() {
@@ -174,7 +169,19 @@ public class TeaSeller {
         this.idCard = idCard;
     }
 
+    public Account getAccount() {
+        return account;
+    }
 
+    public void setAccount(Account account) {
+        this.account = account;
+    }
 
+    public int getAlive() {
+        return alive;
+    }
 
+    public void setAlive(int alive) {
+        this.alive = alive;
+    }
 }

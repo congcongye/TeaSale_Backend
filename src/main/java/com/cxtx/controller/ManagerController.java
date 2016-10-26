@@ -28,8 +28,8 @@ public class ManagerController extends ApiController{
     public ServiceResult login(@RequestBody Manager manager) throws Exception{
         checkParameter(manager!=null,"manager cannot be empty!");
         //checkParameter(manager.getTel()!=null,"tel cannot be empty!");
-        Manager managerGet = managerService.findByTelAndPassordAndAlive(manager.getTel(), manager.getPassword());
-        return ServiceResult.success(managerGet);
+        //Manager managerGet = managerService.findByTelAndPassordAndAlive(manager.getTel(), manager.getPassword());
+        return ServiceResult.success(null);
     }
 
     @RequestMapping(value = "/manager/register", method = RequestMethod.POST)

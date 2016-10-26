@@ -62,5 +62,102 @@ public class CrowdSourcing {
     @Column
     private int state;
 
+    @Column
+    private int alive;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public double getEarnest() {
+        return earnest;
+    }
+
+    public void setEarnest(double earnest) {
+        this.earnest = earnest;
+    }
+
+    public double getUnitNum() {
+        return unitNum;
+    }
+
+    public void setUnitNum(double unitNum) {
+        this.unitNum = unitNum;
+    }
+
+    public double getUnitMoney() {
+        return unitMoney;
+    }
+
+    public void setUnitMoney(double unitMoney) {
+        this.unitMoney = unitMoney;
+    }
+
+    public int getJoinNum() {
+        return JoinNum;
+    }
+
+    public void setJoinNum(int joinNum) {
+        JoinNum = joinNum;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public Date getDealDate() {
+        return dealDate;
+    }
+
+    public void setDealDate(Date dealDate) {
+        this.dealDate = dealDate;
+    }
+
+    public Date getDeliverDate() {
+        return deliverDate;
+    }
+
+    public void setDeliverDate(Date deliverDate) {
+        this.deliverDate = deliverDate;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getAlive() {
+        return alive;
+    }
+
+    public void setAlive(int alive) {
+        this.alive = alive;
+    }
 }

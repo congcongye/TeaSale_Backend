@@ -59,6 +59,9 @@ public class CrowdFunding {
     @Column
     private int state;
 
+    @Column
+    private int alive;
+
     public Long getId() {
         return id;
     }
@@ -153,5 +156,13 @@ public class CrowdFunding {
 
     public void setState(int state) {
         this.state = state;
+    }
+
+    public int getAlive() {
+        return alive;
+    }
+
+    public void setAlive(int alive) {
+        this.alive = alive;
     }
 }

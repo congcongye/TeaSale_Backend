@@ -16,110 +16,254 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long id;
+    private Long id;
 
     /**
      * 所属产品类型
      */
     @ManyToOne
     @JoinColumn(name = "productType_id")
-    public ProductType productType;
+    private ProductType productType;
 
     /**
      * 描述
      */
     @Column
-    public String remark;
+    private String remark;
 
     /**
      * 产品名称
      */
     @Column
-    public String name;
+    private String name;
 
     /**
      * 产品级别
      */
     @Column
-    public int level;
+    private int level;
 
     /**
      * 产地
      */
     @Column
-    public String locality;
+    private String locality;
 
     /**
      * 库存
      */
     @Column
-    public double stock;
+    private double stock;
 
     /**
      * 单价
      */
     @Column
-    public double price;
+    private double price;
 
     /**
      * 起售数量
      */
     @Column
-    public double startNum;
+    private double startNum;
 
     /**
      * 折扣
      */
     @Column
-    public double discount;
+    private double discount;
 
     /**
      * 是否包邮,1包邮 0不包邮
      */
     @Column
-    public int isFree=1;
+    private int isFree=1;
 
     /**
      * 邮费
      */
     @Column
-    public double postate;
+    private double postate;
 
     /**
      * 发货间隔 (5天或者10天等)
      */
     @Column
-    public int deliverLimit;
+    private int deliverLimit;
 
     /**
      * 产品的上架时间
      */
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
     @Column
-    public Date createDate;
+    private Date createDate;
 
     /**
      * 计数单位
      */
     @Column
-    public String unit;
+    private String unit;
 
     /**
      * 所属的茶农
      */
     @ManyToOne
     @JoinColumn(name = "teaSeller_id")
-    public TeaSeller teaSeller;
+    private TeaSeller teaSeller;
 
     /**
      * 商品状态,0未上架  1上架
      */
     @Column
-    public int state=0;
+    private int state=0;
 
     /**
      * 是否存在
      */
     @Column
-    public int alive=1;
+    private int alive=1;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getLocality() {
+        return locality;
+    }
+
+    public void setLocality(String locality) {
+        this.locality = locality;
+    }
+
+    public double getStock() {
+        return stock;
+    }
+
+    public void setStock(double stock) {
+        this.stock = stock;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public double getStartNum() {
+        return startNum;
+    }
+
+    public void setStartNum(double startNum) {
+        this.startNum = startNum;
+    }
+
+    public double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(double discount) {
+        this.discount = discount;
+    }
+
+    public int getIsFree() {
+        return isFree;
+    }
+
+    public void setIsFree(int isFree) {
+        this.isFree = isFree;
+    }
+
+    public double getPostate() {
+        return postate;
+    }
+
+    public void setPostate(double postate) {
+        this.postate = postate;
+    }
+
+    public int getDeliverLimit() {
+        return deliverLimit;
+    }
+
+    public void setDeliverLimit(int deliverLimit) {
+        this.deliverLimit = deliverLimit;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public TeaSeller getTeaSeller() {
+        return teaSeller;
+    }
+
+    public void setTeaSeller(TeaSeller teaSeller) {
+        this.teaSeller = teaSeller;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getAlive() {
+        return alive;
+    }
+
+    public void setAlive(int alive) {
+        this.alive = alive;
+    }
 }
