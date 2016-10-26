@@ -55,7 +55,7 @@ public class ManagerController extends ApiController{
         checkParameter(createManagerModel !=null,"manager cannot be empty!");
         Account account = accountService.register(createManagerModel.getTel(), createManagerModel.getPassword());
         if (account == null){
-            return ServiceResult.fail(500, "register failed!");
+            return ServiceResult.fail(500, "register failed, the tel already has account!");
         }
         //return ServiceResult.success(account);
         Manager manager = managerService.addManager(createManagerModel, account);

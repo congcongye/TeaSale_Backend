@@ -61,7 +61,11 @@ public class Customer {
     /**
      * 头像
      */
+    @Column
     private String headUrl;
+
+    @Column
+    private int alive;
 
     public Long getId() {
         return id;
@@ -133,5 +137,13 @@ public class Customer {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public int getAlive() {
+        return alive;
+    }
+
+    public void setAlive(int alive) {
+        this.alive = alive;
     }
 }
