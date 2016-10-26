@@ -2,9 +2,7 @@ package com.cxtx.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by jinchuyang on 16/10/26.
@@ -13,6 +11,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ACCOUNT")
 public class Account {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     /**
      * 电话
      */
@@ -31,6 +33,13 @@ public class Account {
     @Column
     private int alive;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTel() {
         return tel;
