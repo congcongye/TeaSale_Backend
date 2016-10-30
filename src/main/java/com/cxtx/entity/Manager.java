@@ -27,11 +27,6 @@ public class Manager {
     @Column
     private String tel;
 
-    /**
-     * 密码
-     */
-    @Column
-    private String password;
 
     /**
      * 级别
@@ -48,8 +43,14 @@ public class Manager {
     /**
      * 头像
      */
+    @Column
     private String headUrl;
 
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
+
+    @Column
     private int alive;
 
     public Long getId() {
@@ -76,14 +77,6 @@ public class Manager {
         this.tel = tel;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public int getLever() {
         return lever;
     }
@@ -106,5 +99,21 @@ public class Manager {
 
     public void setAlive(int alive) {
         this.alive = alive;
+    }
+
+    public String getHeadUrl() {
+        return headUrl;
+    }
+
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
     }
 }
