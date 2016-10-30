@@ -2,6 +2,7 @@ package com.cxtx.service;
 
 import com.cxtx.entity.Product;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -9,4 +10,6 @@ import java.util.Map;
  */
 public interface ProductService {
      Map<String,Object> newProduct(Product product, Long productType_id, Long teaSeller_id);
+     Map<String,Object> updateProduct(List<Product> products);
+     Map<String,Object> startSell(List<Product> products);
 }

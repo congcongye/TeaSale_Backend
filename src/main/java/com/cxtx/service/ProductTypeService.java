@@ -11,4 +11,5 @@ import java.util.Map;
 public interface ProductTypeService {
 
      Map<String,Object> newOrUpdateProductType(List<ProductType> productTypes);
+     List<ProductType> getAllProductType(int state);
 }
