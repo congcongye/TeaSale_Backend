@@ -3,6 +3,7 @@ package com.cxtx.controller;
 import com.cxtx.entity.Product;
 import com.cxtx.service.ProductService;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map;
 /**
  * Created by ycc on 16/10/30.
  */
+@Controller
 public class ProductController {
 
     private ProductService productService;
@@ -73,6 +75,8 @@ public class ProductController {
      * @param sortOrder
      * @return
      */
+    @RequestMapping(value = "/product/search", method = RequestMethod.GET)
+    @ResponseBody
     public Page<Product> findProductByConditions(@RequestParam(value = "productType_id",defaultValue = "-1") Long productType_id, @RequestParam(value = "remark",defaultValue = "") String remark, @RequestParam(value = "name",defaultValue = "")String name,
                                                  @RequestParam(value = "level",defaultValue = "-1")int level, @RequestParam(value = "locality",defaultValue = "")String locality,@RequestParam(value = "stock",defaultValue = "-1") double stock,
                                                  @RequestParam(value = "price",defaultValue = "-1")double price, @RequestParam(value = "startNum",defaultValue = "-1")double startNum, @RequestParam(value = "discount",defaultValue = "-1")double discount,

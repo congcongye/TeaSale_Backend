@@ -6,12 +6,15 @@ import com.cxtx.dao.TeaSellerDao;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSeller;
+import com.cxtx.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -27,7 +30,9 @@ import java.util.Map;
 /**
  * Created by ycc on 16/10/24.
  */
-public class ProductServiceImpl {
+@Service("ProductServiceImpl")
+//@Component
+public class ProductServiceImpl implements ProductService{
 
     @Autowired
     private ProductDao productDao;
@@ -160,7 +165,7 @@ public class ProductServiceImpl {
      * @throws ParseException
      */
     public Page<Product> findByConditions(Long productType_id,String remark,String name,int level,String locality,double stock,double price,
-                                          double startNum,double discount,int isFree,String teaSeller_name,int state,int pageIndex, int pageSize, String sortField, String sortOrder) throws ParseException {
+                                          double startNum,double discount,int isFree,String teaSeller_name,int state,int pageIndex, int pageSize, String sortField, String sortOrder){
         Sort.Direction direction = Sort.Direction.ASC;
         if (sortOrder.toUpperCase().equals("DESC")) {
             direction = Sort.Direction.DESC;

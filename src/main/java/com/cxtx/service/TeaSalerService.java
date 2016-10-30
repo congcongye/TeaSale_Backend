@@ -5,6 +5,7 @@ import com.cxtx.entity.Customer;
 import com.cxtx.entity.TeaSeller;
 import com.cxtx.model.CreateCustomerModel;
 import com.cxtx.model.CreateTeaSalerModel;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by jinchuyang on 16/10/19.

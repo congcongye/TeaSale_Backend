@@ -1,6 +1,7 @@
 package com.cxtx.service;
 
 import com.cxtx.entity.ProductType;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;

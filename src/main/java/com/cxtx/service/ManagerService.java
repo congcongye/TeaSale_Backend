@@ -3,6 +3,7 @@ package com.cxtx.service;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Manager;
 import com.cxtx.model.CreateManagerModel;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by jinchuyang on 16/10/19.

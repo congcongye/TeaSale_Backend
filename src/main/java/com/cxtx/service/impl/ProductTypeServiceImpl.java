@@ -4,6 +4,7 @@ import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.entity.ProductType;
 import com.cxtx.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,6 +14,7 @@ import java.util.Map;
 /**
  * Created by ycc on 16/10/22.
  */
+@Service("ProductTypeServiceImpl")
 public class ProductTypeServiceImpl implements ProductTypeService{
 
     @Autowired
