@@ -7,7 +7,11 @@ import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSeller;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -134,89 +138,90 @@ public class ProductServiceImpl {
         return result;
     }
 
-//    private Specification<Product> buildSpecifications() {
-//        final ReceiveFileType receiveFileType = receiveFileTypeDao.findOne(receiveFileType_id);
-//        final Project project=projectDao.findOne(project_id);
-//        final EngNoInfo engNoInfo=engNoInfoDao.findOne(engNoInfo_id);
-//        final int attachmentStatef =attachmentState;
-//        final int replyStatusf =replyStatus;
-//        final int sendStatef =sendState;
-//        final String endDateStr1=endDateStr;
-//        final String startDateStr1=startDateStr;
-//        final String codeStr=code;
-//        final String nameStr=name;
-//        final String dcncodeStr=dcncode;
-//
-//        Specification<ReceiveFile> specification = new Specification<ReceiveFile>() {
-//            @Override
-//            public Predicate toPredicate(Root<ReceiveFile> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-//                Predicate predicate = criteriaBuilder.conjunction();
-//                SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-//                if (receiveFileType != null) {
-//                    predicate.getExpressions().add(criteriaBuilder.equal(root.<ReceiveFileType>get("receiveFileType"),receiveFileType));
-//                }
-//                if(null != project){
-//                    predicate.getExpressions().add(criteriaBuilder.equal(root.<Project>get("project"),project));
-//                }
-//                if(null != engNoInfo){
-//                    predicate.getExpressions().add(criteriaBuilder.equal(root.<EngNoInfo>get("engNoInfo"),engNoInfo));
-//                }
-//                if(attachmentStatef > -1){
-//                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("attachmentState"),attachmentStatef));
-//                }
-//                // replyStatus作为计数器后的修改
-//                if(replyStatusf == 0){
-//                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("replyStatus"),0));
-//                } else if (replyStatusf > 0) {
-//                    predicate.getExpressions().add(criteriaBuilder.greaterThan(root.<Integer>get("replyStatus"), 0));
-//                }
-//                if(sendStatef > -1){
-//                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("sendState"),sendStatef));
-//                }
-//                if (null != endDateStr1 && !endDateStr1.equals("") && (null == startDateStr1 || startDateStr1.equals(""))) {
-//                    Date endDate = null;
-//                    try {
-//                        endDate = sdf.parse(endDateStr1);
-//                        Long afterTime=endDate.getTime()+24*60*60*1000;
-//                        endDate=new Date(afterTime);
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    predicate.getExpressions().add(criteriaBuilder.lessThan(root.<Date>get("receiveDate"), endDate));
-//                }
-//                if (null != startDateStr1 && !startDateStr1.equals("") && (null == endDateStr1 || endDateStr1.equals(""))) {
-//                    Date startDate = null;
-//                    try {
-//                        startDate = sdf.parse(startDateStr1);
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//                    predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("receiveDate"), startDate));
-//
-//                }
-//                if (null != endDateStr1 && !endDateStr1.equals("") && null != startDateStr1 && !startDateStr1.equals("")) {
-//                    Date endDate = null;
-//                    Date startDate = null;
-//                    try {
-//                        endDate = sdf.parse(endDateStr1);
-//                        startDate = sdf.parse(startDateStr1);
-//                        Long afterTime=endDate.getTime()+24*60*60*1000;
-//                        endDate=new Date(afterTime);
-//                    } catch (ParseException e) {
-//                        e.printStackTrace();
-//                    }
-//
-//                    predicate.getExpressions().add(criteriaBuilder.lessThan(root.<Date>get("receiveDate"), endDate));
-//                    predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("receiveDate"), startDate));
-//                }
-//                predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("code"),"%"+codeStr+"%"));
-//                predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("name"),"%"+nameStr+"%"));
-//                predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("dcncode"),"%"+dcncodeStr+"%"));
-//                predicate.getExpressions().add(criteriaBuilder.equal(root.get("alive"),1));
-//                return criteriaBuilder.and(predicate);
-//            }
-//        };
-//        return specification;
-//    }
+
+    /**
+     * 对茶产品的条件查找
+     * @param productType_id
+     * @param remark
+     * @param name
+     * @param level
+     * @param locality
+     * @param stock
+     * @param price
+     * @param startNum
+     * @param discount
+     * @param isFree
+     * @param teaSeller_name
+     * @param pageIndex
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return
+     * @throws ParseException
+     */
+    public Page<Product> findByConditions(Long productType_id,String remark,String name,int level,String locality,double stock,double price,
+                                          double startNum,double discount,int isFree,String teaSeller_name,int state,int pageIndex, int pageSize, String sortField, String sortOrder) throws ParseException {
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (sortOrder.toUpperCase().equals("DESC")) {
+            direction = Sort.Direction.DESC;
+        }
+        Sort sort = new Sort(direction, sortField);
+        Specification<Product> specification = this.buildSpecifications(productType_id,remark,name,level,locality,stock,price,startNum,discount,isFree,teaSeller_name,state);
+        return  productDao.findAll(Specifications.where(specification), new PageRequest(pageIndex, pageSize, sort));
+
+    }
+    private Specification<Product> buildSpecifications(Long productType_id,String remark,String name,int level,String locality,double stock,double price,
+                                                       double startNum,double discount,int isFree,String teaSeller_name,int state) {
+        final ProductType fproductType = productTypeDao.findByIdAndAlive(productType_id,1);
+        final String fremark =remark;
+        final String fname =name;
+        final int flevel=level;
+        final String flocality =locality;
+        final double fstock =stock;
+        final double fprice =price;
+        final double fstartNum=startNum;
+        final double fdiscount=discount;
+        final int fisFree =isFree;
+        final String fteaSeller_name=teaSeller_name;
+        final int fstate=state;
+        Specification<Product> specification = new Specification<Product>() {
+            @Override
+            public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                Predicate predicate = criteriaBuilder.conjunction();
+                if(null!=fproductType){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.<ProductType>get("productType"),fproductType));
+                }
+                if(flevel>-1){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("level"),flevel));
+                }
+                if(fstock>-1){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("stock"),fstock));
+                }
+                if(fprice>-1){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("price"),fprice));
+                }
+                if(fstartNum>-1){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("startNum"),fstartNum));
+                }
+                if(fdiscount>-1){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("discount"),fdiscount));
+                }
+                if(fisFree>-1){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("isFree"),fisFree));
+                }
+                final String fremark =remark;
+                final String fname =name;
+                final String flocality =locality;
+                final String fteaSeller_name=teaSeller_name;
+                predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("remark"),"%"+fremark+"%"));
+                predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("name"),"%"+fname+"%"));
+                predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("locality"),"%"+flocality+"%"));
+                predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSeller>get("teaseller").get("name"),"%"+fteaSeller_name+"%"));
+                predicate.getExpressions().add(criteriaBuilder.equal(root.get("alive"),1));
+                predicate.getExpressions().add(criteriaBuilder.equal(root.get("state"),fstate));
+                return criteriaBuilder.and(predicate);
+            }
+        };
+        return specification;
+    }
 }
