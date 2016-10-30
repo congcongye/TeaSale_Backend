@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Created by ycc on 16/10/22.
  */
 public interface ProductTypeDao extends JpaRepository<ProductType,Long> {
-
+     ProductType findByIdAndAlive(Long id,int alive);
 }

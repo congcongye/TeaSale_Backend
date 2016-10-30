@@ -32,7 +32,7 @@ public class TeaSeller {
      * 级别
      */
     @Column
-    private int lever;
+    private int level;
 
     /**
      * 昵称
@@ -78,6 +78,19 @@ public class TeaSeller {
     @Column
     private String idCard;
 
+    /**
+     * 是否审核通过
+     */
+    @Column
+    private int state=1;
+    /**
+     * 是否删除
+     */
+    @Column
+    private int alive=1;
+
+
+
     public Long getId() {
         return id;
     }
@@ -94,12 +107,12 @@ public class TeaSeller {
         this.name = name;
     }
 
-    public int getLever() {
-        return lever;
+    public int getLevel() {
+        return level;
     }
 
-    public void setLever(int lever) {
-        this.lever = lever;
+    public void setLevel(int lever) {
+        this.level = level;
     }
 
     public String getNickname() {
@@ -174,7 +187,20 @@ public class TeaSeller {
         this.idCard = idCard;
     }
 
+    public void setState(int state) {
+        this.state = state;
+    }
 
+    public void setAlive(int alive) {
+        this.alive = alive;
+    }
 
+    public int getState() {
+        return state;
 
+    }
+
+    public int getAlive() {
+        return alive;
+    }
 }

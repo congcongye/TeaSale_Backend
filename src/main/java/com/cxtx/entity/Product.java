@@ -41,7 +41,7 @@ public class Product {
      * 产品级别
      */
     @Column
-    public int level;
+    public String level;
 
     /**
      * 产地
