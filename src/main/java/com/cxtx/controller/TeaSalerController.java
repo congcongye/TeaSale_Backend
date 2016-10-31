@@ -6,15 +6,14 @@ import com.cxtx.entity.TeaSeller;
 import com.cxtx.model.CreateCustomerModel;
 import com.cxtx.model.CreateTeaSalerModel;
 import com.cxtx.model.ServiceResult;
+import com.cxtx.model.UserListCell;
 import com.cxtx.service.AccountService;
 import com.cxtx.service.CustomerService;
 import com.cxtx.service.TeaSalerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by jinchuyang on 16/10/19.
@@ -65,5 +64,20 @@ public class TeaSalerController extends ApiController{
         }
         TeaSeller teaSeller = teaSalerService.addTeaSaler(createTeaSalerModel, account);
         return ServiceResult.success(teaSeller);
+    }
+
+
+    //@RequestParam (value ="state",defaultValue = "1")int state
+    @RequestMapping(value = "/teaSalers/search", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult search(@RequestParam(value = "name", defaultValue = "") String name,
+                                @RequestParam(value = "level", defaultValue = "1")int level,
+                                @RequestParam(value = "tel", defaultValue = "")String tel,
+                                @RequestParam(value="pageIndex", defaultValue="0") int pageIndex,
+                                @RequestParam(value="pageSize", defaultValue="10") int pageSize,
+                                @RequestParam(value="sortField", defaultValue="id") String sortField,
+                                @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
+        Page<TeaSeller> result = teaSalerService.searchTeaSaler(name, level, tel, pageIndex, pageSize, sortField, sortOrder);
+        return  ServiceResult.success(result);
     }
 }

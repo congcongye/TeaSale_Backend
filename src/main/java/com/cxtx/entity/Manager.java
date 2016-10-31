@@ -1,8 +1,10 @@
 package com.cxtx.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by jinchuyang on 16/10/19.
@@ -52,6 +54,13 @@ public class Manager {
 
     @Column
     private int alive;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
+    @Column
+    private Date createDate;
 
     public Long getId() {
         return id;
@@ -115,5 +124,13 @@ public class Manager {
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

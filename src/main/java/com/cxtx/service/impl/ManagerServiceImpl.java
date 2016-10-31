@@ -8,6 +8,8 @@ import com.cxtx.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * Created by jinchuyang on 16/10/19.
  */
@@ -36,6 +38,7 @@ public class ManagerServiceImpl implements ManagerService {
         manager.setHeadUrl(createManagerModel.getHeadUrl());
         manager.setAccount(account);
         manager.setName(createManagerModel.getName());
+        manager.setCreateDate(new Date());
         return managerDao.save(manager);
     }
 }

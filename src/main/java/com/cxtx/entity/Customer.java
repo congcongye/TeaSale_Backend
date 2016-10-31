@@ -4,9 +4,11 @@ package com.cxtx.entity;
  * Created by jinchuyang on 16/10/21.
  */
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
@@ -66,6 +68,13 @@ public class Customer {
 
     @Column
     private int alive;
+
+    /**
+     * 创建时间
+     */
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
+    @Column
+    private Date createDate;
 
     public Long getId() {
         return id;
@@ -145,5 +154,13 @@ public class Customer {
 
     public void setAlive(int alive) {
         this.alive = alive;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 }

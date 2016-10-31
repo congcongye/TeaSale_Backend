@@ -8,6 +8,8 @@ import com.cxtx.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * Created by jinchuyang on 16/10/26.
  */
@@ -36,6 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setNickname(createCustomerModel.getNickname());
         customer.setZip(createCustomerModel.getZip());
         customer.setAlive(1);
+        customer.setCreateDate(new Date());
         return customerDao.save(customer);
     }
 }
