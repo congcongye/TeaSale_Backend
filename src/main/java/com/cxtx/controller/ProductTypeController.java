@@ -3,10 +3,8 @@ package com.cxtx.controller;
 import com.cxtx.entity.ProductType;
 import com.cxtx.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +12,7 @@ import java.util.Map;
 /**
  * Created by ycc on 16/10/23.
  */
+@Controller
 public class ProductTypeController {
 
     @Autowired
@@ -30,4 +29,16 @@ public class ProductTypeController {
         Map<String,Object> result =productTypeService.newOrUpdateProductType(list);
         return result;
     }
+
+    /**
+     * 传入参数1,获得所有可以使用的茶产品,传入参数0获得不能使用的茶产品
+     * @return
+     */
+    @RequestMapping(value = "/productType/getAllProductType", method = RequestMethod.POST)
+    @ResponseBody
+    public List<ProductType> getAllProductType(@RequestParam (value ="state",defaultValue = "1")int state){
+        List<ProductType> result = productTypeService.getAllProductType(state);
+        return result;
+    }
+
 }

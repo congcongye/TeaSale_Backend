@@ -4,7 +4,9 @@ import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.entity.ProductType;
 import com.cxtx.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import java.util.Map;
 /**
  * Created by ycc on 16/10/22.
  */
+@Service("ProductTypeServiceImpl")
 public class ProductTypeServiceImpl implements ProductTypeService{
 
     @Autowired
@@ -45,6 +48,13 @@ public class ProductTypeServiceImpl implements ProductTypeService{
     }
 
 
+    public List<ProductType> getAllProductType(int state){
+        List<ProductType> list = productTypeDao.findByAliveAndState(1,state);//存在且可用的全部茶产品类型,可以使用的state=1
+        if(list==null){
+            list=new ArrayList<ProductType>();
+        }
+        return list;
+    }
 
 
 

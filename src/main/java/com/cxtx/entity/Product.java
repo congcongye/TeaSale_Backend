@@ -42,7 +42,6 @@ public class Product {
      */
     @Column
     private int level;
-
     /**
      * 产地
      */

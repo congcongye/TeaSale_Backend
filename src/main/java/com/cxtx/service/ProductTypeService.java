@@ -1,6 +1,7 @@
 package com.cxtx.service;
 
 import com.cxtx.entity.ProductType;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
@@ -11,4 +12,5 @@ import java.util.Map;
 public interface ProductTypeService {
 
      Map<String,Object> newOrUpdateProductType(List<ProductType> productTypes);
+     List<ProductType> getAllProductType(int state);
 }
