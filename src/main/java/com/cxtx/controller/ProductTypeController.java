@@ -1,6 +1,7 @@
 package com.cxtx.controller;
 
 import com.cxtx.entity.ProductType;
+import com.cxtx.model.ServiceResult;
 import com.cxtx.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,7 @@ import java.util.Map;
  * Created by ycc on 16/10/23.
  */
 @Controller
-public class ProductTypeController {
+public class ProductTypeController extends ApiController {
 
     @Autowired
     private ProductTypeService productTypeService;
@@ -25,9 +26,13 @@ public class ProductTypeController {
      */
     @RequestMapping(value = "/productType/newOrUpdate", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> newOrUpdateProductType(@RequestBody List<ProductType> list){
-        Map<String,Object> result =productTypeService.newOrUpdateProductType(list);
-        return result;
+    public ServiceResult newOrUpdateProductType(@RequestBody List<ProductType> list){
+        checkParameter(list!=null&&!list.isEmpty(),"productTypes are empty");
+        int succCount =productTypeService.newOrUpdateProductType(list);
+        if(succCount!=list.size()){
+            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(list.size()-succCount));
+        }
+        return ServiceResult.success("all succeed");
     }
 
     /**
@@ -36,9 +41,8 @@ public class ProductTypeController {
      */
     @RequestMapping(value = "/productType/getAllProductType", method = RequestMethod.POST)
     @ResponseBody
-    public List<ProductType> getAllProductType(@RequestParam (value ="state",defaultValue = "1")int state){
+    public ServiceResult getAllProductType(@RequestParam (value ="state",defaultValue = "1")int state){
         List<ProductType> result = productTypeService.getAllProductType(state);
-        return result;
+        return ServiceResult.success(result);
     }
-
 }

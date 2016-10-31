@@ -11,4 +11,5 @@ import java.util.List;
 public interface ProductTypeDao extends JpaRepository<ProductType,Long> {
      ProductType findByIdAndAlive(Long id,int alive);
      List<ProductType> findByAliveAndState(int alive, int state);//存在且可用的茶产品类型
+     List<ProductType> findByNameAndDescriptAndUrlAndStateAndAlive(String name,String descript,String url,int state,int alive);
 }

@@ -13,7 +13,7 @@ import java.util.Map;
  * Created by ycc on 16/10/30.
  */
 @Controller
-public class ProductController {
+public class ProductController extends ApiController {
 
     private ProductService productService;
 

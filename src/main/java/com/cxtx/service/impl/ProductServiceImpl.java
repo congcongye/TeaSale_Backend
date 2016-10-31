@@ -30,7 +30,7 @@ import java.util.Map;
 /**
  * Created by ycc on 16/10/24.
  */
-@Service("ProductServiceImpl")
+@Service("ProductService")
 //@Component
 public class ProductServiceImpl implements ProductService{
 
@@ -49,6 +49,7 @@ public class ProductServiceImpl implements ProductService{
      * @param teaSeller_id
      * @return
      */
+    @Override
     public Map<String,Object> newProduct(Product product,Long productType_id,Long teaSeller_id){
         Map<String,Object> result =new HashMap<String,Object>();
         if(product==null){
@@ -88,6 +89,7 @@ public class ProductServiceImpl implements ProductService{
      * @param products
      * @return
      */
+    @Override
     public Map<String,Object> updateProduct(List<Product> products){
         Map<String,Object> result =new HashMap<String,Object>();
         if(products==null ||products.isEmpty()){
@@ -117,6 +119,7 @@ public class ProductServiceImpl implements ProductService{
      * @param products
      * @return
      */
+    @Override
     public Map<String,Object> startSell(List<Product> products){
         Map<String,Object> result =new HashMap<String,Object>();
         if(products==null ||products.isEmpty()){
@@ -164,6 +167,7 @@ public class ProductServiceImpl implements ProductService{
      * @return
      * @throws ParseException
      */
+    @Override
     public Page<Product> findByConditions(Long productType_id,String remark,String name,int level,String locality,double stock,double price,
                                           double startNum,double discount,int isFree,String teaSeller_name,int state,int pageIndex, int pageSize, String sortField, String sortOrder){
         Sort.Direction direction = Sort.Direction.ASC;

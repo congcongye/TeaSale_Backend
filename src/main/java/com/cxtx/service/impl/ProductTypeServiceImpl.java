@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * Created by ycc on 16/10/22.
  */
-@Service("ProductTypeServiceImpl")
+@Service("ProductTypeService")
 public class ProductTypeServiceImpl implements ProductTypeService{
 
     @Autowired
@@ -25,29 +25,32 @@ public class ProductTypeServiceImpl implements ProductTypeService{
      * @param productTypes
      * @return
      */
-    public Map<String,Object> newOrUpdateProductType(List<ProductType> productTypes){
-        Map<String,Object> result =new HashMap<String,Object>();
-        if(productTypes==null || productTypes.isEmpty()){
-            result.put("code",2);
-            result.put("msg","信息未传入");
-            return result;
-        }
+    @Override
+    public int newOrUpdateProductType(List<ProductType> productTypes){
         int succCount=0;
         for(ProductType productType:productTypes){
-            productTypeDao.save(productType);
-            succCount++;
+            if(Unique(productType)){
+                productTypeDao.save(productType);
+                succCount++;
+            }
         }
-        if(succCount!=productTypes.size()){
-            result.put("code",3);
-            result.put("msg","成功的数量是: "+succCount+" ; 失败的数量是: "+(productTypes.size()-succCount));
-            return result;
-        }
-        result.put("code",1);
-        result.put("msg","全部操作成功");
-        return result;
+        return succCount;
     }
 
-
+    private boolean Unique(ProductType productType){//判断茶产品类型不存在或者是当前要修改的茶产品类型
+        List<ProductType> ps=productTypeDao.findByNameAndDescriptAndUrlAndStateAndAlive(productType.name,productType.descript,productType.url,productType.state,1);
+        boolean flag=false;
+        if(null==ps || ps.isEmpty()){
+            return true;
+        }
+        if(ps.size()==1){
+            if(ps.get(0).id==productType.id){
+                return true;
+            }
+        }
+        return flag;
+    }
+    @Override
     public List<ProductType> getAllProductType(int state){
         List<ProductType> list = productTypeDao.findByAliveAndState(1,state);//存在且可用的全部茶产品类型,可以使用的state=1
         if(list==null){
