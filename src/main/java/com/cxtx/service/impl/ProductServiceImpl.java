@@ -6,6 +6,8 @@ import com.cxtx.dao.TeaSellerDao;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSeller;
+import com.cxtx.model.CreateProductModel;
+import com.cxtx.model.StartSellProductModel;
 import com.cxtx.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,7 +32,7 @@ import java.util.Map;
 /**
  * Created by ycc on 16/10/24.
  */
-@Service("ProductService")
+@Service("ProductServiceImpl")
 //@Component
 public class ProductServiceImpl implements ProductService{
 
@@ -45,105 +47,96 @@ public class ProductServiceImpl implements ProductService{
     /**
      * 茶产品的新增,验证了product,productType,teaseller不能未空,product里面的填入信息,应该在前台进行验证
      * @param product
-     * @param productType_id
-     * @param teaSeller_id
      * @return
      */
     @Override
-    public Map<String,Object> newProduct(Product product,Long productType_id,Long teaSeller_id){
-        Map<String,Object> result =new HashMap<String,Object>();
-        if(product==null){
-            result.put("code",2);
-            result.put("msg","产品信息未传入");
-            return result;
-        }
-        ProductType pt =productTypeDao.findByIdAndAlive(productType_id,1);
-        TeaSeller ts =teaSellerDao.findByIdAndStateAndAlive(teaSeller_id,1,1);//存在且审核通过的茶农
-        if(pt==null){
-            result.put("code",3);
-            result.put("msg","产品类型信息不存在");
-            return result;
-        }
-        if(ts ==null){
-            result.put("code",3);
-            result.put("msg","茶农不存在或未审核通过");
-            return result;
-        }
-        if(product==null){
-            result.put("code",3);
-            result.put("msg","产品信息未填");
-            return result;
-        }
-        product.setProductType(pt);
-        product.setTeaSeller(ts);
-        product.setAlive(1);//存在
-        product.setState(0);//未上架
-        productDao.save(product);
-        result.put("code",1);
-        result.put("msg","新增产品成功");
+    public Product newProduct(Product product){
+        Product result = productDao.save(product);
         return result;
     }
 
     /**
-     * 茶产品的批量修改
+     * 茶产品的批量修改只有(stock,price,startNum,discount,isFree,postage,deliverLimit,unit)可以修改,其它不能修改
      * @param products
      * @return
      */
     @Override
-    public Map<String,Object> updateProduct(List<Product> products){
-        Map<String,Object> result =new HashMap<String,Object>();
-        if(products==null ||products.isEmpty()){
-            result.put("code",2);
-            result.put("msg","茶产品不存在或者处于销售状态,无法修改");
-            return result;
-        }
+    public int updateProduct(List<CreateProductModel> products){//修改后填入的信息
         int succCount =0 ;
-        for(Product product:products){
-            if(null!=product&&product.getState()==0){//产品存在并且产品的状态为未上架
-                productDao.save(product);
-                succCount++;
+        for(CreateProductModel product:products){
+            if(null!=product){
+                Product pt =productDao.findByIdAndAlive(product.id,1);
+                if(pt!=null&&pt.getState()==0){//商品存在且未上架
+                    if(product.stock!=-1){
+                        pt.setStock(product.stock);
+                    }
+                    if(product.price!=-1){
+                        pt.setPrice(product.price);
+                    }
+                    if(product.startNum!=-1){
+                        pt.setStartNum(product.startNum);
+                    }
+                    if(product.discount!=-1){
+                        pt.setDiscount(product.discount);
+                    }
+                    if(product.isFree!=-1){
+                        pt.setIsFree(product.isFree);
+                    }
+                    if(product.postage!=-1){
+                        pt.setPostate(product.postage);
+                    }
+                    if(product.deliverLimit!=-1){
+                        pt.setDeliverLimit(product.deliverLimit);
+                    }
+                    if(!product.unit.equals("")){
+                        pt.setUnit(product.unit);
+                    }
+                    if(isUnique(pt)){
+                        productDao.save(pt);
+                        succCount++;
+                    }
+                }
             }
         }
-        if(products.size()!=succCount){
-            result.put("code",3);
-            result.put("msg","修改成功的数目为: "+succCount+" ; 修改失败的数目为: "+(products.size()-succCount));
-            return result;
-        }
-        result.put("code",1);
-        result.put("msg","茶产品信息全部修改成功");
-        return result;
+        return succCount;
     }
 
+    /**
+     * productType,teaSeller,level,locality,name(进行唯一性检查)
+     * @param p
+     * @return
+     */
+    public Boolean isUnique(Product p){
+        List<Product> list = productDao.findByProductTypeAndTeaSellerAndLevelAndLocalityAndNameAndAlive(p.getProductType(),p.getTeaSeller(),p.getLevel(),p.getLocality(),p.getName(),1);
+        boolean flag=false;
+        if(null==list|| list.isEmpty()){
+            return true;
+        }
+        if(list.size()==1){
+            if(list.get(0).getId()==p.getId()){
+                return true;
+            }
+        }
+        return flag;
+    }
     /**
      * 茶产品的批量上架
      * @param products
      * @return
      */
     @Override
-    public Map<String,Object> startSell(List<Product> products){
-        Map<String,Object> result =new HashMap<String,Object>();
-        if(products==null ||products.isEmpty()){
-            result.put("code",2);
-            result.put("msg","茶产品信息未传入");
-            return result;
-        }
+    public int startSell(List<StartSellProductModel> products){
         int succCount=0;
-        for(Product product:products){
-            if(product!=null&&product.getAlive()==1){
+        for(StartSellProductModel sdm:products){
+            Product product=productDao.findByIdAndAlive(sdm.id,1);
+            if(product!=null&&product.getState()==0){
                 product.setState(1);
                 product.setCreateDate(new Date());//填入上架时间
                 productDao.save(product);
                 succCount++;
             }
         }
-        if(products.size()!=succCount){
-            result.put("code",3);
-            result.put("msg","上架成功的数目: "+succCount+" ; 上架失败的数目是: "+(products.size()-succCount));
-            return result;
-        }
-        result.put("code",1);
-        result.put("msg","全部成功");
-        return result;
+        return succCount;
     }
 
 
@@ -155,31 +148,32 @@ public class ProductServiceImpl implements ProductService{
      * @param level
      * @param locality
      * @param stock
-     * @param price
+     * @param lowPrice
+     * @param highPrice
      * @param startNum
      * @param discount
      * @param isFree
      * @param teaSeller_name
+     * @param state
      * @param pageIndex
      * @param pageSize
      * @param sortField
      * @param sortOrder
      * @return
-     * @throws ParseException
      */
     @Override
-    public Page<Product> findByConditions(Long productType_id,String remark,String name,int level,String locality,double stock,double price,
+    public Page<Product> findByConditions(Long productType_id,String remark,String name,int level,String locality,double stock,double lowPrice,double highPrice,
                                           double startNum,double discount,int isFree,String teaSeller_name,int state,int pageIndex, int pageSize, String sortField, String sortOrder){
         Sort.Direction direction = Sort.Direction.ASC;
         if (sortOrder.toUpperCase().equals("DESC")) {
             direction = Sort.Direction.DESC;
         }
         Sort sort = new Sort(direction, sortField);
-        Specification<Product> specification = this.buildSpecifications(productType_id,remark,name,level,locality,stock,price,startNum,discount,isFree,teaSeller_name,state);
+        Specification<Product> specification = this.buildSpecifications(productType_id,remark,name,level,locality,stock,lowPrice,highPrice,startNum,discount,isFree,teaSeller_name,state);
         return  productDao.findAll(Specifications.where(specification), new PageRequest(pageIndex, pageSize, sort));
 
     }
-    private Specification<Product> buildSpecifications(Long productType_id,String remark,String name,int level,String locality,double stock,double price,
+    private Specification<Product> buildSpecifications(Long productType_id,String remark,String name,int level,String locality,double stock,double lowPrice,double highPrice,
                                                        double startNum,double discount,int isFree,String teaSeller_name,int state) {
         final ProductType fproductType = productTypeDao.findByIdAndAlive(productType_id,1);
         final String fremark =remark;
@@ -187,7 +181,8 @@ public class ProductServiceImpl implements ProductService{
         final int flevel=level;
         final String flocality =locality;
         final double fstock =stock;
-        final double fprice =price;
+        final double flowPrice =lowPrice;
+        final double fhighPrice =highPrice;
         final double fstartNum=startNum;
         final double fdiscount=discount;
         final int fisFree =isFree;
@@ -204,30 +199,31 @@ public class ProductServiceImpl implements ProductService{
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("level"),flevel));
                 }
                 if(fstock>-1){
-                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("stock"),fstock));
+                    predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.get("stock"),fstock));
                 }
-                if(fprice>-1){
-                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("price"),fprice));
+                if(flowPrice>-1){
+                    predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.get("price"),flowPrice));
+                }
+                if(fhighPrice>-1){
+                    predicate.getExpressions().add(criteriaBuilder.lessThanOrEqualTo(root.get("price"),fhighPrice));
                 }
                 if(fstartNum>-1){
-                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("startNum"),fstartNum));
+                    predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.get("startNum"),fstartNum));
                 }
                 if(fdiscount>-1){
-                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("discount"),fdiscount));
+                    predicate.getExpressions().add(criteriaBuilder.lessThanOrEqualTo(root.get("discount"),fdiscount));
                 }
                 if(fisFree>-1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("isFree"),fisFree));
                 }
-                final String fremark =remark;
-                final String fname =name;
-                final String flocality =locality;
-                final String fteaSeller_name=teaSeller_name;
+                if(fstate>-1){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("state"),fstate));
+                }
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("remark"),"%"+fremark+"%"));
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("name"),"%"+fname+"%"));
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("locality"),"%"+flocality+"%"));
-                predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSeller>get("teaseller").get("name"),"%"+fteaSeller_name+"%"));
+                predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSeller>get("teaSeller").get("name"),"%"+fteaSeller_name+"%"));
                 predicate.getExpressions().add(criteriaBuilder.equal(root.get("alive"),1));
-                predicate.getExpressions().add(criteriaBuilder.equal(root.get("state"),fstate));
                 return criteriaBuilder.and(predicate);
             }
         };
