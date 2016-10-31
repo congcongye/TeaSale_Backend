@@ -10,7 +10,7 @@
         "url":"图片地址url1"
         }
     ]
-#### 修改
+####修改
 	[
         {
         “id”:1,
@@ -19,10 +19,10 @@
         "url":"图片地址url1"
         }
     ]
-#### 返回
+####返回
 	{
  	 "code": 200,
-  	"data": "all succeed"
+  	 "data": "all succeed"
 	}
 ####2.茶产品类型的查询
 ####url: http://localhost:8080/api/productType/getAllProductType?state=1

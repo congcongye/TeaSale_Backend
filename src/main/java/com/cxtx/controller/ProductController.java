@@ -1,7 +1,14 @@
 package com.cxtx.controller;
 
+import com.cxtx.dao.ProductDao;
+import com.cxtx.dao.ProductTypeDao;
+import com.cxtx.dao.TeaSellerDao;
 import com.cxtx.entity.Product;
+import com.cxtx.entity.ProductType;
+import com.cxtx.entity.TeaSeller;
+import com.cxtx.model.ServiceResult;
 import com.cxtx.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -15,8 +22,14 @@ import java.util.Map;
 @Controller
 public class ProductController extends ApiController {
 
+    @Autowired
     private ProductService productService;
-
+    @Autowired
+    private ProductTypeDao productTypeDao;
+    @Autowired
+    private TeaSellerDao teaSellerDao;
+    @Autowired
+    private ProductDao productDao;
     /**
      * 茶产品的新增,product对象中必须传入的数据应该由前台来限制
      * @param product
@@ -26,21 +39,40 @@ public class ProductController extends ApiController {
      */
     @RequestMapping(value = "/product/new", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> newProduct(@RequestBody Product product, @RequestParam (value="productType_id",defaultValue = "-1")Long productType_id,@RequestParam (value="teaSeller_id",defaultValue = "-1")Long teaSeller_id){
-        Map<String,Object> result = productService.newProduct(product,productType_id,teaSeller_id);
-        return result;
+    public ServiceResult newProduct(@RequestBody Product product, @RequestParam (value="productType_id",defaultValue = "-1")Long productType_id, @RequestParam (value="teaSeller_id",defaultValue = "-1")Long teaSeller_id){
+        checkParameter(product!=null,"product is empty");
+        ProductType pt =productTypeDao.findByIdAndAlive(productType_id,1);
+        TeaSeller ts =teaSellerDao.findByIdAndStateAndAlive(teaSeller_id,1,1);//存在且审核通过的茶农
+        checkParameter(pt!=null,"productType doesn't exist");
+        checkParameter(ts!=null,"teaSeller doesn,t exist");
+        Product result=null;
+        product.setProductType(pt);
+        product.setTeaSeller(ts);
+        product.setAlive(1);//存在
+        product.setState(0);//未上架
+        if(productService.isUnique(product)){//检查是否重复
+            result = productService.newProduct(product);
+            return ServiceResult.success(result);
+        }else{
+            return ServiceResult.fail(500,"product has exist");
+        }
     }
 
     /**
      * 茶产品的批量修改,哪些数据能修改,哪些不能应该由前台控制
+     * 只有(stock,price,startNum,discount,isFree,postage,deliverLimit,unit)可以修改,其它不能修改
      * @param productList
      * @return
      */
     @RequestMapping(value = "/product/update", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> updateProduct(@RequestBody List<Product> productList){
-        Map<String,Object> result = productService.updateProduct(productList);
-        return result;
+    public ServiceResult updateProduct(@RequestBody List<Product> productList){
+        checkParameter(productList!=null&&!productList.isEmpty(),"products are empty");
+        int succCount = productService.updateProduct(productList);
+        if(succCount!=productList.size()){
+            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(productList.size()-succCount));
+        }
+        return ServiceResult.success("all succeed");
     }
 
     /**
@@ -50,9 +82,13 @@ public class ProductController extends ApiController {
      */
     @RequestMapping(value = "/product/startSell", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> startSell(@RequestBody List<Product> productList){
-        Map<String,Object> result = productService.startSell(productList);
-        return result;
+    public ServiceResult startSell(@RequestBody List<Product> productList){
+        checkParameter(productList!=null&&!productList.isEmpty(),"products are empty");
+        int succCount = productService.startSell(productList);
+        if(succCount!=productList.size()){
+            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(productList.size()-succCount));
+        }
+        return ServiceResult.success("all succeed");
     }
 
     /**

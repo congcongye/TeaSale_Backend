@@ -45,105 +45,68 @@ public class ProductServiceImpl implements ProductService{
     /**
      * 茶产品的新增,验证了product,productType,teaseller不能未空,product里面的填入信息,应该在前台进行验证
      * @param product
-     * @param productType_id
-     * @param teaSeller_id
      * @return
      */
     @Override
-    public Map<String,Object> newProduct(Product product,Long productType_id,Long teaSeller_id){
-        Map<String,Object> result =new HashMap<String,Object>();
-        if(product==null){
-            result.put("code",2);
-            result.put("msg","产品信息未传入");
-            return result;
-        }
-        ProductType pt =productTypeDao.findByIdAndAlive(productType_id,1);
-        TeaSeller ts =teaSellerDao.findByIdAndStateAndAlive(teaSeller_id,1,1);//存在且审核通过的茶农
-        if(pt==null){
-            result.put("code",3);
-            result.put("msg","产品类型信息不存在");
-            return result;
-        }
-        if(ts ==null){
-            result.put("code",3);
-            result.put("msg","茶农不存在或未审核通过");
-            return result;
-        }
-        if(product==null){
-            result.put("code",3);
-            result.put("msg","产品信息未填");
-            return result;
-        }
-        product.setProductType(pt);
-        product.setTeaSeller(ts);
-        product.setAlive(1);//存在
-        product.setState(0);//未上架
-        productDao.save(product);
-        result.put("code",1);
-        result.put("msg","新增产品成功");
+    public Product newProduct(Product product){
+        Product result = productDao.save(product);
         return result;
     }
 
     /**
-     * 茶产品的批量修改
+     * 茶产品的批量修改只有(stock,price,startNum,discount,isFree,postage,deliverLimit,unit)可以修改,其它不能修改
      * @param products
      * @return
      */
     @Override
-    public Map<String,Object> updateProduct(List<Product> products){
-        Map<String,Object> result =new HashMap<String,Object>();
-        if(products==null ||products.isEmpty()){
-            result.put("code",2);
-            result.put("msg","茶产品不存在或者处于销售状态,无法修改");
-            return result;
-        }
+    public int updateProduct(List<Product> products){
         int succCount =0 ;
         for(Product product:products){
             if(null!=product&&product.getState()==0){//产品存在并且产品的状态为未上架
-                productDao.save(product);
-                succCount++;
+                if(isUnique(product)){
+                    productDao.save(product);
+                    succCount++;
+                }
             }
         }
-        if(products.size()!=succCount){
-            result.put("code",3);
-            result.put("msg","修改成功的数目为: "+succCount+" ; 修改失败的数目为: "+(products.size()-succCount));
-            return result;
-        }
-        result.put("code",1);
-        result.put("msg","茶产品信息全部修改成功");
-        return result;
+        return succCount;
     }
 
+    /**
+     * productType,teaSeller,level,locality,name(进行唯一性检查)
+     * @param p
+     * @return
+     */
+    public Boolean isUnique(Product p){
+        List<Product> list = productDao.findByProductTypeAndTeaSellerAndLevelAndLocalityAndNameAndAlive(p.getProductType(),p.getTeaSeller(),p.getLevel(),p.getLocality(),p.getName(),1);
+        boolean flag=false;
+        if(null==list|| list.isEmpty()){
+            return true;
+        }
+        if(list.size()==1){
+            if(list.get(0).getId()==p.getId()){
+                return true;
+            }
+        }
+        return flag;
+    }
     /**
      * 茶产品的批量上架
      * @param products
      * @return
      */
     @Override
-    public Map<String,Object> startSell(List<Product> products){
-        Map<String,Object> result =new HashMap<String,Object>();
-        if(products==null ||products.isEmpty()){
-            result.put("code",2);
-            result.put("msg","茶产品信息未传入");
-            return result;
-        }
+    public int startSell(List<Product> products){
         int succCount=0;
         for(Product product:products){
-            if(product!=null&&product.getAlive()==1){
+            if(product!=null&&product.getAlive()==1&&product.getState()==0){
                 product.setState(1);
                 product.setCreateDate(new Date());//填入上架时间
                 productDao.save(product);
                 succCount++;
             }
         }
-        if(products.size()!=succCount){
-            result.put("code",3);
-            result.put("msg","上架成功的数目: "+succCount+" ; 上架失败的数目是: "+(products.size()-succCount));
-            return result;
-        }
-        result.put("code",1);
-        result.put("msg","全部成功");
-        return result;
+        return succCount;
     }
 
 
