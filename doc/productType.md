@@ -1,8 +1,9 @@
 ###1.产品类型的新增或修改：
-####url: http://localhost:8080/api/productType/newOrUpdate 
-####Method:POST
-#### 参数：在body里
-####新增：
+* url: http://localhost:8080/api/productType/newOrUpdate 
+* Method:POST
+* 参数：在body里
+* 新增：
+   <pre>
     [
         {
         "name":"红茶1",
@@ -10,7 +11,9 @@
         "url":"图片地址url1"
         }
     ]
-####修改
+</pre>
+* 修改
+	<pre>
 	[
         {
         “id”:1,
@@ -19,20 +22,22 @@
         "url":"图片地址url1"
         }
     ]
-####返回
-	{
+	</pre>
+* 返回
+	<pre>{
  	 "code": 200,
   	 "data": "all succeed"
 	}
+	</pre>
 ####2.茶产品类型的查询
-####url: http://localhost:8080/api/productType/getAllProductType?state=1
-####Method:POST
-####参数：在url上
-####state =1 获得所有可以使用的茶产品
-####state＝0获得所有不能使用的茶产品
-####返回：
-
-	{
+* url: http://localhost:8080/api/productType/getAllProductType?state=1
+* Method:POST
+* 参数：在url上
+state =1 获得所有可以使用的茶产品
+state＝0获得所有不能使用的茶产品
+* 返回：
+ <pre>
+{
 	  "code": 200,
 	  "data": [
     {
@@ -53,4 +58,4 @@
     }
   	]
 	}
-
+</pre>

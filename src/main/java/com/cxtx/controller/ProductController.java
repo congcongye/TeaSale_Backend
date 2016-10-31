@@ -6,7 +6,9 @@ import com.cxtx.dao.TeaSellerDao;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSeller;
+import com.cxtx.model.CreateProductModel;
 import com.cxtx.model.ServiceResult;
+import com.cxtx.model.StartSellProductModel;
 import com.cxtx.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -66,7 +68,7 @@ public class ProductController extends ApiController {
      */
     @RequestMapping(value = "/product/update", method = RequestMethod.POST)
     @ResponseBody
-    public ServiceResult updateProduct(@RequestBody List<Product> productList){
+    public ServiceResult updateProduct(@RequestBody List<CreateProductModel> productList){
         checkParameter(productList!=null&&!productList.isEmpty(),"products are empty");
         int succCount = productService.updateProduct(productList);
         if(succCount!=productList.size()){
@@ -82,7 +84,7 @@ public class ProductController extends ApiController {
      */
     @RequestMapping(value = "/product/startSell", method = RequestMethod.POST)
     @ResponseBody
-    public ServiceResult startSell(@RequestBody List<Product> productList){
+    public ServiceResult startSell(@RequestBody List<StartSellProductModel> productList){
         checkParameter(productList!=null&&!productList.isEmpty(),"products are empty");
         int succCount = productService.startSell(productList);
         if(succCount!=productList.size()){
@@ -99,7 +101,8 @@ public class ProductController extends ApiController {
      * @param level
      * @param locality
      * @param stock
-     * @param price
+     * @param lowPrice
+     * @param highPrice
      * @param startNum
      * @param discount
      * @param isFree
@@ -111,15 +114,15 @@ public class ProductController extends ApiController {
      * @param sortOrder
      * @return
      */
-    @RequestMapping(value = "/product/search", method = RequestMethod.GET)
+    @RequestMapping(value = "/product/search", method = RequestMethod.POST)
     @ResponseBody
     public Page<Product> findProductByConditions(@RequestParam(value = "productType_id",defaultValue = "-1") Long productType_id, @RequestParam(value = "remark",defaultValue = "") String remark, @RequestParam(value = "name",defaultValue = "")String name,
                                                  @RequestParam(value = "level",defaultValue = "-1")int level, @RequestParam(value = "locality",defaultValue = "")String locality,@RequestParam(value = "stock",defaultValue = "-1") double stock,
-                                                 @RequestParam(value = "price",defaultValue = "-1")double price, @RequestParam(value = "startNum",defaultValue = "-1")double startNum, @RequestParam(value = "discount",defaultValue = "-1")double discount,
+                                                 @RequestParam(value = "lowPrice",defaultValue = "-1")double lowPrice, @RequestParam(value = "highPrice",defaultValue = "-1")double highPrice, @RequestParam(value = "startNum",defaultValue = "-1")double startNum, @RequestParam(value = "discount",defaultValue = "-1")double discount,
                                                  @RequestParam(value = "isFree",defaultValue = "-1")int isFree, @RequestParam(value = "teaSeller_name",defaultValue = "")String teaSeller_name, @RequestParam(value = "state",defaultValue = "-1")int state,
                                                  @RequestParam(value="pageIndex", defaultValue="0") int pageIndex, @RequestParam(value="pageSize", defaultValue="10") int pageSize, @RequestParam(value="sortField", defaultValue="price") String sortField, @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
 
-        Page<Product> products = productService.findByConditions(productType_id,remark,name,level,locality,stock,price,
+        Page<Product> products = productService.findByConditions(productType_id,remark,name,level,locality,stock,lowPrice,highPrice,
         startNum, discount, isFree, teaSeller_name,state,pageIndex,pageSize, sortField,sortOrder);
         return products;
     }
