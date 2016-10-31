@@ -1,6 +1,6 @@
 # Api
 
-### 管理员登录
+### 管理员注册
 * URL /api/manager/register
 * Method: POST
 * 参数:
