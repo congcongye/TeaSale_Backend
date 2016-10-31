@@ -4,6 +4,7 @@
 * URL /api/manager/register
 * Method: POST
 * 参数:
+```
 {
     "name":"金初阳",
     "tel":"15200837336",
@@ -11,6 +12,7 @@
     "lever":1,
     "money":100000.00
 }
+```
 * 返回:
 ```
 {
