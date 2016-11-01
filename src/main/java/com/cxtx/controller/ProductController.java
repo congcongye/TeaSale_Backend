@@ -5,7 +5,7 @@ import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.dao.TeaSellerDao;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
-import com.cxtx.entity.TeaSeller;
+import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.CreateProductModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.StartSellProductModel;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ycc on 16/10/30.
@@ -44,12 +43,12 @@ public class ProductController extends ApiController {
     public ServiceResult newProduct(@RequestBody Product product, @RequestParam (value="productType_id",defaultValue = "-1")Long productType_id, @RequestParam (value="teaSeller_id",defaultValue = "-1")Long teaSeller_id){
         checkParameter(product!=null,"product is empty");
         ProductType pt =productTypeDao.findByIdAndAlive(productType_id,1);
-        TeaSeller ts =teaSellerDao.findByIdAndStateAndAlive(teaSeller_id,1,1);//存在且审核通过的茶农
+        TeaSaler ts =teaSellerDao.findByIdAndStateAndAlive(teaSeller_id,1,1);//存在且审核通过的茶农
         checkParameter(pt!=null,"productType doesn't exist");
         checkParameter(ts!=null,"teaSeller doesn,t exist");
         Product result=null;
         product.setProductType(pt);
-        product.setTeaSeller(ts);
+        product.setTeaSaler(ts);
         product.setAlive(1);//存在
         product.setState(0);//未上架
         if(productService.isUnique(product)){//检查是否重复

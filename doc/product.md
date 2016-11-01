@@ -63,7 +63,7 @@
     "deliverLimit": 10,  发货时间间隔：10或者5或者其它（代表天数）
     "createDate": null,
     "unit": "斤",
-    "teaSeller": {
+    "teaSaler": {
       "id": 1,
       "name": "ycc",
       "level": 1,
@@ -170,7 +170,7 @@
       "deliverLimit": 10,
       "createDate": "2016-10-31",
       "unit": "斤",
-      "teaSeller": {
+      "teaSaler": {
         "id": 1,
         "name": "ycc",
         "level": 1,

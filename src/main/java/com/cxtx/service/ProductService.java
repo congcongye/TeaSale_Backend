@@ -1,13 +1,10 @@
 package com.cxtx.service;
 
 import com.cxtx.entity.Product;
-import com.cxtx.entity.ProductType;
-import com.cxtx.entity.TeaSeller;
 import com.cxtx.model.CreateProductModel;
 import com.cxtx.model.StartSellProductModel;
 import org.springframework.data.domain.Page;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ycc on 16/10/30.

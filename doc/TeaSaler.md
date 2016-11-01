@@ -1,7 +1,7 @@
 # Api
 
 ### 查询茶农
-* URL /api/teaSalers/search?name=ziz&level=1&tel=152&pageIndex=0&pageSize=10&sortField=id&sortOrder=ASC
+* URL /api/teaSalers/search?name=ziz&level=1&tel=152&state=0&pageIndex=0&pageSize=10&sortField=id&sortOrder=ASC
 * Method: GET
 * 参数:
 * 返回:
@@ -75,4 +75,37 @@
      "numberOfElements": 2
    }
  }
+```
+### 查询茶农
+* URL /api/teaSaler/{teaSalerId}
+* Method: GET
+* 参数:
+* 返回:
+```
+{
+  "code": 200,
+  "data": {
+    "id": 1,
+    "name": "zizi",
+    "level": 1,
+    "nickname": null,
+    "account": {
+      "id": 2,
+      "tel": "15200837632",
+      "password": "zizi",
+      "label": 0,
+      "alive": 1
+    },
+    "address": null,
+    "tel": "15200837632",
+    "headUrl": null,
+    "money": 0,
+    "licenseUrl": null,
+    "zip": null,
+    "idCard": null,
+    "state": 1,
+    "alive": 1,
+    "createDate": null
+  }
+}
 ```

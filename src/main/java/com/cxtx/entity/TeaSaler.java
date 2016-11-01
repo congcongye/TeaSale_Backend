@@ -13,7 +13,7 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Entity
 @Table(name = "TEASELLER")
-public class TeaSeller {
+public class TeaSaler {
     /**
      licenseUrl
      zip 邮编

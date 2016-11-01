@@ -107,8 +107,8 @@ public class Product {
      * 所属的茶农
      */
     @ManyToOne
-    @JoinColumn(name = "teaSeller_id")
-    private TeaSeller teaSeller;
+    @JoinColumn(name = "teaSaler_id")
+    private TeaSaler teaSaler;
 
     /**
      * 商品状态,0未上架  1上架
@@ -242,12 +242,12 @@ public class Product {
         this.unit = unit;
     }
 
-    public TeaSeller getTeaSeller() {
-        return teaSeller;
+    public TeaSaler getTeaSaler() {
+        return teaSaler;
     }
 
-    public void setTeaSeller(TeaSeller teaSeller) {
-        this.teaSeller = teaSeller;
+    public void setTeaSaler(TeaSaler teaSaler) {
+        this.teaSaler = teaSaler;
     }
 
     public int getState() {

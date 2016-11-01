@@ -1,14 +1,10 @@
 package com.cxtx.controller;
 
 import com.cxtx.entity.Account;
-import com.cxtx.entity.Customer;
-import com.cxtx.entity.TeaSeller;
-import com.cxtx.model.CreateCustomerModel;
+import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.CreateTeaSalerModel;
 import com.cxtx.model.ServiceResult;
-import com.cxtx.model.UserListCell;
 import com.cxtx.service.AccountService;
-import com.cxtx.service.CustomerService;
 import com.cxtx.service.TeaSalerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,11 +37,11 @@ public class TeaSalerController extends ApiController{
         if (accountGet == null){
             return ServiceResult.fail(500, "no account record !");
         }
-        TeaSeller teaSeller = teaSalerService.findByAccountAndAlive(accountGet);
-        if (teaSeller == null ) {
+        TeaSaler teaSaler = teaSalerService.findByAccountAndAlive(accountGet);
+        if (teaSaler == null ) {
             return ServiceResult.fail(500, "no manager record !");
         }
-        return ServiceResult.success(teaSeller);
+        return ServiceResult.success(teaSaler);
     }
 
     /**
@@ -62,22 +58,44 @@ public class TeaSalerController extends ApiController{
         if (account == null){
             return ServiceResult.fail(500, "register failed, the tel already has account!");
         }
-        TeaSeller teaSeller = teaSalerService.addTeaSaler(createTeaSalerModel, account);
-        return ServiceResult.success(teaSeller);
+        TeaSaler teaSaler = teaSalerService.addTeaSaler(createTeaSalerModel, account);
+        return ServiceResult.success(teaSaler);
     }
 
 
-    //@RequestParam (value ="state",defaultValue = "1")int state
+    /**
+     *
+     * @param name
+     * @param level
+     * @param tel
+     * @param pageIndex
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return
+     */
     @RequestMapping(value = "/teaSalers/search", method = RequestMethod.GET)
     @ResponseBody
     public ServiceResult search(@RequestParam(value = "name", defaultValue = "") String name,
-                                @RequestParam(value = "level", defaultValue = "1")int level,
+                                @RequestParam(value = "level", defaultValue = "-1")int level,
                                 @RequestParam(value = "tel", defaultValue = "")String tel,
+                                @RequestParam(value = "state", defaultValue = "-1")int state,
                                 @RequestParam(value="pageIndex", defaultValue="0") int pageIndex,
                                 @RequestParam(value="pageSize", defaultValue="10") int pageSize,
                                 @RequestParam(value="sortField", defaultValue="id") String sortField,
                                 @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
-        Page<TeaSeller> result = teaSalerService.searchTeaSaler(name, level, tel, pageIndex, pageSize, sortField, sortOrder);
+        Page<TeaSaler> result = teaSalerService.searchTeaSaler(name, level, tel,state, pageIndex, pageSize, sortField, sortOrder);
         return  ServiceResult.success(result);
+    }
+
+    @RequestMapping(value = "/teaSaler/{teaSalerId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult singularDetial(@PathVariable(value = "teaSalerId") long teaSalerId){
+        checkParameter(teaSalerId>0,"Invalid TeaSalerId " + teaSalerId);
+        TeaSaler teaSaler  = teaSalerService.findById(teaSalerId);
+        if (teaSaler ==null){
+            return ServiceResult.fail(500,"no teaSaler found!");
+        }
+        return ServiceResult.success(teaSaler);
     }
 }

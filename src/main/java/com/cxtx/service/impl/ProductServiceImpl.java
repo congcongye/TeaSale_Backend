@@ -5,7 +5,7 @@ import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.dao.TeaSellerDao;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
-import com.cxtx.entity.TeaSeller;
+import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.CreateProductModel;
 import com.cxtx.model.StartSellProductModel;
 import com.cxtx.service.ProductService;
@@ -15,19 +15,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ycc on 16/10/24.
@@ -107,7 +102,7 @@ public class ProductServiceImpl implements ProductService{
      * @return
      */
     public Boolean isUnique(Product p){
-        List<Product> list = productDao.findByProductTypeAndTeaSellerAndLevelAndLocalityAndNameAndAlive(p.getProductType(),p.getTeaSeller(),p.getLevel(),p.getLocality(),p.getName(),1);
+        List<Product> list = productDao.findByProductTypeAndTeaSalerAndLevelAndLocalityAndNameAndAlive(p.getProductType(),p.getTeaSaler(),p.getLevel(),p.getLocality(),p.getName(),1);
         boolean flag=false;
         if(null==list|| list.isEmpty()){
             return true;
@@ -222,7 +217,7 @@ public class ProductServiceImpl implements ProductService{
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("remark"),"%"+fremark+"%"));
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("name"),"%"+fname+"%"));
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("locality"),"%"+flocality+"%"));
-                predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSeller>get("teaSeller").get("name"),"%"+fteaSeller_name+"%"));
+                predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSaler>get("teaSeller").get("name"),"%"+fteaSeller_name+"%"));
                 predicate.getExpressions().add(criteriaBuilder.equal(root.get("alive"),1));
                 return criteriaBuilder.and(predicate);
             }

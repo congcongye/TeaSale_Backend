@@ -24,7 +24,7 @@ public class OrderEn {
 
     @ManyToOne
     @JoinColumn(name = "teaSeller_id")
-    private TeaSeller teaSeller ;//茶农
+    private TeaSaler teaSaler;//茶农
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
@@ -105,12 +105,12 @@ public class OrderEn {
         this.createDate = createDate;
     }
 
-    public TeaSeller getTeaSeller() {
-        return teaSeller;
+    public TeaSaler getTeaSaler() {
+        return teaSaler;
     }
 
-    public void setTeaSeller(TeaSeller teaSeller) {
-        this.teaSeller = teaSeller;
+    public void setTeaSaler(TeaSaler teaSaler) {
+        this.teaSaler = teaSaler;
     }
 
     public Customer getCustomer() {
