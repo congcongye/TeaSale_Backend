@@ -7,7 +7,7 @@ public class CreateManagerModel {
     private String tel;
     private String password;
     private String name;
-    private int lever;
+    private int level;
     private double money;
     private String headUrl;
 
@@ -35,12 +35,12 @@ public class CreateManagerModel {
         this.name = name;
     }
 
-    public int getLever() {
-        return lever;
+    public int getLevel() {
+        return level;
     }
 
-    public void setLever(int lever) {
-        this.lever = lever;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public double getMoney() {

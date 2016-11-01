@@ -6,7 +6,7 @@ package com.cxtx.model;
 public class CreateTeaSalerModel {
     private String tel;
     private String password;
-    private int lever;
+    private int level;
     private String nickname;
     private String address;
     private String zip;
@@ -32,12 +32,12 @@ public class CreateTeaSalerModel {
         this.password = password;
     }
 
-    public int getLever() {
-        return lever;
+    public int getLevel() {
+        return level;
     }
 
-    public void setLever(int lever) {
-        this.lever = lever;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public double getMoney() {

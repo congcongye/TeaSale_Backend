@@ -34,7 +34,7 @@ public class ManagerServiceImpl implements ManagerService {
         manager.setAlive(1);
         manager.setMoney(createManagerModel.getMoney());
         manager.setTel(manager.getTel());
-        manager.setLever(createManagerModel.getLever());
+        manager.setLevel(createManagerModel.getLevel());
         manager.setHeadUrl(createManagerModel.getHeadUrl());
         manager.setAccount(account);
         manager.setName(createManagerModel.getName());

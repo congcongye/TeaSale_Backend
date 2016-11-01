@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setAccount(account);
         customer.setHeadUrl(createCustomerModel.getHeadUrl());
         customer.setAddress(createCustomerModel.getAddress());
-        customer.setLever(createCustomerModel.getLever());
+        customer.setLevel(createCustomerModel.getLevel());
         customer.setNickname(createCustomerModel.getNickname());
         customer.setZip(createCustomerModel.getZip());
         customer.setAlive(1);
