@@ -24,7 +24,7 @@ public class Customer {
      * 级别
      */
     @Column
-    private int lever;
+    private int level;
 
     /**
      * 名字
@@ -84,12 +84,12 @@ public class Customer {
         this.id = id;
     }
 
-    public int getLever() {
-        return lever;
+    public int getLevel() {
+        return level;
     }
 
-    public void setLever(int lever) {
-        this.lever = lever;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public String getNickname() {

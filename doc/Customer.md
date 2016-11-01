@@ -1,0 +1,218 @@
+# Api
+
+### 查询茶农
+* URL /api/teaSalers/search?name=ziz&level=1&tel=152&state=0&pageIndex=0&pageSize=10&sortField=id&sortOrder=ASC
+* Method: GET
+* 参数:
+```
+name
+tel
+以上支持模糊查询
+state与level
+不填则全查
+pageIndex,pageSize,sortField,sortOrder
+用于分页查询
+```
+* 返回:
+```
+{{
+   "code": 200,
+   "data": {
+     "content": [
+       {
+         "id": 1,
+         "name": "zizi",
+         "level": 1,
+         "nickname": null,
+         "account": {
+           "id": 2,
+           "tel": "15200837632",
+           "password": "zizi",
+           "label": 0,
+           "alive": 1
+         },
+         "address": null,
+         "tel": "15200837632",
+         "headUrl": null,
+         "money": 0,
+         "licenseUrl": null,
+         "zip": null,
+         "idCard": null,
+         "state": 1,
+         "alive": 1,
+         "createDate": null
+       },
+       {
+         "id": 2,
+         "name": "zizi",
+         "level": 1,
+         "nickname": null,
+         "account": {
+           "id": 8,
+           "tel": "15207808609",
+           "password": "zizi",
+           "label": 0,
+           "alive": 1
+         },
+         "address": null,
+         "tel": "15207808609",
+         "headUrl": null,
+         "money": 0,
+         "licenseUrl": null,
+         "zip": null,
+         "idCard": null,
+         "state": 0,
+         "alive": 1,
+         "createDate": "2016-11-01"
+       }
+     ],
+     "totalElements": 2,
+     "totalPages": 1,
+     "last": true,
+     "size": 10,
+     "number": 0,
+     "sort": [
+       {
+         "direction": "ASC",
+         "property": "id",
+         "ignoreCase": false,
+         "nullHandling": "NATIVE",
+         "ascending": true
+       }
+     ],
+     "first": true,
+     "numberOfElements": 2
+   }
+ }
+```
+### 获得某一茶农的具体信息
+* URL /api/teaSaler/{teaSalerId}
+* Method: GET
+* 参数:
+teaSalerId:PathVariable
+* 返回:
+```
+{
+  "code": 200,
+  "data": {
+    "id": 1,
+    "name": "zizi",
+    "level": 1,
+    "nickname": null,
+    "account": {
+      "id": 2,
+      "tel": "15200837632",
+      "password": "zizi",
+      "label": 0,
+      "alive": 1
+    },
+    "address": null,
+    "tel": "15200837632",
+    "headUrl": null,
+    "money": 0,
+    "licenseUrl": null,
+    "zip": null,
+    "idCard": null,
+    "state": 1,
+    "alive": 1,
+    "createDate": null
+  }
+}
+```
+### 茶农登录
+* URL /api/teaSaler/login
+* Method: POST
+* 参数: RequestBody
+```
+{
+    "tel":"15207808609",
+    "password":"zizi"
+}
+```
+* 返回:
+```
+成功:
+{
+  "code": 200,
+  "data": {
+    "id": 2,
+    "name": "zizi",
+    "level": 1,
+    "nickname": null,
+    "account": {
+      "id": 8,
+      "tel": "15207808609",
+      "password": "zizi",
+      "label": 0,
+      "alive": 1
+    },
+    "address": null,
+    "tel": "15207808609",
+    "headUrl": null,
+    "money": 0,
+    "licenseUrl": null,
+    "zip": null,
+    "idCard": null,
+    "state": 0,
+    "alive": 1,
+    "createDate": "2016-11-01"
+  }
+}
+失败:
+{
+  "code": 500,
+  "data": "no account record !"
+}
+```
+### 茶农注册
+* URL /api/teaSaler/register
+* Method: POST
+* 参数: RequestBody
+```
+{
+    "nickname":"zizi",
+    "tel":"15907823456",
+    "password":"1111111",
+    "address":"zizi",
+    "zip":"315200",
+    "money":10000.00,
+    "name":"金初阳",
+    "idCard":12345678,
+    "level":1
+}
+```
+* 返回:
+```
+成功:
+{
+  "code": 200,
+  "data": {
+    "id": 3,
+    "name": "金初阳",
+    "level": 0,
+    "nickname": "zizi",
+    "account": {
+      "id": 11,
+      "tel": "15907823456",
+      "password": "1111111",
+      "label": 0,
+      "alive": 1
+    },
+    "address": "zizi",
+    "tel": "15907823456",
+    "headUrl": null,
+    "money": 10000,
+    "licenseUrl": null,
+    "zip": "315200",
+    "idCard": "12345678",
+    "state": 0,
+    "alive": 1,
+    "createDate": "2016-11-01"
+  }
+}
+失败:
+{
+  "code": 500,
+  "data": "register failed, the tel already has account!"
+}
+```

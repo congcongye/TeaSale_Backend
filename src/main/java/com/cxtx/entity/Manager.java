@@ -34,7 +34,7 @@ public class Manager {
      * 级别
      */
     @Column
-    private int lever;
+    private int level;
 
     /**
      * 系统账户总额
@@ -86,12 +86,12 @@ public class Manager {
         this.tel = tel;
     }
 
-    public int getLever() {
-        return lever;
+    public int getLevel() {
+        return level;
     }
 
-    public void setLever(int lever) {
-        this.lever = lever;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
     public double getMoney() {
