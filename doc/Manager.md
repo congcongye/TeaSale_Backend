@@ -9,7 +9,7 @@
     "name":"金初阳",
     "tel":"15200837336",
     "password":"zizi",
-    "lever":1,
+    "level":1,
     "money":100000.00
 }
 ```
@@ -21,7 +21,7 @@
     "id": 2,
     "name": "金初阳",
     "tel": null,
-    "lever": 1,
+    "level": 1,
     "money": 100000,
     "headUrl": null,
     "account": {
