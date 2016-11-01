@@ -10,11 +10,9 @@ import com.cxtx.service.AccountService;
 import com.cxtx.service.CustomerService;
 import com.cxtx.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Created by jinchuyang on 16/10/19.
@@ -67,5 +65,39 @@ public class CustomerController extends ApiController{
         return ServiceResult.success(customer);
     }
 
+    /**
+     *
+     * @param name
+     * @param level
+     * @param tel
+     * @param pageIndex
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return
+     */
+    @RequestMapping(value = "/customers/search", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult search(@RequestParam(value = "name", defaultValue = "") String name,
+                                @RequestParam(value = "level", defaultValue = "-1")int level,
+                                @RequestParam(value = "tel", defaultValue = "")String tel,
+                                @RequestParam(value="pageIndex", defaultValue="0") int pageIndex,
+                                @RequestParam(value="pageSize", defaultValue="10") int pageSize,
+                                @RequestParam(value="sortField", defaultValue="id") String sortField,
+                                @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder) {
+        Page<Customer> result = customerService.searchCustomer(name, level, tel, pageIndex, pageSize, sortField, sortOrder);
+        return ServiceResult.success(result);
+    }
+
+    @RequestMapping(value = "/customer/{customerId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult singularDetial(@PathVariable(value = "customerId") long customerId){
+        checkParameter(customerId>0,"Invalid TeaSalerId " + customerId);
+        Customer customer  = customerService.findById(customerId);
+        if (customer ==null){
+            return ServiceResult.fail(500,"no teaSaler found!");
+        }
+        return ServiceResult.success(customer);
+    }
 
 }
