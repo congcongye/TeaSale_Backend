@@ -2,7 +2,7 @@ package com.cxtx.controller;
 
 import com.cxtx.dao.ProductDao;
 import com.cxtx.dao.ProductTypeDao;
-import com.cxtx.dao.TeaSellerDao;
+import com.cxtx.dao.TeaSalerDao;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSaler;
@@ -28,7 +28,7 @@ public class ProductController extends ApiController {
     @Autowired
     private ProductTypeDao productTypeDao;
     @Autowired
-    private TeaSellerDao teaSellerDao;
+    private TeaSalerDao teaSalerDao;
     @Autowired
     private ProductDao productDao;
     /**
@@ -43,7 +43,7 @@ public class ProductController extends ApiController {
     public ServiceResult newProduct(@RequestBody Product product, @RequestParam (value="productType_id",defaultValue = "-1")Long productType_id, @RequestParam (value="teaSeller_id",defaultValue = "-1")Long teaSeller_id){
         checkParameter(product!=null,"product is empty");
         ProductType pt =productTypeDao.findByIdAndAlive(productType_id,1);
-        TeaSaler ts =teaSellerDao.findByIdAndStateAndAlive(teaSeller_id,1,1);//存在且审核通过的茶农
+        TeaSaler ts =teaSalerDao.findByIdAndStateAndAlive(teaSeller_id,1,1);//存在且审核通过的茶农
         checkParameter(pt!=null,"productType doesn't exist");
         checkParameter(ts!=null,"teaSeller doesn,t exist");
         Product result=null;

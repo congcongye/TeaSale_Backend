@@ -2,7 +2,7 @@ package com.cxtx.service.impl;
 
 import com.cxtx.dao.ProductDao;
 import com.cxtx.dao.ProductTypeDao;
-import com.cxtx.dao.TeaSellerDao;
+import com.cxtx.dao.TeaSalerDao;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSaler;
@@ -36,7 +36,7 @@ public class ProductServiceImpl implements ProductService{
     @Autowired
     private ProductTypeDao productTypeDao;
     @Autowired
-    private TeaSellerDao teaSellerDao;
+    private TeaSalerDao teaSalerDao;
 
 
     /**
