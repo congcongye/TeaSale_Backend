@@ -39,7 +39,7 @@ public class ProductTypeController extends ApiController {
      * 传入参数1,获得所有可以使用的茶产品,传入参数0获得不能使用的茶产品
      * @return
      */
-    @RequestMapping(value = "/productType/getAllProductType", method = RequestMethod.POST)
+    @RequestMapping(value = "/productTypes/getAllProductType", method = RequestMethod.GET)
     @ResponseBody
     public ServiceResult getAllProductType(@RequestParam (value ="state",defaultValue = "1")int state){
         List<ProductType> result = productTypeService.getAllProductType(state);

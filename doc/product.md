@@ -90,8 +90,8 @@
 }</pre>
 
 ### 茶产品的批量修改
-* URL:http://localhost:8080/api/product/update
-* Method:POST
+* URL:http://localhost:8080/api/products/update
+* Method:PUT
 * 注意事项：    
 只能对stock,price,startNum,discount,isFree,postage,deliverLimit,unit）进行修改，其它不能进行修改。前台必须传的数据是id和修改的字段，未修改的，可以不传。但是仍然要保证数据格式的正确性。
 * 参数：
@@ -114,8 +114,8 @@
 }
 </pre>
 ###茶产品的批量上架
-* URL:http://localhost:8080/api/product/startSell
-* Method:POST
+* URL:http://localhost:8080/api/products/startSell
+* Method:PUT
 * 注意事项：
 只需要传入需要上架的商品id即可，可以进行上架的产品是存在且未上架的产品
 * 参数：
@@ -134,8 +134,8 @@
 }
 </pre>
 ### 茶产品的多条件组合查询
-* URL:http://localhost:8080/api/product/search 
-* Method:POST
+* URL:http://localhost:8080/api/products/search
+* Method:GET
 * 注意事项：这个可以输入的条件很多，所有的条件都可以不传或者数字传－1，字符传“”。 对于字符串都是进行模糊匹配   
   productType_id：茶产品类型的id，不需要该条件时可以不传或者传－1； 
   remark：描述信息，name：茶的名字，level：等级1，2，3；locality：产地；    

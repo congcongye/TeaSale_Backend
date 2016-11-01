@@ -30,8 +30,8 @@
 	}
 	</pre>
 ####2.茶产品类型的查询
-* url: http://localhost:8080/api/productType/getAllProductType?state=1
-* Method:POST
+* url: http://localhost:8080/api/productTypes/getAllProductType?state=1
+* Method:GET
 * 参数：在url上
 state =1 获得所有可以使用的茶产品
 state＝0获得所有不能使用的茶产品

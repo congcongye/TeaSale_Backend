@@ -65,7 +65,7 @@ public class ProductController extends ApiController {
      * @param productList
      * @return
      */
-    @RequestMapping(value = "/product/update", method = RequestMethod.POST)
+    @RequestMapping(value = "/products/update", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult updateProduct(@RequestBody List<CreateProductModel> productList){
         checkParameter(productList!=null&&!productList.isEmpty(),"products are empty");
@@ -81,7 +81,7 @@ public class ProductController extends ApiController {
      * @param productList
      * @return
      */
-    @RequestMapping(value = "/product/startSell", method = RequestMethod.POST)
+    @RequestMapping(value = "/products/startSell", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult startSell(@RequestBody List<StartSellProductModel> productList){
         checkParameter(productList!=null&&!productList.isEmpty(),"products are empty");
@@ -113,7 +113,7 @@ public class ProductController extends ApiController {
      * @param sortOrder
      * @return
      */
-    @RequestMapping(value = "/product/search", method = RequestMethod.POST)
+    @RequestMapping(value = "/products/search", method = RequestMethod.GET)
     @ResponseBody
     public Page<Product> findProductByConditions(@RequestParam(value = "productType_id",defaultValue = "-1") Long productType_id, @RequestParam(value = "remark",defaultValue = "") String remark, @RequestParam(value = "name",defaultValue = "")String name,
                                                  @RequestParam(value = "level",defaultValue = "-1")int level, @RequestParam(value = "locality",defaultValue = "")String locality,@RequestParam(value = "stock",defaultValue = "-1") double stock,
