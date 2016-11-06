@@ -1,13 +1,11 @@
 package com.cxtx.controller;
 
+import com.cxtx.model.CreateManagerModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.service.ImageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -35,10 +33,28 @@ public class ImageController extends  ApiController{
     public ServiceResult uploadLogo(@RequestParam("picture") MultipartFile [] pictures,
                              @RequestParam("product_id") Long product_id, HttpServletRequest request) throws IOException {
         String uploadPath = request.getSession().getServletContext().getRealPath("/");
-        int succCount= imageService.uploadImage(pictures,product_id);
+        int succCount= imageService.uploadImages(pictures,product_id);
         if(succCount!=pictures.length){
             return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(pictures.length-succCount));
         }
         return ServiceResult.success("all succeed");
+    }
+
+    /**
+     *
+     * @param headPic
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/image/headpic/register", method = RequestMethod.POST)
+    @ResponseBody
+    public ServiceResult register(@RequestParam("headPic") MultipartFile headPic) throws Exception{
+
+        String headUrl = imageService.uploadImage(headPic);
+        if (headUrl == null){
+            //TODO default headURL
+        }
+
+        return ServiceResult.success(headUrl);
     }
 }

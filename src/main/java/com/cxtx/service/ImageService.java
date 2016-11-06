@@ -10,5 +10,7 @@ import java.io.IOException;
  */
 public interface ImageService {
 
-    int uploadImage(MultipartFile pictures[],Long product_Id) throws IOException;
+    int uploadImages(MultipartFile pictures[],Long product_Id) throws IOException;
+
+    String uploadImage(MultipartFile multipartFile) throws IOException;
 }

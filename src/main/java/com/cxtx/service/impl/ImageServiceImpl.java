@@ -36,7 +36,7 @@ public class ImageServiceImpl implements ImageService{
      * @return
      * @throws IOException
      */
-    public int uploadImage(MultipartFile pictures[],Long product_Id) throws IOException {
+    public int uploadImages(MultipartFile pictures[],Long product_Id) throws IOException {
         //获取存储路径
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
         Properties p = new Properties();
@@ -76,6 +76,39 @@ public class ImageServiceImpl implements ImageService{
         }
         return succCount;
     }
+
+    @Override
+    public String uploadImage(MultipartFile multipartFile) throws IOException {
+        //获取存储路径
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("headPicPath");
+        File folder = new File(folderPath);
+        if (multipartFile == null){
+            return null;
+        }
+        //获取图片后缀
+        Pattern pictureNamePattern = Pattern.compile(".*(\\.[a-zA-Z\\s]+)");
+        Matcher matcher = pictureNamePattern.matcher(multipartFile.getOriginalFilename());
+        if (matcher.find()) {//如果是图片的话
+            String uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
+            //保存文件
+            File pictureToStore = File.createTempFile(uuid, matcher.group(1),folder);
+            File pic = new File(folderPath+File.separator + uuid + matcher.group(1));
+            InputStream in = multipartFile.getInputStream();
+            FileUtils.copyInputStreamToFile(in, pictureToStore);
+            pictureToStore.renameTo(pic);
+            return  pictureToStore.getAbsolutePath();
+        }
+        return null;
+    }
+
+
 
 
 //    public int newImage (Image [] image)
