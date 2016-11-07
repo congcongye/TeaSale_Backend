@@ -26,15 +26,15 @@ public class ImageController extends  ApiController{
      * 上传logo文件,上传成功后，可以拿到上传的文件名
      * @param pictures
      * @param product_id
-     * @param request
+     * @param
      * @return
      * @throws IOException
      */
     @RequestMapping(value = "/image/upload", method = RequestMethod.POST)//,produces = "text/plain;charset=UTF-8"
     @ResponseBody
     public ServiceResult uploadLogo(@RequestParam("picture") MultipartFile [] pictures,
-                             @RequestParam("product_id") Long product_id, HttpServletRequest request) throws IOException {
-        String uploadPath = request.getSession().getServletContext().getRealPath("/");
+                             @RequestParam("product_id") Long product_id) throws IOException {//, HttpServletRequest request
+//        String uploadPath = request.getSession().getServletContext().getRealPath("/");
         int succCount= imageService.uploadImage(pictures,product_id);
         if(succCount!=pictures.length){
             return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(pictures.length-succCount));

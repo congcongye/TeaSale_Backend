@@ -38,7 +38,7 @@ public class ImageServiceImpl implements ImageService{
      */
     public int uploadImage(MultipartFile pictures[],Long product_Id) throws IOException {
         //获取存储路径
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
         Properties p = new Properties();
         try {
             p.load(inputStream);
