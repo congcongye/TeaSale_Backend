@@ -31,15 +31,9 @@ public class ImageController extends  ApiController{
     @RequestMapping(value = "/image/upload", method = RequestMethod.POST)//,produces = "text/plain;charset=UTF-8"
     @ResponseBody
     public ServiceResult uploadLogo(@RequestParam("picture") MultipartFile [] pictures,
-<<<<<<< HEAD
                              @RequestParam("product_id") Long product_id) throws IOException {//, HttpServletRequest request
 //        String uploadPath = request.getSession().getServletContext().getRealPath("/");
-        int succCount= imageService.uploadImage(pictures,product_id);
-=======
-                             @RequestParam("product_id") Long product_id, HttpServletRequest request) throws IOException {
-        String uploadPath = request.getSession().getServletContext().getRealPath("/");
         int succCount= imageService.uploadImages(pictures,product_id);
->>>>>>> 51ec58c7605a2895314de4b8859f40c5c900249b
         if(succCount!=pictures.length){
             return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(pictures.length-succCount));
         }
