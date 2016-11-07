@@ -28,6 +28,7 @@ public class TeaSalerController extends ApiController{
      * @return
      * @throws Exception
      */
+    @CrossOrigin
     @RequestMapping(value = "/teaSaler/login", method = RequestMethod.POST)
     @ResponseBody
     public ServiceResult login(@RequestBody Account account) throws Exception{
