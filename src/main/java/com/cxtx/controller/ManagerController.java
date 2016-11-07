@@ -56,8 +56,7 @@ public class ManagerController extends ApiController{
      */
     @RequestMapping(value = "/manager/register", method = RequestMethod.POST)
     @ResponseBody
-    public ServiceResult register(@RequestBody CreateManagerModel createManagerModel,
-                                  @RequestParam("headPic") MultipartFile headPic) throws Exception{
+    public ServiceResult register(@RequestBody CreateManagerModel createManagerModel) throws Exception{
         checkParameter(createManagerModel !=null,"manager cannot be empty!");
         Account account = accountService.register(createManagerModel.getTel(), createManagerModel.getPassword());
         if (account == null){

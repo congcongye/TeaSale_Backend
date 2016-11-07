@@ -6,6 +6,7 @@ import com.cxtx.entity.Image;
 import com.cxtx.entity.Product;
 import com.cxtx.service.ImageService;
 import org.apache.commons.io.FileUtils;
+//import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import java.util.regex.Pattern;
  */
 @Service("ImageServiceImpl")
 public class ImageServiceImpl implements ImageService{
+
     @Autowired
     private ImageDao imageDao;
     @Autowired
@@ -61,7 +63,7 @@ public class ImageServiceImpl implements ImageService{
                 File pictureToStore = File.createTempFile(uuid, matcher.group(1),folder);
                 File pic = new File(folderPath+File.separator + uuid + matcher.group(1));
                 InputStream in = multipartFile.getInputStream();
-                FileUtils.copyInputStreamToFile(in, pictureToStore);
+                //FileUtils.copyInputStreamToFile(in, pictureToStore);
                 pictureToStore.renameTo(pic);
                 Image image = new Image();
                 Product product = productDao.findByIdAndAlive(product_Id,1);
@@ -101,7 +103,7 @@ public class ImageServiceImpl implements ImageService{
             File pictureToStore = File.createTempFile(uuid, matcher.group(1),folder);
             File pic = new File(folderPath+File.separator + uuid + matcher.group(1));
             InputStream in = multipartFile.getInputStream();
-            FileUtils.copyInputStreamToFile(in, pictureToStore);
+            //FileUtils.cop(in, pictureToStore);
             pictureToStore.renameTo(pic);
             return  pictureToStore.getAbsolutePath();
         }
@@ -111,6 +113,6 @@ public class ImageServiceImpl implements ImageService{
 
 
 
-//    public int newImage (Image [] image)
+////    public int newImage (Image [] image)
 
 }
