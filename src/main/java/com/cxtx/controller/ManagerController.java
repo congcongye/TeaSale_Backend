@@ -5,10 +5,12 @@ import com.cxtx.entity.Manager;
 import com.cxtx.model.CreateManagerModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.service.AccountService;
+import com.cxtx.service.ImageService;
 import com.cxtx.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created by jinchuyang on 16/10/19.
@@ -20,6 +22,9 @@ public class ManagerController extends ApiController{
 
     @Autowired
     private AccountService accountService;
+
+    @Autowired
+    private ImageService imageService;
 
     /**
      *
@@ -51,7 +56,8 @@ public class ManagerController extends ApiController{
      */
     @RequestMapping(value = "/manager/register", method = RequestMethod.POST)
     @ResponseBody
-    public ServiceResult register(@RequestBody CreateManagerModel createManagerModel) throws Exception{
+    public ServiceResult register(@RequestBody CreateManagerModel createManagerModel,
+                                  @RequestParam("headPic") MultipartFile headPic) throws Exception{
         checkParameter(createManagerModel !=null,"manager cannot be empty!");
         Account account = accountService.register(createManagerModel.getTel(), createManagerModel.getPassword());
         if (account == null){
