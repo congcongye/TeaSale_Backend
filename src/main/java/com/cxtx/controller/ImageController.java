@@ -38,7 +38,9 @@ public class ImageController extends  ApiController{
     /**
      * 上传logo文件,上传成功后，可以拿到上传的文件名(image新增和修改)
      * @param pictures
-     * @param model
+     * @param product_id
+     * @param image_id
+     * @param type
      * @return
      * @throws IOException
      */
@@ -116,8 +118,5 @@ public class ImageController extends  ApiController{
         List<Image> list =imageService.getAllByProductAndTypeAndAlive(product,type,1);
         return ServiceResult.success(list);
     }
-
-
-
 
 }

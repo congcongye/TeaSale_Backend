@@ -17,4 +17,5 @@ public interface ImageService {
      int uploadImages(MultipartFile pictures[], Product product, Long image_id,int type) throws IOException;
      int delete (List<DeleteImageModel> list);
      List<Image> getAllByProductAndTypeAndAlive(Product product,int type,int alive);
+
 }

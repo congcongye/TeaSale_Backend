@@ -1,5 +1,6 @@
 package com.cxtx.service.impl;
 
+import com.cxtx.ImageUtils;
 import com.cxtx.dao.CustomerDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Customer;
@@ -16,7 +17,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
+import java.util.Properties;
+import java.util.UUID;
 
 /**
  * Created by jinchuyang on 16/10/26.
@@ -40,13 +46,30 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setMoney(createCustomerModel.getMoney());
         customer.setTel(createCustomerModel.getTel());
         customer.setAccount(account);
-        customer.setHeadUrl(createCustomerModel.getHeadUrl());
         customer.setAddress(createCustomerModel.getAddress());
         customer.setLevel(createCustomerModel.getLevel());
         customer.setNickname(createCustomerModel.getNickname());
         customer.setZip(createCustomerModel.getZip());
         customer.setAlive(1);
         customer.setCreateDate(new Date());
+        //存头像
+        String headContent = createCustomerModel.getHeadUrl();
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            //return null;
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("headPicPath");
+        String uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
+        String imageUrl = folderPath + File.separator + uuid + ".jpg";
+        boolean createHeadImageResult = ImageUtils.GenerateImage(headContent,imageUrl);
+        if (!createHeadImageResult){
+            imageUrl = folderPath + File.separator + "default.jpg";
+        }
+        customer.setHeadUrl(imageUrl);
         return customerDao.save(customer);
     }
 
