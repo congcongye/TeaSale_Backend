@@ -40,21 +40,21 @@ public class ImageController extends  ApiController{
         return ServiceResult.success("all succeed");
     }
 
-    /**
-     *
-     * @param headPic
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/image/headpic/register", method = RequestMethod.POST)
-    @ResponseBody
-    public ServiceResult register(@RequestParam("headPic") MultipartFile headPic) throws Exception{
-
-        String headUrl = imageService.uploadImage(headPic);
-        if (headUrl == null){
-            //TODO default headURL
-        }
-
-        return ServiceResult.success(headUrl);
-    }
+//    /**
+//     *
+//     * @param headPic
+//     * @return
+//     * @throws Exception
+//     */
+//    @RequestMapping(value = "/image/headpic/register", method = RequestMethod.POST)
+//    @ResponseBody
+//    public ServiceResult register(@RequestParam("headPic") MultipartFile headPic) throws Exception{
+//
+//        String headUrl = imageService.uploadImage(headPic);
+//        if (headUrl == null){
+//            //TODO default headURL
+//        }
+//
+//        return ServiceResult.success(headUrl);
+//    }
 }

@@ -1,5 +1,6 @@
 package com.cxtx.service.impl;
 
+import com.cxtx.ImageUtils;
 import com.cxtx.dao.ManagerDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Manager;
@@ -8,7 +9,12 @@ import com.cxtx.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
+import java.util.Properties;
+import java.util.UUID;
 
 /**
  * Created by jinchuyang on 16/10/19.
@@ -35,10 +41,30 @@ public class ManagerServiceImpl implements ManagerService {
         manager.setMoney(createManagerModel.getMoney());
         manager.setTel(manager.getTel());
         manager.setLevel(createManagerModel.getLevel());
-        manager.setHeadUrl(createManagerModel.getHeadUrl());
+
         manager.setAccount(account);
         manager.setName(createManagerModel.getName());
         manager.setCreateDate(new Date());
+        manager.setHeadUrl(createManagerModel.getHeadUrl());
+        //存头像
+//        String headContent = createManagerModel.getHeadContent();
+//        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
+//        Properties p = new Properties();
+//        try {
+//            p.load(inputStream);
+//        } catch (IOException e1) {
+//            //return null;
+//            e1.printStackTrace();
+//        }
+//        String folderPath = p.getProperty("headPicPath");
+//        File folder = new File(folderPath);
+//        String uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
+//        String imageUrl = folder + File.separator + uuid + ".jpg";
+//        boolean createHeadImageResult = ImageUtils.GenerateImage(headContent,imageUrl);
+//        if (!createHeadImageResult){
+//
+//        }
+
         return managerDao.save(manager);
     }
 }

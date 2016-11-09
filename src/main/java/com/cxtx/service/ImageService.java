@@ -12,5 +12,5 @@ public interface ImageService {
 
     int uploadImages(MultipartFile pictures[],Long product_Id) throws IOException;
 
-    String uploadImage(MultipartFile multipartFile) throws IOException;
+    //String uploadImage(MultipartFile multipartFile) throws IOException;
 }
