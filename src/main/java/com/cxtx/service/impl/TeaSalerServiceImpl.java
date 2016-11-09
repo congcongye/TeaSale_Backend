@@ -1,5 +1,6 @@
 package com.cxtx.service.impl;
 
+import com.cxtx.ImageUtils;
 import com.cxtx.dao.TeaSalerDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.TeaSaler;
@@ -16,7 +17,12 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
+import java.util.Properties;
+import java.util.UUID;
 
 /**
  * Created by jinchuyang on 16/10/27.
@@ -41,13 +47,40 @@ public class TeaSalerServiceImpl implements TeaSalerService{
         teaSaler.setLevel(createTeaSalerModel.getLevel());
         teaSaler.setAddress(createTeaSalerModel.getAddress());
         teaSaler.setAccount(account);
-        teaSaler.setHeadUrl(createTeaSalerModel.getHeadUrl());
+        //teaSaler.setHeadUrl(createTeaSalerModel.getHeadUrl());
         teaSaler.setIdCard(createTeaSalerModel.getIdCard());
         teaSaler.setLicenseUrl(createTeaSalerModel.getLicenseUrl());
         teaSaler.setName(createTeaSalerModel.getName());
         teaSaler.setZip(createTeaSalerModel.getZip());
         teaSaler.setCreateDate(new Date());
         teaSaler.setState(0);
+        //存头像
+        String headContent = createTeaSalerModel.getHeadUrl();
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            //return null;
+            e1.printStackTrace();
+        }
+        String headFolderPath = p.getProperty("headPicPath");
+        String uuid1 = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
+        String imageUrl = headFolderPath + File.separator + uuid1 + ".jpg";
+        boolean createHeadImageResult = ImageUtils.GenerateImage(headContent,imageUrl);
+        if (!createHeadImageResult){
+            imageUrl = headFolderPath + File.separator + "default.jpg";
+        }
+        teaSaler.setHeadUrl(imageUrl);
+
+        String licenceContent = createTeaSalerModel.getLicenseUrl();
+        String licenceFolderPath = p.getProperty("licencePicPath");
+        String uuid2 = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
+        imageUrl = licenceFolderPath + File.separator +uuid2 + ".jpg";
+        boolean createLincenceImageResult = ImageUtils.GenerateImage(licenceContent,imageUrl);
+        if (!createLincenceImageResult){
+            imageUrl = licenceFolderPath + File.separator + "default.jpg";
+        }
         return teaSalerDao.save(teaSaler);
     }
 
