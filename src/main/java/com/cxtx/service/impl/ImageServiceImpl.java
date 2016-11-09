@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -49,6 +47,9 @@ public class ImageServiceImpl implements ImageService{
         }
         String folderPath = p.getProperty("logoPath");
         File folder = new File(folderPath);
+        if(!folder.exists()&&!folder.isDirectory()){
+            folder.mkdir();
+        }
         int succCount=0;
         //获取图片后缀
         Pattern pictureNamePattern = Pattern.compile(".*(\\.[a-zA-Z\\s]+)");
@@ -60,11 +61,29 @@ public class ImageServiceImpl implements ImageService{
             if (matcher.find()) {//如果是图片的话
                 String uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
                 //保存文件
-                File pictureToStore = File.createTempFile(uuid, matcher.group(1),folder);
-                File pic = new File(folderPath+File.separator + uuid + matcher.group(1));
-                InputStream in = multipartFile.getInputStream();
-                //FileUtils.copyInputStreamToFile(in, pictureToStore);
-                pictureToStore.renameTo(pic);
+                File pictureToStore = null;
+                File pic = null;
+                InputStream in=null;
+                OutputStream op=null;
+                try {
+                    pictureToStore = File.createTempFile(uuid, matcher.group(1),folder);
+                    pic = new File(folderPath+File.separator + uuid + matcher.group(1));
+                    in = multipartFile.getInputStream();
+                    op=new FileOutputStream(pictureToStore);
+                    byte [] buffer =new byte[1024];
+                    int num=0;
+                    while((num= in.read(buffer))!=-1){
+                        op.write(buffer,0,num);
+                    }
+                    pictureToStore.renameTo(pic);
+                }finally {
+                    if(in!=null){
+                        in.close();
+                    }
+                    if(op!=null){
+                        op.close();
+                    }
+                }
                 Image image = new Image();
                 Product product = productDao.findByIdAndAlive(product_Id,1);
                 if(product!=null){

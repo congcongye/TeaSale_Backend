@@ -32,8 +32,7 @@ public class ImageController extends  ApiController{
     @ResponseBody
     public ServiceResult uploadLogo(@RequestParam("picture") MultipartFile [] pictures,
                              @RequestParam("product_id") Long product_id) throws IOException {//, HttpServletRequest request
-//        String uploadPath = request.getSession().getServletContext().getRealPath("/");
-        int succCount= imageService.uploadImages(pictures,product_id);
+          int  succCount= imageService.uploadImages(pictures,product_id);
         if(succCount!=pictures.length){
             return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(pictures.length-succCount));
         }
