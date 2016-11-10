@@ -213,3 +213,34 @@
   "numberOfElements": 1
 }
 </pre>
+### 根据id查询商品
+* URL:http://localhost:7000/api/products/getById?id=1
+* Method:GET
+* 参数：id 商品id
+* 返回值：d
+ <pre>
+{
+  "code": 200,
+  "data": {
+    "id": null,
+    "productType": null,
+    "remark": null,
+    "name": null,
+    "level": 0,
+    "locality": null,
+    "stock": 0,
+    "price": 0,
+    "startNum": 0,
+    "discount": 0,
+    "isFree": 1,
+    "postate": 0,
+    "deliverLimit": 0,
+    "createDate": null,
+    "unit": null,
+    "teaSaler": null,
+    "state": 0,
+    "alive": 1,
+    "url": null
+  }
+}
+</pre>

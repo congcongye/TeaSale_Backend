@@ -127,4 +127,19 @@ public class ProductController extends ApiController {
         return products;
     }
 
+    /**
+     * 根据id查产品
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/products/getById", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult findProductById(@RequestParam(value = "id",defaultValue = "-1")Long id){
+        Product product=productDao.findByIdAndAlive(id,1);
+        if(product==null){
+            product=new Product();
+        }
+        return ServiceResult.success(product);
+    }
+
 }
