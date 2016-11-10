@@ -23,7 +23,7 @@ public class OrderEn {
     private Date createDate;//创建时间
 
     @ManyToOne
-    @JoinColumn(name = "teaSeller_id")
+    @JoinColumn(name = "teaSaler_id")
     private TeaSaler teaSaler;//茶农
 
     @ManyToOne
