@@ -48,6 +48,7 @@ public class ProductController extends ApiController {
         checkParameter(ts!=null,"teaSeller doesn,t exist");
         Product result=null;
         product.setProductType(pt);
+        product.setUrl(pt.url);
         product.setTeaSaler(ts);
         product.setAlive(1);//存在
         product.setState(0);//未上架

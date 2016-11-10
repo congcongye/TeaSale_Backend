@@ -96,6 +96,10 @@ public class ImageServiceImpl implements ImageService{
                     image.setCreateDate(new Date());
                     image.setType(type);
                     imageDao.save(image);
+                    if(type==1){//如果主图,则更新product中主图的url
+                        product.setUrl(uuid + matcher.group(1));
+                        productDao.save(product);
+                    }
                     succCount++;
                 }
             }

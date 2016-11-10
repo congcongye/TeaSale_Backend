@@ -1,12 +1,15 @@
 package com.cxtx.controller;
 
 import com.cxtx.entity.ProductType;
+import com.cxtx.model.CreateProductTypeModel;
 import com.cxtx.model.ServiceResult;
+import com.cxtx.model.UpdateProductTypeModel;
 import com.cxtx.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -20,15 +23,20 @@ public class ProductTypeController extends ApiController {
     private ProductTypeService productTypeService;
 
     /**
-     * 茶产品类型的新增和修改,修改只能把state变成0,即不产品新增时,该商品不可用
+     * 茶产品类型的新增
      * @param list
      * @return
      */
-    @RequestMapping(value = "/productType/newOrUpdate", method = RequestMethod.POST)
+    @RequestMapping(value = "/productTypes/new", method = RequestMethod.POST)
     @ResponseBody
-    public ServiceResult newOrUpdateProductType(@RequestBody List<ProductType> list){
+    public ServiceResult newOrUpdateProductType(@RequestBody List<CreateProductTypeModel> list){
         checkParameter(list!=null&&!list.isEmpty(),"productTypes are empty");
-        int succCount =productTypeService.newOrUpdateProductType(list);
+        int succCount =0;
+        try {
+            succCount = productTypeService.newProductType(list);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if(succCount!=list.size()){
             return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(list.size()-succCount));
         }
@@ -44,5 +52,21 @@ public class ProductTypeController extends ApiController {
     public ServiceResult getAllProductType(@RequestParam (value ="state",defaultValue = "1")int state){
         List<ProductType> result = productTypeService.getAllProductType(state);
         return ServiceResult.success(result);
+    }
+
+    /**
+     * 修改商品类型,修改只能把state变成0,即该商品不可用
+     * @param list
+     * @return
+     */
+    @RequestMapping(value = "/productTypes/update", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult updateProductType(@RequestBody List<UpdateProductTypeModel> list){
+        checkParameter(list!=null&&!list.isEmpty(),"productTypes are empty");
+        int succCount = productTypeService.updateProductType(list);
+        if(succCount!=list.size()){
+            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(list.size()-succCount));
+        }
+        return ServiceResult.success("all succeed");
     }
 }

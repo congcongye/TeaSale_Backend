@@ -122,6 +122,14 @@ public class Product {
     @Column
     private int alive=1;
 
+
+    /**
+     * 主图图片
+     */
+    @Column
+    private String url;
+
+
     public Long getId() {
         return id;
     }
@@ -257,6 +265,15 @@ public class Product {
     public void setState(int state) {
         this.state = state;
     }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
 
     public int getAlive() {
         return alive;

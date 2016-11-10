@@ -1,16 +1,18 @@
 package com.cxtx.service;
 
 import com.cxtx.entity.ProductType;
-import org.springframework.stereotype.Component;
+import com.cxtx.model.CreateProductTypeModel;
+import com.cxtx.model.UpdateProductTypeModel;
 
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by ycc on 16/10/22.
  */
 public interface ProductTypeService {
 
-     int newOrUpdateProductType(List<ProductType> productTypes);
+     int newProductType(List<CreateProductTypeModel> productTypes) throws IOException;
+     int updateProductType(List<UpdateProductTypeModel> list);
      List<ProductType> getAllProductType(int state);
 }

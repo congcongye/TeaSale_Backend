@@ -1,5 +1,5 @@
-###1.产品类型的新增或修改：
-* url: http://localhost:8080/api/productType/newOrUpdate 
+###产品类型的新增
+* url: http://localhost:8080/api/productType/new
 * Method:POST
 * 参数：在body里
 * 新增：
@@ -8,18 +8,27 @@
         {
         "name":"红茶1",
         "descript":"红茶的描述信息",
-        "url":"图片地址url1"
+        "url":"图片地址url1",
+        "multipartFile":图片文件（用控件上传）
         }
     ]
 </pre>
-* 修改
+* 返回：
+ <pre>{
+ 	 "code": 200,
+  	 "data": "all succeed"
+	}
+	</pre>
+### 产品类型的修改
+* URL:http://localhost:8080/api/productType/update
+* Method:PUT
+* 参数：传入需要修改的产品类型的id和state（产品类型的状态）state＝1，茶农新增时可用，state＝0，茶农新增时不可用
+* 注意事项：（修改只能把state改成0，其它的不改变）
 	<pre>
 	[
         {
         “id”:1,
-        "name":"红茶1",
-        "descript":"红茶的描述信息",
-        "url":"图片地址url1"
+        "state":1
         }
     ]
 	</pre>
