@@ -3,6 +3,7 @@ package com.cxtx.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * Created by ycc on 16/10/23.
@@ -35,6 +36,18 @@ public class Image {
     @JoinColumn(name = "product_id")
     private Product product;
 
+    /**
+     * 图片新增的时间
+     */
+    @Column
+    private Date createDate;
+
+
+    /**
+     * 是否是主图  1是,0不是
+     */
+    @Column
+    private int type=0;
     /**
      * 是否存在
      */
@@ -71,6 +84,22 @@ public class Image {
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 
     public int getAlive() {

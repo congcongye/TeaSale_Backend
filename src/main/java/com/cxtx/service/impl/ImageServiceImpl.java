@@ -4,6 +4,7 @@ import com.cxtx.dao.ImageDao;
 import com.cxtx.dao.ProductDao;
 import com.cxtx.entity.Image;
 import com.cxtx.entity.Product;
+import com.cxtx.model.DeleteImageModel;
 import com.cxtx.service.ImageService;
 import org.apache.commons.io.FileUtils;
 //import org.apache.commons.io.FileUtils;
@@ -27,16 +28,16 @@ public class ImageServiceImpl implements ImageService{
     @Autowired
     private ProductDao productDao;
 
-    private Map<String, String> logoNameMap = new HashMap<String, String>();
 
     /**
-     * 上传图片文件
+     * 创建和修改image
      * @param pictures
-     * @param product_Id
+     * @param product
+     * @param image_id
      * @return
      * @throws IOException
      */
-    public int uploadImages(MultipartFile pictures[],Long product_Id) throws IOException {
+    public int uploadImages(MultipartFile pictures[],Product product,Long image_id,int type) throws IOException {
         //获取存储路径
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
         Properties p = new Properties();
@@ -84,12 +85,16 @@ public class ImageServiceImpl implements ImageService{
                         op.close();
                     }
                 }
-                Image image = new Image();
-                Product product = productDao.findByIdAndAlive(product_Id,1);
+                Image image = imageDao.findByIdAndAlive(image_id,1);
+                if(image==null){ //image不存在修改
+                    image=new Image();
+                }
                 if(product!=null){
                     image.setProduct(product);
-                    image.setUrl(pictureToStore.getAbsolutePath());
+                    image.setUrl(uuid + matcher.group(1));
                     image.setName(multipartFile.getOriginalFilename());
+                    image.setCreateDate(new Date());
+                    image.setType(type);
                     imageDao.save(image);
                     succCount++;
                 }
@@ -98,40 +103,53 @@ public class ImageServiceImpl implements ImageService{
         return succCount;
     }
 
-//    @Override
-//    public String uploadImage(MultipartFile multipartFile) throws IOException {
-//        //获取存储路径
-//        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
-//        Properties p = new Properties();
-//        try {
-//            p.load(inputStream);
-//        } catch (IOException e1) {
-//            e1.printStackTrace();
-//        }
-//        String folderPath = p.getProperty("headPicPath");
-//        File folder = new File(folderPath);
-//        if (multipartFile == null){
-//            return null;
-//        }
-//        //获取图片后缀
-//        Pattern pictureNamePattern = Pattern.compile(".*(\\.[a-zA-Z\\s]+)");
-//        Matcher matcher = pictureNamePattern.matcher(multipartFile.getOriginalFilename());
-//        if (matcher.find()) {//如果是图片的话
-//            String uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
-//            //保存文件
-//            File pictureToStore = File.createTempFile(uuid, matcher.group(1),folder);
-//            File pic = new File(folderPath+File.separator + uuid + matcher.group(1));
-//            InputStream in = multipartFile.getInputStream();
-//            //FileUtils.cop(in, pictureToStore);
-//            pictureToStore.renameTo(pic);
-//            return  pictureToStore.getAbsolutePath();
-//        }
-//        return null;
-//    }
+
+    /**
+     *image的批量删除
+     * @param list
+     * @return
+     */
+    public int delete (List<DeleteImageModel> list){
+        int succCount=0;
+        if(list==null || list.isEmpty()){
+            return succCount;
+        }
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("logoPath");
+        for(DeleteImageModel model:list){
+            Image image=imageDao.findOne(model.id);
+            if(image!=null){
+                File file = new File(folderPath+File.separator+image.getUrl());
+                if(file!=null){
+                    file.delete();
+                }
+                image.setAlive(0);//逻辑删除
+                imageDao.save(image);
+                succCount++;
+            }
+        }
+        return succCount;
+    }
 
 
-
-
-////    public int newImage (Image [] image)
-
+    /**
+     * 获取某个产品的所有图片(type=1主图  type=0其它图片  type=-1查询全部图片
+     * @param product
+     * @return
+     */
+    public List<Image> getAllByProductAndTypeAndAlive(Product product,int type,int alive){
+        List<Image> list = new ArrayList<Image> ();
+        if(type>-1){//传入类型时
+            list = imageDao.findByProductAndTypeAndAlive(product,type,1);
+        }else{
+            list = imageDao.findByProductAndAlive(product,1);
+        }
+        return list;
+    }
 }
