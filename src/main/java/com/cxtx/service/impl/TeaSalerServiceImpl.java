@@ -64,7 +64,7 @@ public class TeaSalerServiceImpl implements TeaSalerService{
             //return null;
             e1.printStackTrace();
         }
-        String headFolderPath = p.getProperty("headPicPath");
+        String headFolderPath = p.getProperty("picPath");
         String uuid1 = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
         String imageUrl = headFolderPath + File.separator + uuid1 + ".jpg";
         boolean createHeadImageResult = ImageUtils.GenerateImage(headContent,imageUrl);
@@ -74,7 +74,7 @@ public class TeaSalerServiceImpl implements TeaSalerService{
         teaSaler.setHeadUrl(imageUrl);
 
         String licenceContent = createTeaSalerModel.getLicenseUrl();
-        String licenceFolderPath = p.getProperty("licencePicPath");
+        String licenceFolderPath = p.getProperty("picPath");
         String uuid2 = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
         imageUrl = licenceFolderPath + File.separator +uuid2 + ".jpg";
         boolean createLincenceImageResult = ImageUtils.GenerateImage(licenceContent,imageUrl);

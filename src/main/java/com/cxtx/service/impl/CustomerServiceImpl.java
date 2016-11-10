@@ -62,7 +62,7 @@ public class CustomerServiceImpl implements CustomerService {
             //return null;
             e1.printStackTrace();
         }
-        String folderPath = p.getProperty("headPicPath");
+        String folderPath = p.getProperty("picPath");
         String uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
         String imageUrl = folderPath + File.separator + uuid + ".jpg";
         boolean createHeadImageResult = ImageUtils.GenerateImage(headContent,imageUrl);

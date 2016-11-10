@@ -46,7 +46,7 @@ public class ImageServiceImpl implements ImageService{
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        String folderPath = p.getProperty("logoPath");
+        String folderPath = p.getProperty("picPath");
         File folder = new File(folderPath);
         if(!folder.exists()&&!folder.isDirectory()){
             folder.mkdir();
@@ -125,7 +125,7 @@ public class ImageServiceImpl implements ImageService{
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        String folderPath = p.getProperty("logoPath");
+        String folderPath = p.getProperty("picPath");
         for(DeleteImageModel model:list){
             Image image=imageDao.findOne(model.id);
             if(image!=null){

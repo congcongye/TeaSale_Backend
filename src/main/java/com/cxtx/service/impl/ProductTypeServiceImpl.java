@@ -41,7 +41,7 @@ public class ProductTypeServiceImpl implements ProductTypeService{
         } catch (IOException e1) {
             e1.printStackTrace();
         }
-        String folderPath = p.getProperty("logoPath");
+        String folderPath = p.getProperty("picPath");
         File folder = new File(folderPath);
         if(!folder.exists()&&!folder.isDirectory()){
             folder.mkdir();

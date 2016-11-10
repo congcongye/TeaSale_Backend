@@ -75,7 +75,7 @@ public class ImageController extends  ApiController{
             InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
             Properties p = new Properties();
             p.load(inputStream);
-            String folderPath = p.getProperty("logoPath");
+            String folderPath = p.getProperty("picPath");
             response.reset();
             File file = new File(folderPath+File.separator+url);
             response.setContentType("application/octet-stream; charset=UTF-8");

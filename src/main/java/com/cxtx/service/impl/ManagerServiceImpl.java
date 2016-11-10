@@ -56,7 +56,7 @@ public class ManagerServiceImpl implements ManagerService {
             //return null;
             e1.printStackTrace();
         }
-        String folderPath = p.getProperty("headPicPath");
+        String folderPath = p.getProperty("picPath");
         //File folder = new File(folderPath);
         String uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
         String imageUrl = folderPath + File.separator + uuid + ".jpg";
