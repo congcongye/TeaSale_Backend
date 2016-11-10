@@ -11,18 +11,17 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
-apply plugin: 'war'
-apply plugin: 'jar'
+//apply plugin: 'war'
 
 jar {
 	baseName = 'cxtx'
 	version = '0.0.1-SNAPSHOT'
 }
 
-war {
-	baseName = 'cxtx'
-	version = '0.0.1-SNAPSHOT'
-}
+//war {
+//	baseName = 'cxtx'
+//	version = '0.0.1-SNAPSHOT'
+//}
 
 repositories {
 	mavenCentral()
