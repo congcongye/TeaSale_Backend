@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -107,6 +108,20 @@ public class TeaSalerServiceImpl implements TeaSalerService{
             return  teaSaler;
         }
         return null;
+    }
+
+    @Override
+    public int approveTeaSalers(List<TeaSaler> teaSalers) {
+        int succCount = 0;
+        for (TeaSaler teaSaler : teaSalers) {
+            TeaSaler saler = teaSalerDao.findOne(teaSaler.getId());
+            if (saler != null && saler.getAlive() == 1 && saler.getState() == 0) {
+                saler.setState(1);
+                teaSalerDao.save(saler);
+                succCount++;
+            }
+        }
+        return succCount;
     }
 
 

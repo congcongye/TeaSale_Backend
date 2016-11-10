@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Created by jinchuyang on 16/10/19.
  */
@@ -98,5 +100,16 @@ public class TeaSalerController extends ApiController{
             return ServiceResult.fail(500,"no teaSaler found!");
         }
         return ServiceResult.success(teaSaler);
+    }
+
+    @RequestMapping(value = "/teaSalers/approve", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult approveTeasaler(@RequestBody List<TeaSaler> teaSalers){
+        checkParameter(teaSalers!=null&&!teaSalers.isEmpty(),"teaSaler are empty");
+        int succCount = teaSalerService.approveTeaSalers(teaSalers);
+        if(succCount!=teaSalers.size()){
+            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(teaSalers.size()-succCount));
+        }
+        return ServiceResult.success("all succeed");
     }
 }
