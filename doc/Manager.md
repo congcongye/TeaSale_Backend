@@ -17,21 +17,53 @@
 ```
 {
   "code": 200,
+   "data": {
+     "id": 2,
+     "name": "金初阳",
+     "tel": null,
+     "level": 1,
+     "money": 100000,
+     "headUrl": null,
+     "account": {
+       "id": 5,
+       "tel": "15200837336",
+       "password": "zizi",
+       "label": 0,
+       "alive": 1
+     },
+     "alive": 1
+   }
+ }
+```
+### 管理员登陆
+* URL /api/manager/login
+* Method: POST
+* 参数:
+```
+{
+  "tel":"13201716308",
+  "password":"123456"
+}
+```
+* 返回:
+```
+{
+  "code": 200,
   "data": {
-    "id": 2,
-    "name": "金初阳",
+    "id": 1,
+    "name": "llf1",
     "tel": null,
     "level": 1,
     "money": 100000,
-    "headUrl": null,
+    "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
     "account": {
-      "id": 5,
-      "tel": "15200837336",
-      "password": "zizi",
+      "id": 2,
+      "tel": "13201716308",
+      "password": "123456",
       "label": 0,
       "alive": 1
     },
-    "alive": 1
+    "alive": 1,
+    "createDate": "2016-11-10"
   }
-}
 ```

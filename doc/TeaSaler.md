@@ -216,3 +216,140 @@ teaSalerId:PathVariable
   "data": "register failed, the tel already has account!"
 }
 ```
+### 批量审批茶农
+* URL /api/teaSalers/approve
+* Method: PUT
+* 参数: RequestBody(List<TeaSaler>)
+```
+[
+      {
+        "id": 1,
+        "name": "金初阳",
+        "level": 0,
+        "nickname": "zizi",
+        "account": {
+          "id": 3,
+          "tel": "15907823456",
+          "password": "1111111",
+          "label": 0,
+          "alive": 1
+        },
+        "address": "zizi",
+        "tel": "15907823456",
+        "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
+        "money": 10000,
+        "licenseUrl": null,
+        "zip": "315200",
+        "idCard": "12345678",
+        "state": 0,
+        "alive": 1,
+        "createDate": "2016-11-10"
+      },
+      {
+        "id": 2,
+        "name": "金初阳",
+        "level": 0,
+        "nickname": "zizi",
+        "account": {
+          "id": 4,
+          "tel": "15907823451",
+          "password": "1111111",
+          "label": 0,
+          "alive": 1
+        },
+        "address": "zizi",
+        "tel": "15907823451",
+        "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
+        "money": 10000,
+        "licenseUrl": null,
+        "zip": "315200",
+        "idCard": "12345678",
+        "state": 0,
+        "alive": 1,
+        "createDate": "2016-11-10"
+      },
+      {
+        "id": 3,
+        "name": "金初阳",
+        "level": 0,
+        "nickname": "zizi",
+        "account": {
+          "id": 5,
+          "tel": "15907823452",
+          "password": "1111111",
+          "label": 0,
+          "alive": 1
+        },
+        "address": "zizi",
+        "tel": "15907823452",
+        "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
+        "money": 10000,
+        "licenseUrl": null,
+        "zip": "315200",
+        "idCard": "12345678",
+        "state": 0,
+        "alive": 1,
+        "createDate": "2016-11-10"
+      },
+      {
+        "id": 4,
+        "name": "金初阳",
+        "level": 0,
+        "nickname": "zizi",
+        "account": {
+          "id": 6,
+          "tel": "15907823453",
+          "password": "1111111",
+          "label": 0,
+          "alive": 1
+        },
+        "address": "zizi",
+        "tel": "15907823453",
+        "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
+        "money": 10000,
+        "licenseUrl": null,
+        "zip": "315200",
+        "idCard": "12345678",
+        "state": 0,
+        "alive": 1,
+        "createDate": "2016-11-10"
+      },
+      {
+        "id": 5,
+        "name": "金初阳",
+        "level": 0,
+        "nickname": "zizi",
+        "account": {
+          "id": 7,
+          "tel": "15907823454",
+          "password": "1111111",
+          "label": 0,
+          "alive": 1
+        },
+        "address": "zizi",
+        "tel": "15907823454",
+        "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
+        "money": 10000,
+        "licenseUrl": null,
+        "zip": "315200",
+        "idCard": "12345678",
+        "state": 0,
+        "alive": 1,
+        "createDate": "2016-11-10"
+      }
+    ] "level":1
+}
+```
+* 返回:
+```
+成功:
+{
+  "code": 200,
+  "data": "all succeed"
+}
+失败:
+{
+  "code": 500,
+  "data": "the num of succeed is 0 ; the fail number is 5"
+}
+```
