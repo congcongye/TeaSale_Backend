@@ -83,7 +83,8 @@ dependencies {
 	compile("com.thetransactioncompany:cors-filter:2.5")
 	compile("com.alibaba:druid:1.0.18")
 	compile("org.codehaus.plexus:plexus-compiler-javac:2.7")
-
+	compile("com.jayway.restassured:rest-assured:2.3.3")
+	compile("junit:junit:4.11")
 
 	// end::actuator[]
 	testCompile("junit:junit")
