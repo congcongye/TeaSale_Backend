@@ -54,7 +54,7 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setCreateDate(new Date());
         //存头像
         String headContent = createCustomerModel.getHeadUrl();
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
         Properties p = new Properties();
         try {
             p.load(inputStream);

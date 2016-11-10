@@ -48,7 +48,7 @@ public class ManagerServiceImpl implements ManagerService {
 
         //存头像
         String headContent = createManagerModel.getHeadUrl();
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
         Properties p = new Properties();
         try {
             p.load(inputStream);

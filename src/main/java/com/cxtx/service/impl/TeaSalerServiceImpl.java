@@ -56,7 +56,7 @@ public class TeaSalerServiceImpl implements TeaSalerService{
         teaSaler.setState(0);
         //存头像
         String headContent = createTeaSalerModel.getHeadUrl();
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtc.properties");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
         Properties p = new Properties();
         try {
             p.load(inputStream);
