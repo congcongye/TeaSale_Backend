@@ -217,7 +217,7 @@ public class ProductServiceImpl implements ProductService{
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("remark"),"%"+fremark+"%"));
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("name"),"%"+fname+"%"));
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("locality"),"%"+flocality+"%"));
-                predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSaler>get("teaSeller").get("name"),"%"+fteaSeller_name+"%"));
+                predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSaler>get("teaSaler").get("name"),"%"+fteaSeller_name+"%"));
                 predicate.getExpressions().add(criteriaBuilder.equal(root.get("alive"),1));
                 return criteriaBuilder.and(predicate);
             }
