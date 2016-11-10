@@ -78,7 +78,7 @@ public class ProductServiceImpl implements ProductService{
                         pt.setIsFree(product.isFree);
                     }
                     if(product.postage!=-1){
-                        pt.setPostate(product.postage);
+                        pt.setPostage(product.postage);
                     }
                     if(product.deliverLimit!=-1){
                         pt.setDeliverLimit(product.deliverLimit);

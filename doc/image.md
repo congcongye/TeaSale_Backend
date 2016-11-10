@@ -72,7 +72,7 @@ type:＝1为主图 ＝0 普通图片 －1或不传查全部图片
         "startNum": 1,
         "discount": 0.8,
         "isFree": 1,
-        "postate": 0,
+        "postage": 0,
         "deliverLimit": 10,
         "createDate": "2016-11-09",
         "unit": "斤",
