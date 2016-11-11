@@ -353,3 +353,17 @@ teaSalerId:PathVariable
   "data": "the num of succeed is 0 ; the fail number is 5"
 }
 ```
+### 农户上传营业执照照片
+* URL /api/image/licence/upload?teaSalerId=1
+* Method: POST
+* 参数: 
+```
+picture:MultipartFile
+```
+* 返回:
+```
+{
+  "code": 200,
+  "data": "head pic upload succeed "
+}
+```

@@ -3,6 +3,7 @@ package com.cxtx.service;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Image;
 import com.cxtx.entity.Product;
+import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.DeleteImageModel;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,4 +21,6 @@ public interface ImageService {
      List<Image> getAllByProductAndTypeAndAlive(Product product,int type,int alive);
 
     int uploadHeadPic(MultipartFile picture, Account account) throws IOException;
+
+    int uploadLicencePic(MultipartFile picture, TeaSaler teaSaler) throws IOException;
 }
