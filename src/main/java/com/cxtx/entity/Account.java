@@ -33,6 +33,9 @@ public class Account {
     @Column
     private int alive;
 
+    @Column
+    private String headURL;
+
     public Long getId() {
         return id;
     }
@@ -71,5 +74,13 @@ public class Account {
 
     public void setAlive(int alive) {
         this.alive = alive;
+    }
+
+    public String getHeadURL() {
+        return headURL;
+    }
+
+    public void setHeadURL(String headURL) {
+        this.headURL = headURL;
     }
 }
