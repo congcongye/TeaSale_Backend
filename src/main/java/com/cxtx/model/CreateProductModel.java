@@ -13,4 +13,5 @@ public class CreateProductModel {
     public double postage=-1;
     public int deliverLimit=-1;
     public String unit="";
+    public Long teaSaler_id=-1L;
 }
