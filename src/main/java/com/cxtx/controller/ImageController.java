@@ -76,8 +76,9 @@ public class ImageController extends  ApiController{
      */
     @RequestMapping(value = "/image/getByUrl", method = RequestMethod.GET)
     @ResponseBody
-    public void downloadLogo(HttpServletResponse response,
+    public void downloadLogo(HttpServletRequest request, HttpServletResponse response,
                              @RequestParam(value="url") String url) throws IOException {// @PathVariable(value="url") String url
+        System.out.print(request.getRequestURL() + "\t" + request.getMethod());
         OutputStream os = response.getOutputStream();
         try {
             InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
@@ -86,6 +87,9 @@ public class ImageController extends  ApiController{
             String folderPath = p.getProperty("picPath");
             response.reset();
             File file = new File(folderPath+File.separator+url);
+            if (!file.exists()) {
+                return;
+            }
             response.setContentType("application/octet-stream; charset=UTF-8");
             os.write(FileUtils.readFileToByteArray(file));
             os.flush();
