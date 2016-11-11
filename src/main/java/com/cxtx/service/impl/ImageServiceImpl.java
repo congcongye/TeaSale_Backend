@@ -1,7 +1,9 @@
 package com.cxtx.service.impl;
 
+import com.cxtx.dao.AccountDao;
 import com.cxtx.dao.ImageDao;
 import com.cxtx.dao.ProductDao;
+import com.cxtx.entity.Account;
 import com.cxtx.entity.Image;
 import com.cxtx.entity.Product;
 import com.cxtx.model.DeleteImageModel;
@@ -27,6 +29,8 @@ public class ImageServiceImpl implements ImageService{
     private ImageDao imageDao;
     @Autowired
     private ProductDao productDao;
+    @Autowired
+    private AccountDao accountDao;
 
 
     /**
@@ -107,7 +111,60 @@ public class ImageServiceImpl implements ImageService{
         return succCount;
     }
 
-
+    @Override
+    public int uploadHeadPic(MultipartFile picture, Account account) throws IOException{
+        //获取存储路径
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("picPath");
+        File folder = new File(folderPath);
+        if(!folder.exists()&&!folder.isDirectory()){
+            folder.mkdir();
+        }
+        int succCount=0;
+        //获取图片后缀
+        Pattern pictureNamePattern = Pattern.compile(".*(\\.[a-zA-Z\\s]+)");
+        if(picture==null){
+            return succCount;
+        }
+        Matcher matcher = pictureNamePattern.matcher(picture.getOriginalFilename());
+        if (matcher.find()) {//如果是图片的话
+            String uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
+            //保存文件
+            File pictureToStore = null;
+            File pic = null;
+            InputStream in=null;
+            OutputStream op=null;
+            try {
+                pictureToStore = File.createTempFile(uuid, matcher.group(1),folder);
+                pic = new File(folderPath+File.separator + uuid + matcher.group(1));
+                in = picture.getInputStream();
+                op=new FileOutputStream(pictureToStore);
+                byte [] buffer =new byte[1024];
+                int num=0;
+                while((num= in.read(buffer))!=-1){
+                    op.write(buffer,0,num);
+                }
+                pictureToStore.renameTo(pic);
+            }finally {
+                if(in!=null){
+                    in.close();
+                }
+                if(op!=null){
+                    op.close();
+                }
+            }
+            account.setHeadURL(uuid + matcher.group(1));
+            accountDao.save(account);
+            return 1;
+        }
+        return 0;
+    }
     /**
      *image的批量删除
      * @param list
@@ -156,4 +213,6 @@ public class ImageServiceImpl implements ImageService{
         }
         return list;
     }
+
+
 }

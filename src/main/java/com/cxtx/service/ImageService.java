@@ -1,5 +1,6 @@
 package com.cxtx.service;
 
+import com.cxtx.entity.Account;
 import com.cxtx.entity.Image;
 import com.cxtx.entity.Product;
 import com.cxtx.model.DeleteImageModel;
@@ -18,4 +19,5 @@ public interface ImageService {
      int delete (List<DeleteImageModel> list);
      List<Image> getAllByProductAndTypeAndAlive(Product product,int type,int alive);
 
+    int uploadHeadPic(MultipartFile picture, Account account) throws IOException;
 }

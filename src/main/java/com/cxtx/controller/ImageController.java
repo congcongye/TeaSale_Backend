@@ -1,6 +1,8 @@
 package com.cxtx.controller;
 
+import com.cxtx.dao.AccountDao;
 import com.cxtx.dao.ProductDao;
+import com.cxtx.entity.Account;
 import com.cxtx.entity.Image;
 import com.cxtx.entity.Product;
 import com.cxtx.model.CreateImageModel;
@@ -34,6 +36,8 @@ public class ImageController extends  ApiController{
     private ImageService imageService;
     @Autowired
     private ProductDao productDao;
+    @Autowired
+    private AccountDao accountDao;
 
     /**
      * 上传logo文件,上传成功后，可以拿到上传的文件名(image新增和修改)
@@ -119,4 +123,25 @@ public class ImageController extends  ApiController{
         return ServiceResult.success(list);
     }
 
+
+    /**
+     *
+     * @param picture
+     * @param accountId
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/image/head/upload", method = RequestMethod.POST)//,produces = "text/plain;charset=UTF-8"
+    @ResponseBody
+    public ServiceResult uploadHeadPic(@RequestParam("picture") MultipartFile  picture,
+                                       @RequestParam(value = "accountId",defaultValue = "-1")Long accountId) throws IOException {//, HttpServletRequest request
+        checkParameter(picture!=null,"pictures are empty");
+        Account account = accountDao.findOne(accountId);
+        checkParameter(account!=null&&account.getAlive()==1,"no account");
+        int result = imageService.uploadHeadPic(picture,account);
+        if (result ==0){
+            return ServiceResult.fail(500,"head pic upload fail");
+        }
+        return ServiceResult.success("head pic upload succeed ");
+    }
 }

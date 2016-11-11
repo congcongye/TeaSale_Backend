@@ -45,26 +45,6 @@ public class ManagerServiceImpl implements ManagerService {
         manager.setAccount(account);
         manager.setName(createManagerModel.getName());
         manager.setCreateDate(new Date());
-
-        //存头像
-        String headContent = createManagerModel.getHeadUrl();
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
-        Properties p = new Properties();
-        try {
-            p.load(inputStream);
-        } catch (IOException e1) {
-            //return null;
-            e1.printStackTrace();
-        }
-        String folderPath = p.getProperty("picPath");
-        //File folder = new File(folderPath);
-        String uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
-        String imageUrl = folderPath + File.separator + uuid + ".jpg";
-        boolean createHeadImageResult = ImageUtils.GenerateImage(headContent,imageUrl);
-        if (!createHeadImageResult){
-            imageUrl = folderPath + File.separator + "default.jpg";
-        }
-        manager.setHeadUrl(imageUrl);
         return managerDao.save(manager);
     }
 }
