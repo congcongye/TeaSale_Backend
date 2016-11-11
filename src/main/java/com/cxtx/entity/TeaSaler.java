@@ -81,7 +81,7 @@ public class TeaSaler{
     private String idCard;
 
     /**
-     * 是否审核通过(state=0,未审核通过,state=1,审核通过)
+     * 是否审核通过(state=0未审核通过,state=1审核通过)
      */
     @Column
     private int state=0;

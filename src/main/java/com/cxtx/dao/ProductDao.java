@@ -14,4 +14,6 @@ import java.util.List;
 public interface ProductDao extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
    List<Product> findByProductTypeAndTeaSalerAndLevelAndLocalityAndNameAndAlive(ProductType pt, TeaSaler ts, int level, String locality, String name, int alive);
    Product findByIdAndAlive(Long id,int alive);
+   List<Product> findByTeaSalerAndStateAndAlive(TeaSaler teaSaler,int state,int alive);
+   List<Product> findByTeaSalerAndAlive(TeaSaler teaSaler,int alive);
 }

@@ -244,3 +244,68 @@
   }
 }
 </pre>
+### 根据茶农和state查询商品
+* URL：http://localhost:7000/api/products/getByTeaSalerAndState?teaSaler_id=1&state=1
+* Method:GET
+* 输入：    
+state:1上架，0未上架的 －1或不传查全部    
+teaSaler_id:茶农id
+* 返回值：    
+ <pre>
+ {
+  "code": 200,
+  "data": [
+    {
+      "id": 1,
+      "productType": {
+        "id": 1,
+        "name": "红茶",
+        "descript": "红茶",
+        "url": "1.jpg",
+        "state": 1,
+        "alive": 1
+      },
+      "remark": "产品1",
+      "name": "红茶",
+      "level": 1,
+      "locality": "上海闵行区",
+      "stock": 1000,
+      "price": 100,
+      "startNum": 5,
+      "discount": 0.8,
+      "isFree": 1,
+      "postage": 5,
+      "deliverLimit": 10,
+      "createDate": "2016-11-11",
+      "unit": "两",
+      "teaSaler": {
+        "id": 1,
+        "name": "ycc",
+        "level": 1,
+        "nickname": "ycc",
+        "account": {
+          "id": 1,
+          "tel": "12314",
+          "password": "123",
+          "label": 1,
+          "alive": 1,
+          "headURL": null
+        },
+        "address": "上海市",
+        "tel": "12341341",
+        "headUrl": "1.jpg",
+        "money": 100,
+        "licenseUrl": "1.jpg",
+        "zip": "14134",
+        "idCard": "14rwerq",
+        "state": 1,
+        "alive": 1,
+        "createDate": "2016-11-11"
+      },
+      "state": 0,
+      "alive": 1,
+      "url": "1.jpg"
+    }
+  ]
+}
+</pre>

@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -141,6 +142,27 @@ public class ProductController extends ApiController {
             product=new Product();
         }
         return ServiceResult.success(product);
+    }
+
+    /**
+     * 根据茶农和state获得产品
+     * @param teaSaler_id
+     * @param state
+     * @return
+     */
+    @RequestMapping(value = "/products/getByTeaSalerAndState", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult findByTeaSalerAndState(@RequestParam(value = "teaSaler_id",defaultValue = "-1")Long teaSaler_id,@RequestParam(value = "state",defaultValue = "-1")int state){
+        TeaSaler teaSaler =teaSalerDao.findByIdAndStateAndAlive(teaSaler_id,1,1);
+        checkParameter(teaSaler!=null,"teaSaler is empty");
+        List<Product> list =new ArrayList<Product>();
+        if(state>-1){
+            list =productDao.findByTeaSalerAndStateAndAlive(teaSaler,state,1);
+        }else{
+            list=productDao.findByTeaSalerAndAlive(teaSaler,1);
+        }
+        return ServiceResult.success(list);
+
     }
 
 }
