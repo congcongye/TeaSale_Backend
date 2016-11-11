@@ -50,38 +50,12 @@ public class TeaSalerServiceImpl implements TeaSalerService{
         teaSaler.setAccount(account);
         //teaSaler.setHeadUrl(createTeaSalerModel.getHeadUrl());
         teaSaler.setIdCard(createTeaSalerModel.getIdCard());
-        teaSaler.setLicenseUrl(createTeaSalerModel.getLicenseUrl());
+        //teaSaler.setLicenseUrl(createTeaSalerModel.getLicenseUrl());
         teaSaler.setName(createTeaSalerModel.getName());
         teaSaler.setZip(createTeaSalerModel.getZip());
         teaSaler.setCreateDate(new Date());
         teaSaler.setState(0);
         //存头像
-        String headContent = createTeaSalerModel.getHeadUrl();
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
-        Properties p = new Properties();
-        try {
-            p.load(inputStream);
-        } catch (IOException e1) {
-            //return null;
-            e1.printStackTrace();
-        }
-        String headFolderPath = p.getProperty("picPath");
-        String uuid1 = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
-        String imageUrl = headFolderPath + File.separator + uuid1 + ".jpg";
-        boolean createHeadImageResult = ImageUtils.GenerateImage(headContent,imageUrl);
-        if (!createHeadImageResult){
-            imageUrl = headFolderPath + File.separator + "default.jpg";
-        }
-        teaSaler.setHeadUrl(imageUrl);
-
-        String licenceContent = createTeaSalerModel.getLicenseUrl();
-        String licenceFolderPath = p.getProperty("picPath");
-        String uuid2 = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
-        imageUrl = licenceFolderPath + File.separator +uuid2 + ".jpg";
-        boolean createLincenceImageResult = ImageUtils.GenerateImage(licenceContent,imageUrl);
-        if (!createLincenceImageResult){
-            imageUrl = licenceFolderPath + File.separator + "default.jpg";
-        }
         return teaSalerDao.save(teaSaler);
     }
 

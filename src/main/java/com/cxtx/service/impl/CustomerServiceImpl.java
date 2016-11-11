@@ -52,24 +52,6 @@ public class CustomerServiceImpl implements CustomerService {
         customer.setZip(createCustomerModel.getZip());
         customer.setAlive(1);
         customer.setCreateDate(new Date());
-        //存头像
-        String headContent = createCustomerModel.getHeadUrl();
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
-        Properties p = new Properties();
-        try {
-            p.load(inputStream);
-        } catch (IOException e1) {
-            //return null;
-            e1.printStackTrace();
-        }
-        String folderPath = p.getProperty("picPath");
-        String uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
-        String imageUrl = folderPath + File.separator + uuid + ".jpg";
-        boolean createHeadImageResult = ImageUtils.GenerateImage(headContent,imageUrl);
-        if (!createHeadImageResult){
-            imageUrl = folderPath + File.separator + "default.jpg";
-        }
-        customer.setHeadUrl(imageUrl);
         return customerDao.save(customer);
     }
 
