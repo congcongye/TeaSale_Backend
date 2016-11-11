@@ -21,6 +21,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,8 +57,9 @@ public class ProductServiceImpl implements ProductService{
      * @return
      */
     @Override
-    public int updateProduct(List<CreateProductModel> products){//修改后填入的信息
+    public List<Product> updateProduct(List<CreateProductModel> products){//修改后填入的信息
         int succCount =0 ;
+        List<Product> result =new ArrayList<Product>();
         for(CreateProductModel product:products){
             if(null!=product){
                 Product pt =productDao.findByIdAndAlive(product.id,1);
@@ -87,13 +89,14 @@ public class ProductServiceImpl implements ProductService{
                         pt.setUnit(product.unit);
                     }
                     if(isUnique(pt)){
-                        productDao.save(pt);
+                        Product product1= productDao.save(pt);
+                        result.add(product1);
                         succCount++;
                     }
                 }
             }
         }
-        return succCount;
+        return result;
     }
 
     /**
@@ -158,18 +161,18 @@ public class ProductServiceImpl implements ProductService{
      */
     @Override
     public Page<Product> findByConditions(Long productType_id,String remark,String name,int level,String locality,double stock,double lowPrice,double highPrice,
-                                          double startNum,double discount,int isFree,String teaSeller_name,int state,int pageIndex, int pageSize, String sortField, String sortOrder){
+                                          double startNum,double discount,int isFree,String teaSeller_name,int state,Long teaSaler_id,int pageIndex, int pageSize, String sortField, String sortOrder){
         Sort.Direction direction = Sort.Direction.ASC;
         if (sortOrder.toUpperCase().equals("DESC")) {
             direction = Sort.Direction.DESC;
         }
         Sort sort = new Sort(direction, sortField);
-        Specification<Product> specification = this.buildSpecifications(productType_id,remark,name,level,locality,stock,lowPrice,highPrice,startNum,discount,isFree,teaSeller_name,state);
+        Specification<Product> specification = this.buildSpecifications(productType_id,remark,name,level,locality,stock,lowPrice,highPrice,startNum,discount,isFree,teaSeller_name,state,teaSaler_id);
         return  productDao.findAll(Specifications.where(specification), new PageRequest(pageIndex, pageSize, sort));
 
     }
     private Specification<Product> buildSpecifications(Long productType_id,String remark,String name,int level,String locality,double stock,double lowPrice,double highPrice,
-                                                       double startNum,double discount,int isFree,String teaSeller_name,int state) {
+                                                       double startNum,double discount,int isFree,String teaSeller_name,int state,Long teaSaler_id) {
         final ProductType fproductType = productTypeDao.findByIdAndAlive(productType_id,1);
         final String fremark =remark;
         final String fname =name;
@@ -183,6 +186,7 @@ public class ProductServiceImpl implements ProductService{
         final int fisFree =isFree;
         final String fteaSeller_name=teaSeller_name;
         final int fstate=state;
+        final TeaSaler fteaSaler =teaSalerDao.findByIdAndStateAndAlive(teaSaler_id,1,1);
         Specification<Product> specification = new Specification<Product>() {
             @Override
             public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -213,6 +217,9 @@ public class ProductServiceImpl implements ProductService{
                 }
                 if(fstate>-1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("state"),fstate));
+                }
+                if(null!=fteaSaler){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.<TeaSaler>get("teaSaler"),fteaSaler));
                 }
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("remark"),"%"+fremark+"%"));
                 predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("name"),"%"+fname+"%"));
