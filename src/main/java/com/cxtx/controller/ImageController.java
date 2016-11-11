@@ -2,9 +2,11 @@ package com.cxtx.controller;
 
 import com.cxtx.dao.AccountDao;
 import com.cxtx.dao.ProductDao;
+import com.cxtx.dao.TeaSalerDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Image;
 import com.cxtx.entity.Product;
+import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.CreateImageModel;
 import com.cxtx.model.CreateManagerModel;
 import com.cxtx.model.DeleteImageModel;
@@ -38,6 +40,8 @@ public class ImageController extends  ApiController{
     private ProductDao productDao;
     @Autowired
     private AccountDao accountDao;
+    @Autowired
+    private TeaSalerDao teaSalerDao;
 
     /**
      * 上传logo文件,上传成功后，可以拿到上传的文件名(image新增和修改)
@@ -139,6 +143,27 @@ public class ImageController extends  ApiController{
         Account account = accountDao.findOne(accountId);
         checkParameter(account!=null&&account.getAlive()==1,"no account");
         int result = imageService.uploadHeadPic(picture,account);
+        if (result ==0){
+            return ServiceResult.fail(500,"head pic upload fail");
+        }
+        return ServiceResult.success("head pic upload succeed ");
+    }
+
+    /**
+     *
+     * @param picture
+     * @param teaSalerId
+     * @return
+     * @throws IOException
+     */
+    @RequestMapping(value = "/image/licence/upload", method = RequestMethod.POST)//,produces = "text/plain;charset=UTF-8"
+    @ResponseBody
+    public ServiceResult uploadLicencePic(@RequestParam("picture") MultipartFile  picture,
+                                       @RequestParam(value = "teaSalerId",defaultValue = "-1")Long teaSalerId) throws IOException {//, HttpServletRequest request
+        checkParameter(picture!=null,"pictures are empty");
+        TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
+        checkParameter(teaSaler!=null&&teaSaler.getAlive()==1,"no teaSaler account");
+        int result = imageService.uploadLicencePic(picture,teaSaler);
         if (result ==0){
             return ServiceResult.fail(500,"head pic upload fail");
         }
