@@ -120,7 +120,7 @@ public class ProductController extends ApiController {
                                                  @RequestParam(value = "level",defaultValue = "-1")int level, @RequestParam(value = "locality",defaultValue = "")String locality,@RequestParam(value = "stock",defaultValue = "-1") double stock,
                                                  @RequestParam(value = "lowPrice",defaultValue = "-1")double lowPrice, @RequestParam(value = "highPrice",defaultValue = "-1")double highPrice, @RequestParam(value = "startNum",defaultValue = "-1")double startNum, @RequestParam(value = "discount",defaultValue = "-1")double discount,
                                                  @RequestParam(value = "isFree",defaultValue = "-1")int isFree, @RequestParam(value = "teaSeller_name",defaultValue = "")String teaSeller_name, @RequestParam(value = "state",defaultValue = "-1")int state,
-                                                 @RequestParam(value="pageIndex", defaultValue="0") int pageIndex, @RequestParam(value="pageSize", defaultValue="10") int pageSize, @RequestParam(value="sortField", defaultValue="price") String sortField, @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
+                                                 @RequestParam(value="pageIndex", defaultValue="1") int pageIndex, @RequestParam(value="pageSize", defaultValue="10") int pageSize, @RequestParam(value="sortField", defaultValue="price") String sortField, @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
 
         Page<Product> products = productService.findByConditions(productType_id,remark,name,level,locality,stock,lowPrice,highPrice,
         startNum, discount, isFree, teaSeller_name,state,pageIndex,pageSize, sortField,sortOrder);

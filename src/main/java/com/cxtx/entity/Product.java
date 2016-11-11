@@ -82,7 +82,7 @@ public class Product {
      * 邮费
      */
     @Column
-    private double postate;
+    private double postage;
 
     /**
      * 发货间隔 (5天或者10天等)
@@ -218,12 +218,12 @@ public class Product {
         this.isFree = isFree;
     }
 
-    public double getPostate() {
-        return postate;
+    public double getPostage() {
+        return postage;
     }
 
-    public void setPostate(double postate) {
-        this.postate = postate;
+    public void setPostage(double postage) {
+        this.postage = postage;
     }
 
     public int getDeliverLimit() {
