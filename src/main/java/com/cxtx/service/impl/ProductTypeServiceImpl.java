@@ -28,12 +28,15 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 
     /**
      * 产品类型的新增和修改(修改只能把state变成0)
-     * @param productTypes
+     * @param name
+     * @param descript
+     * @param multipartFile
      * @return
+     * @throws IOException
      */
     @Override
-    public int newProductType(List<CreateProductTypeModel> productTypes) throws IOException {
-        int succCount=0;
+    public ProductType newProductType(String name,String descript,MultipartFile multipartFile) throws IOException {
+        ProductType result=null;
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
         Properties p = new Properties();
         try {
@@ -48,30 +51,31 @@ public class ProductTypeServiceImpl implements ProductTypeService{
         }
         //获取图片后缀
         Pattern pictureNamePattern = Pattern.compile(".*(\\.[a-zA-Z\\s]+)");
-        for(CreateProductTypeModel createProductTypeModel:productTypes){
-            if(Unique(createProductTypeModel.productType)){
-                MultipartFile multipartFile=createProductTypeModel.multipartFile;
-                Matcher matcher = pictureNamePattern.matcher(multipartFile.getOriginalFilename());
-                String uuid="";
-                if (matcher.find()) {//如果是图片的话
-                    uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
-                    //保存文件
-                    File pictureToStore = null;
-                    File pic = null;
-                    InputStream in=null;
-                    OutputStream op=null;
-                    try {
-                        pictureToStore = File.createTempFile(uuid, matcher.group(1),folder);
-                        pic = new File(folderPath+File.separator + uuid + matcher.group(1));
-                        in = multipartFile.getInputStream();
-                        op=new FileOutputStream(pictureToStore);
-                        byte [] buffer =new byte[1024];
-                        int num=0;
-                        while((num= in.read(buffer))!=-1){
-                            op.write(buffer,0,num);
-                        }
-                        pictureToStore.renameTo(pic);
-                        createProductTypeModel.productType.url=uuid + matcher.group(1);
+        ProductType productType=new ProductType();
+        productType.name=name;
+        productType.descript=descript;
+        if(Unique(productType)){
+            Matcher matcher = pictureNamePattern.matcher(multipartFile.getOriginalFilename());
+            String uuid="";
+            if (matcher.find()) {//如果是图片的话
+                uuid = UUID.randomUUID().toString().replaceAll("-","");//让图片名字不同
+                //保存文件
+                File pictureToStore = null;
+                File pic = null;
+                InputStream in=null;
+                OutputStream op=null;
+                try {
+                    pictureToStore = File.createTempFile(uuid, matcher.group(1),folder);
+                    pic = new File(folderPath+File.separator + uuid + matcher.group(1));
+                    in = multipartFile.getInputStream();
+                    op=new FileOutputStream(pictureToStore);
+                    byte [] buffer =new byte[1024];
+                    int num=0;
+                    while((num= in.read(buffer))!=-1){
+                        op.write(buffer,0,num);
+                    }
+                    pictureToStore.renameTo(pic);
+                    productType.url=uuid + matcher.group(1);
                     }finally {
                         if(in!=null){
                             in.close();
@@ -81,11 +85,9 @@ public class ProductTypeServiceImpl implements ProductTypeService{
                         }
                     }
                 }
-                productTypeDao.save(createProductTypeModel.productType);
-                succCount++;
+             result=productTypeDao.save(productType);
             }
-        }
-        return succCount;
+        return result;
     }
 
     /**
@@ -107,7 +109,7 @@ public class ProductTypeServiceImpl implements ProductTypeService{
     }
 
     private boolean Unique(ProductType productType){//判断茶产品类型不存在或者是当前要修改的茶产品类型
-        List<ProductType> ps=productTypeDao.findByNameAndDescriptAndUrlAndStateAndAlive(productType.name,productType.descript,productType.url,productType.state,1);
+        List<ProductType> ps=productTypeDao.findByNameAndDescriptAndStateAndAlive(productType.name,productType.descript,productType.state,1);
         boolean flag=false;
         if(null==ps || ps.isEmpty()){
             return true;

@@ -1,23 +1,19 @@
 ###产品类型的新增
-* url: http://localhost:8080/api/productType/new
+* url: http://localhost:7000/api/productType/new?name=green&descript=great green
 * Method:POST
-* 参数：在body里
-* 新增：
-   <pre>
-    [
-        {
-        "name":"红茶1",
-        "descript":"红茶的描述信息",
-        "url":"图片地址url1",
-        "multipartFile":图片文件（用控件上传）
-        }
-    ]
-</pre>
+* 参数：name:图片名称,descript:图片描述信息,file在requestboy里,类型MultipartFile
 * 返回：
- <pre>{
- 	 "code": 200,
-  	 "data": "all succeed"
-	}
+  <pre>{
+        "code": 200,
+        "data": {
+          "id": 2,
+          "name": "green",
+          "descript": "great green",
+          "url": "ff35420abb144047b7ab6fddcf94c8c7.png",
+          "state": 1,
+          "alive": 1
+        }
+      }
 	</pre>
 ### 产品类型的修改
 * URL:http://localhost:8080/api/productType/update

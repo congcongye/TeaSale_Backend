@@ -8,6 +8,7 @@ import com.cxtx.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,23 +25,22 @@ public class ProductTypeController extends ApiController {
 
     /**
      * 茶产品类型的新增
-     * @param list
+     * @param name
+     * @param descript
+     * @param file
      * @return
      */
-    @RequestMapping(value = "/productTypes/new", method = RequestMethod.POST)
+    @RequestMapping(value = "/productType/new", method = RequestMethod.POST)
     @ResponseBody
-    public ServiceResult newOrUpdateProductType(@RequestBody List<CreateProductTypeModel> list){
-        checkParameter(list!=null&&!list.isEmpty(),"productTypes are empty");
-        int succCount =0;
+    public ServiceResult newOrUpdateProductType(@RequestParam (value="name",defaultValue = "")String name,@RequestParam (value="descript",defaultValue = "")String descript,@RequestParam (value="file")MultipartFile file){
+        checkParameter(file!=null,"picture is empty");
+        ProductType result=new ProductType() ;
         try {
-            succCount = productTypeService.newProductType(list);
+            result = productTypeService.newProductType(name,descript,file);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(succCount!=list.size()){
-            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(list.size()-succCount));
-        }
-        return ServiceResult.success("all succeed");
+        return ServiceResult.success(result);
     }
 
     /**
