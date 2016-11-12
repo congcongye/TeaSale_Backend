@@ -37,7 +37,6 @@ public class TeaSalerServiceImpl implements TeaSalerService{
         TeaSaler teaSaler = new TeaSaler();
         teaSaler.setAlive(1);
         teaSaler.setTel(createTeaSalerModel.getTel());
-        teaSaler.setMoney(createTeaSalerModel.getMoney());
         teaSaler.setNickname(createTeaSalerModel.getNickname());
         teaSaler.setLevel(createTeaSalerModel.getLevel());
         teaSaler.setAddress(createTeaSalerModel.getAddress());

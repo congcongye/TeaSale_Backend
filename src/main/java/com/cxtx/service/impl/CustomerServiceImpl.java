@@ -1,5 +1,6 @@
 package com.cxtx.service.impl;
 
+import com.cxtx.dao.AccountDao;
 import com.cxtx.dao.CustomerDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Customer;
@@ -26,6 +27,10 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private CustomerDao customerDao;
+    @Autowired
+    private AccountDao accountDao;
+
+
     @Override
     public Customer findByAccountAndAlive(Account account) {
         return customerDao.findByAccountAndAlive(account, 1);
@@ -37,7 +42,6 @@ public class CustomerServiceImpl implements CustomerService {
             return null;
         }
         Customer customer = new Customer();
-        customer.setMoney(createCustomerModel.getMoney());
         customer.setTel(createCustomerModel.getTel());
         customer.setAccount(account);
         customer.setAddress(createCustomerModel.getAddress());
@@ -68,6 +72,21 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerDao.findOne(customerId);
         if (customer != null && customer.getAlive() == 1){
             return customer;
+        }
+        return null;
+    }
+
+    @Override
+    public Customer updateCustomer(CreateCustomerModel createCustomerModel) {
+        Account account = accountDao.findByTelAndAlive(createCustomerModel.getTel(),1);
+        if (account != null){
+            Customer customer = customerDao.findByAccountAndAlive(account,1);
+            if (customer != null){
+                customer.setNickname(createCustomerModel.getNickname());
+                customer.setAddress(createCustomerModel.getAddress());
+                customer.setZip(createCustomerModel.getZip());
+                return customerDao.save(customer);
+            }
         }
         return null;
     }

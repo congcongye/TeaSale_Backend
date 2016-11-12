@@ -10,8 +10,8 @@ public class CreateTeaSalerModel {
     private String nickname;
     private String address;
     private String zip;
-    private double money;
-    private String headUrl;
+//    private double money;
+//    private String headUrl;
     private String name;
     private String licenseUrl;
     private String idCard;
@@ -40,21 +40,6 @@ public class CreateTeaSalerModel {
         this.level = level;
     }
 
-    public double getMoney() {
-        return money;
-    }
-
-    public void setMoney(double money) {
-        this.money = money;
-    }
-
-    public String getHeadUrl() {
-        return headUrl;
-    }
-
-    public void setHeadUrl(String headUrl) {
-        this.headUrl = headUrl;
-    }
 
     public String getNickname() {
         return nickname;

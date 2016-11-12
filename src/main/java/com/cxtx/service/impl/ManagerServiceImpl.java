@@ -32,7 +32,6 @@ public class ManagerServiceImpl implements ManagerService {
         }
         Manager manager = new Manager();
         manager.setAlive(1);
-        manager.setMoney(createManagerModel.getMoney());
         manager.setTel(manager.getTel());
         manager.setLevel(createManagerModel.getLevel());
 

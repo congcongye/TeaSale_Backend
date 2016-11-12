@@ -20,4 +20,6 @@ public interface CustomerService {
     Page<Customer> searchCustomer(String name, int level, String tel, int pageIndex, int pageSize, String sortField, String sortOrder);
 
     Customer findById(long customerId);
+
+    Customer updateCustomer(CreateCustomerModel createCustomerModel);
 }
