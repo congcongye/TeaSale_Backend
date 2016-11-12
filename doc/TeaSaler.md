@@ -1,6 +1,6 @@
 # Api
 
-### 查询茶农
+### 查询茶农(lever=1 查询的是经销商 lever为2是茶农)
 * URL /api/teaSalers/search?name=ziz&level=1&tel=152&state=0&pageIndex=0&pageSize=10&sortField=id&sortOrder=ASC
 * Method: GET
 * 参数:
@@ -90,7 +90,7 @@ pageIndex,pageSize,sortField,sortOrder
 * Method: GET
 * 参数:
 teaSalerId:PathVariable
-* 返回:
+* 返回: level 1 为经销商 2为茶农
 ```
 {
   "code": 200,
@@ -216,7 +216,7 @@ teaSalerId:PathVariable
   "data": "register failed, the tel already has account!"
 }
 ```
-### 批量审批茶农
+### 批量审批茶农(lever 1的为经销商, 2为茶农,经销商需要有营业执照)
 * URL /api/teaSalers/approve
 * Method: PUT
 * 参数: RequestBody(List<TeaSaler>)
