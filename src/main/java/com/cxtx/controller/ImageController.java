@@ -132,26 +132,7 @@ public class ImageController extends  ApiController{
     }
 
 
-    /**
-     *
-     * @param picture
-     * @param accountId
-     * @return
-     * @throws IOException
-     */
-    @RequestMapping(value = "/image/head/upload", method = RequestMethod.POST)//,produces = "text/plain;charset=UTF-8"
-    @ResponseBody
-    public ServiceResult uploadHeadPic(@RequestParam("picture") MultipartFile  picture,
-                                       @RequestParam(value = "accountId",defaultValue = "-1")Long accountId) throws IOException {//, HttpServletRequest request
-        checkParameter(picture!=null,"pictures are empty");
-        Account account = accountDao.findOne(accountId);
-        checkParameter(account!=null&&account.getAlive()==1,"no account");
-        int result = imageService.uploadHeadPic(picture,account);
-        if (result ==0){
-            return ServiceResult.fail(500,"head pic upload fail");
-        }
-        return ServiceResult.success("head pic upload succeed ");
-    }
+
 
     /**
      *
@@ -173,4 +154,25 @@ public class ImageController extends  ApiController{
         }
         return ServiceResult.success("head pic upload succeed ");
     }
+
+    /**
+     *
+     * @param picture
+     * @param teaSalerId
+     * @return
+     * @throws IOException
+     */
+//    @RequestMapping(value = "/image/licence/base64/upload", method = RequestMethod.POST)//,produces = "text/plain;charset=UTF-8"
+//    @ResponseBody
+//    public ServiceResult uploadBase64LicencePic(@RequestParam("picture") String  picture,
+//                                          @RequestParam(value = "teaSalerId",defaultValue = "-1")Long teaSalerId) throws IOException {//, HttpServletRequest request
+//        checkParameter(picture!=null,"pictures are empty");
+//        TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
+//        checkParameter(teaSaler!=null&&teaSaler.getAlive()==1,"no teaSaler account");
+//        int result = imageService.uploadBase64LicencePic(picture,teaSaler);
+//        if (result ==0){
+//            return ServiceResult.fail(500,"head pic upload fail");
+//        }
+//        return ServiceResult.success("head pic upload succeed ");
+//    }
 }

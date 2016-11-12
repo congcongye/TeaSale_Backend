@@ -54,7 +54,6 @@
     "name": "llf1",
     "tel": null,
     "level": 1,
-    "money": 100000,
     "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
     "account": {
       "id": 2,

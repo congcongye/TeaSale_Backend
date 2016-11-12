@@ -10,8 +10,8 @@ public class CreateCustomerModel {
     private String nickname;
     private String address;
     private String zip;
-    private double money;
-    private String headUrl;
+    //private double money;
+    //private String headUrl;
 
     public String getTel() {
         return tel;
@@ -35,22 +35,6 @@ public class CreateCustomerModel {
 
     public void setLevel(int level) {
         this.level = level;
-    }
-
-    public double getMoney() {
-        return money;
-    }
-
-    public void setMoney(double money) {
-        this.money = money;
-    }
-
-    public String getHeadUrl() {
-        return headUrl;
-    }
-
-    public void setHeadUrl(String headUrl) {
-        this.headUrl = headUrl;
     }
 
     public String getNickname() {

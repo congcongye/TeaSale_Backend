@@ -237,7 +237,6 @@ teaSalerId:PathVariable
         "address": "zizi",
         "tel": "15907823456",
         "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
-        "money": 10000,
         "licenseUrl": null,
         "zip": "315200",
         "idCard": "12345678",

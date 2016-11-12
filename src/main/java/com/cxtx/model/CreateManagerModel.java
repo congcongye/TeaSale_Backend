@@ -8,8 +8,8 @@ public class CreateManagerModel {
     private String password;
     private String name;
     private int level;
-    private double money;
-    private String headUrl;
+//    private double money;
+//    private String headUrl;
 
     public String getTel() {
         return tel;
@@ -43,19 +43,4 @@ public class CreateManagerModel {
         this.level = level;
     }
 
-    public double getMoney() {
-        return money;
-    }
-
-    public void setMoney(double money) {
-        this.money = money;
-    }
-
-    public String getHeadUrl() {
-        return headUrl;
-    }
-
-    public void setHeadUrl(String headUrl) {
-        this.headUrl = headUrl;
-    }
 }

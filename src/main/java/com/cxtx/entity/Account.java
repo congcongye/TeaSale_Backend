@@ -28,7 +28,11 @@ public class Account {
     private String password;
 
     /**
+<<<<<<< HEAD
      *  0管理员，1茶农，2消费者
+=======
+     * 0管理员，1茶农，2消费者
+>>>>>>> e8259b3f8b6234ef48d385f24895d5be7035708a
      */
     @Column
     private int label;
@@ -38,6 +42,9 @@ public class Account {
 
     @Column
     private String headURL;
+
+    @Column
+    private double money=0;
 
     public Long getId() {
         return id;
@@ -85,5 +92,13 @@ public class Account {
 
     public void setHeadURL(String headURL) {
         this.headURL = headURL;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
     }
 }

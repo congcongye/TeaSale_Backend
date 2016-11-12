@@ -78,7 +78,6 @@ customerId:PathVariable
     "address": null,
     "zip": null,
     "tel": "15200837678",
-    "money": 0,
     "headUrl": null,
     "alive": 1,
     "createDate": null
@@ -171,5 +170,58 @@ customerId:PathVariable
 {
   "code": 500,
   "data": "register failed, the tel already has account!"
+}
+```
+### 客户更新
+* URL /api/customer/update
+* Method: PUT
+* 参数: RequestBody
+```
+{
+    "nickname":"123",
+    "address":"闵行东川路",
+    "zip":"12344567",
+    "tel":13918966539
+}
+```
+* 返回:
+```
+成功:更新之后的customer
+{
+  "code": 200,
+  "data": {
+    "id": 1,
+    "level": 0,
+    "nickname": "123",
+    "account": {
+      "id": 8,
+      "tel": "13918966539",
+      "password": "123456",
+      "label": 0,
+      "alive": 1,
+      "headURL": "836e8e3a0af54847902cc1d31cb68e89.jpg"
+    },
+    "address": "闵行东川路",
+    "zip": "12344567",
+    "tel": "13918966539",
+    "money": 0,
+    "headUrl": null,
+    "alive": 1,
+    "createDate": "2016-11-11"
+  }
+}
+```
+失败:1
+```
+{
+  "code": 500,
+  "data": "没有该帐号"
+}
+```
+失败:2
+```
+{
+  "code": 500,
+  "data": "修改失败"
 }
 ```

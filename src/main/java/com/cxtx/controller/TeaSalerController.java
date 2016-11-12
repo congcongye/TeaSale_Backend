@@ -57,7 +57,7 @@ public class TeaSalerController extends ApiController{
     @ResponseBody
     public ServiceResult register(@RequestBody CreateTeaSalerModel createTeaSalerModel) throws Exception{
         checkParameter(createTeaSalerModel !=null,"manager cannot be empty!");
-        Account account = accountService.register(createTeaSalerModel.getTel(), createTeaSalerModel.getPassword());
+        Account account = accountService.register(createTeaSalerModel.getTel(), createTeaSalerModel.getPassword(), 1);
         if (account == null){
             return ServiceResult.fail(500, "register failed, the tel already has account!");
         }

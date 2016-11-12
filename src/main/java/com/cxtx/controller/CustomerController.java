@@ -1,14 +1,12 @@
 package com.cxtx.controller;
 
+import com.cxtx.dao.AccountDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Customer;
-import com.cxtx.entity.Manager;
 import com.cxtx.model.CreateCustomerModel;
-import com.cxtx.model.CreateManagerModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.service.AccountService;
 import com.cxtx.service.CustomerService;
-import com.cxtx.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -24,6 +22,9 @@ public class CustomerController extends ApiController{
 
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private AccountDao accountDao;
+
 
     /**
      *
@@ -56,8 +57,8 @@ public class CustomerController extends ApiController{
     @RequestMapping(value = "/customer/register", method = RequestMethod.POST)
     @ResponseBody
     public ServiceResult register(@RequestBody CreateCustomerModel createCustomerModel) throws Exception{
-        checkParameter(createCustomerModel !=null,"manager cannot be empty!");
-        Account account = accountService.register(createCustomerModel.getTel(), createCustomerModel.getPassword());
+        checkParameter(createCustomerModel !=null,"customer cannot be empty!");
+        Account account = accountService.register(createCustomerModel.getTel(), createCustomerModel.getPassword(), 2);
         if (account == null){
             return ServiceResult.fail(500, "register failed, the tel already has account!");
         }
@@ -96,6 +97,27 @@ public class CustomerController extends ApiController{
         Customer customer  = customerService.findById(customerId);
         if (customer ==null){
             return ServiceResult.fail(500,"no teaSaler found!");
+        }
+        return ServiceResult.success(customer);
+    }
+
+    /**
+     *
+     * @param createCustomerModel
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/customer/update", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult PUT(@RequestBody CreateCustomerModel createCustomerModel) throws Exception{
+        checkParameter(createCustomerModel !=null,"customer cannot be empty!");
+        Customer customer = customerService.updateCustomer(createCustomerModel);
+        Account account = accountDao.findByTelAndAlive(createCustomerModel.getTel(),1);
+        if (account == null){
+            return ServiceResult.fail(500, "没有该帐号");
+        }
+        if (customer == null){
+            return ServiceResult.fail(500, "修改失败");
         }
         return ServiceResult.success(customer);
     }

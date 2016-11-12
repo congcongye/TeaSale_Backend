@@ -225,6 +225,30 @@ public class ImageServiceImpl implements ImageService{
         return 0;
     }
 
+    @Override
+    public int uploadBase64LicencePic(String picture, TeaSaler teaSaler) {
+//        //获取存储路径
+//        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
+//        Properties p = new Properties();
+//        try {
+//            p.load(inputStream);
+//        } catch (IOException e1) {
+//            e1.printStackTrace();
+//        }
+//        String folderPath = p.getProperty("picPath");
+//        File folder = new File(folderPath);
+//        if(!folder.exists()&&!folder.isDirectory()){
+//            folder.mkdir();
+//        }
+//        int succCount=0;
+//        //获取图片后缀
+//        Pattern pictureNamePattern = Pattern.compile(".*(\\.[a-zA-Z\\s]+)");
+//        if(picture==null){
+//            return succCount;
+//        }
+        return 0;
+    }
+
     /**
      *image的批量删除
      * @param list
