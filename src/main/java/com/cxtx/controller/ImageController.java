@@ -87,7 +87,7 @@ public class ImageController extends  ApiController{
             String folderPath = p.getProperty("picPath");
             response.reset();
             File file = new File(folderPath+File.separator+url);
-            if (!file.exists()) {
+            if (!file.exists() && !file.isDirectory()) {
                 return;
             }
             response.setContentType("application/octet-stream; charset=UTF-8");
