@@ -10,4 +10,8 @@ public interface AccountService {
     Account register(String tel, String password, int label);
 
     Account login(String tel, String password);
+
+    Account findAliveAccount(long accountId);
+
+    Account recharge(double money, long accountId);
 }

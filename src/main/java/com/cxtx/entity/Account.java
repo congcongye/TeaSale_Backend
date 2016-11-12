@@ -39,6 +39,9 @@ public class Account {
     @Column
     private String headURL;
 
+    @Column
+    private double money=0;
+
     public Long getId() {
         return id;
     }
@@ -85,5 +88,13 @@ public class Account {
 
     public void setHeadURL(String headURL) {
         this.headURL = headURL;
+    }
+
+    public double getMoney() {
+        return money;
+    }
+
+    public void setMoney(double money) {
+        this.money = money;
     }
 }

@@ -39,4 +39,23 @@ public class AccountServiceImpl implements AccountService {
         }
         return null;
     }
+
+    @Override
+    public Account findAliveAccount(long accountId) {
+        Account account = accountDao.findOne(accountId);
+        if (account != null && account.getAlive() == 1){
+            return account;
+        }
+        return null;
+    }
+
+    @Override
+    public Account recharge(double money, long accountId) {
+        Account account = accountDao.findOne(accountId);
+        if (account != null && account.getAlive() == 1) {
+            account.setMoney(account.getMoney()+money);
+            return accountDao.save(account);
+        }
+        return null;
+    }
 }

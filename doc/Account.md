@@ -14,3 +14,18 @@ picture:MultipartFile
   "data": "head pic upload succeed "
 }
 ```
+### 充值
+* URL /api/account/recharge?money=10000&accountId=1
+* Method: GET
+* 参数:
+```
+money
+accountId
+```
+* 返回:
+```
+{
+  "code": 200,
+  "data": "recharge success"
+}
+```
