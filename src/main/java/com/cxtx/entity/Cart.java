@@ -27,17 +27,17 @@ public class Cart {
     private Product product;//产品
 
     @Column
-    private double num ;//产品数量
+    private double num=0;//产品数量
 
     @Column
-    private double price ;//加入时单价
+    private double price=0 ;//加入时单价
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
     @Column
     private Date joinDate ;//加入时间
 
     @Column
-    private int alive ;//是否删除
+    private int alive=1;//是否删除
 
     public Long getId() {
         return id;

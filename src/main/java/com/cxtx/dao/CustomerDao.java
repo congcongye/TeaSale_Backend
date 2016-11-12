@@ -11,4 +11,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface CustomerDao extends JpaRepository<Customer, Long> ,JpaSpecificationExecutor<Customer>{
 
     Customer findByAccountAndAlive(Account account, int alive);
+    Customer findByIdAndAlive(Long id,int alive);
 }

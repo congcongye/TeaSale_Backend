@@ -16,7 +16,7 @@
       }
 	</pre>
 ### 产品类型的修改
-* URL:http://localhost:8080/api/productType/update
+* URL:http://localhost:8080/api/productTypes/update
 * Method:PUT
 * 参数：传入需要修改的产品类型的id和state（产品类型的状态）state＝1，茶农新增时可用，state＝0，茶农新增时不可用
 * 注意事项：（修改只能把state改成0，其它的不改变）
