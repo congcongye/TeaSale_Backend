@@ -178,7 +178,7 @@ teaSalerId:PathVariable
     "money":10000.00,
     "name":"金初阳",
     "idCard":12345678,
-    "level":1
+    "level":1 //1代表经销商2代表个体茶农
 }
 ```
 * 返回:
