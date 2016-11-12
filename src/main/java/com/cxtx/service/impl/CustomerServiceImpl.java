@@ -1,6 +1,5 @@
 package com.cxtx.service.impl;
 
-import com.cxtx.ImageUtils;
 import com.cxtx.dao.CustomerDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Customer;
@@ -17,12 +16,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
-import java.util.Properties;
-import java.util.UUID;
 
 /**
  * Created by jinchuyang on 16/10/26.

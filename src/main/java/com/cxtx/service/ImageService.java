@@ -23,4 +23,6 @@ public interface ImageService {
     int uploadHeadPic(MultipartFile picture, Account account) throws IOException;
 
     int uploadLicencePic(MultipartFile picture, TeaSaler teaSaler) throws IOException;
+
+    int uploadBase64LicencePic(String picture, TeaSaler teaSaler);
 }

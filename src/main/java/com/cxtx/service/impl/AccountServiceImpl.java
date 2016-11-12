@@ -16,7 +16,7 @@ public class AccountServiceImpl implements AccountService {
     private AccountDao accountDao;
 
     @Override
-    public Account register(String tel, String password) {
+    public Account register(String tel, String password, int label) {
         if (tel != null && password != null) {
             Account account = accountDao.findByTelAndAlive(tel, 1);
             if (account == null || account.getId() == 0){
@@ -24,6 +24,7 @@ public class AccountServiceImpl implements AccountService {
                 account.setTel(tel);
                 account.setPassword(password);
                 account.setAlive(1);
+                account.setLabel(label);
                 return accountDao.save(account);
             }
         }

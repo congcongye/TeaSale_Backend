@@ -1,16 +1,12 @@
 package com.cxtx.service.impl;
 
-import com.cxtx.ImageUtils;
 import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.entity.ProductType;
-import com.cxtx.model.CreateProductTypeModel;
-import com.cxtx.model.StartSellProductModel;
 import com.cxtx.model.UpdateProductTypeModel;
 import com.cxtx.service.ProductTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import sun.misc.BASE64Decoder;
 
 import java.io.*;
 import java.util.*;
