@@ -78,7 +78,6 @@ customerId:PathVariable
     "address": null,
     "zip": null,
     "tel": "15200837678",
-    "money": 0,
     "headUrl": null,
     "alive": 1,
     "createDate": null
