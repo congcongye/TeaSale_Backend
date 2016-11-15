@@ -27,20 +27,21 @@ public class CartServiceImpl implements CartService {
      * 把产品加入购物车,注意要合并重复的商品
      * @param product
      * @param num
-     * @param price
      * @param customer
      * @return
      */
-    public Cart addToCart(Product product, double num, double price, Customer customer){
+    public Cart addToCart(Product product, double num, Customer customer){
         Cart cart =cartDao.findByProductAndCustomerAndAlive(product,customer,1);
         Cart result=new Cart();
         if(cart!=null){//购物车中该用户已经有此商品,则加合两个产品数量
             cart.setNum(cart.getNum()+num);
+            cart.setPrice(product.getPrice());
         }else{
             cart=new Cart();
             cart.setProduct(product);
+            cart.setCustomer(customer);
             cart.setNum(num);
-            cart.setPrice(price);
+            cart.setPrice(product.getPrice());
             cart.setJoinDate(new Date());
         }
         result=cartDao.save(cart);
@@ -75,6 +76,7 @@ public class CartServiceImpl implements CartService {
             Cart cart=cartDao.findByIdAndAlive(updateCartModel.id,1);
             if(cart!=null){
                 cart.setNum(updateCartModel.num);
+                cart.setPrice(cart.getProduct().getPrice());
                 Cart cart1=cartDao.save(cart);
                 result.add(cart1);
             }

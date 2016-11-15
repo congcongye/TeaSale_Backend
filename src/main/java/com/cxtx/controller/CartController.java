@@ -31,10 +31,9 @@ public class CartController extends ApiController{
 
 
     /**
-     * 添加商品到购物车
+     * 添加商品到购物车,同时更新购物车的价格
      * @param product_id
      * @param num
-     * @param price
      * @param customer_id
      * @return
      */
@@ -42,15 +41,13 @@ public class CartController extends ApiController{
     @ResponseBody
     public ServiceResult addToCart(@RequestParam(value = "product_id",defaultValue = "-1")Long product_id,
                                    @RequestParam(value = "num",defaultValue = "-1")double num,
-                                   @RequestParam(value = "price",defaultValue = "-1")double price,
                                    @RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id){
         Product product=productDao.findByIdAndAlive(product_id,1);
         Customer customer=customerDao.findByIdAndAlive(customer_id,1);
         checkParameter(product!=null,"product is empty");
         checkParameter(customer!=null,"customer is empty");
         checkParameter(num>=0,"the number of product is error");
-        checkParameter(price>=0,"the price of product is error");
-        Cart cart=cartService.addToCart(product,num,price,customer);
+        Cart cart=cartService.addToCart(product,num,customer);
         return ServiceResult.success(cart);
     }
 
