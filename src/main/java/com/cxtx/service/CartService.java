@@ -12,7 +12,7 @@ import java.util.List;
  * Created by ycc on 16/11/12.
  */
 public interface CartService {
-     Cart addToCart(Product product, double num, double price, Customer customer);
+     Cart addToCart(Product product, double num,Customer customer);
      int delete(List<DeleteImageModel> list);
      List<Cart> update(List<UpdateCartModel> list);
      List<Cart> searchAll(Customer customer);
