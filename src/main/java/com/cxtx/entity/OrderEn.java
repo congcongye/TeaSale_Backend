@@ -48,46 +48,58 @@ public class OrderEn {
     @Column
     private double logistic ;//邮费
 
+    /**
+     * 订单状态 0 未完成, 1已完成
+     */
     @Column
-    private int state;// 订单状态
+    private int state = 0;
 
     @Column
-    private int isSend;// 是否发货
+    private int isSend = 0;// 是否发货
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
     @Column
     private Date SendDate ;//发货时间
 
     @Column
-    public int isConfirm;//是否确认收货
+    public int isConfirm = 0;//是否确认收货
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
     @Column
     private Date confirmDate;// 确认时间
 
     @Column
-    private int isComment ;//是否评价
+    private int isComment = 0;//是否评价
 
     @Column
-    private double score;// 分数
+    private double score = -1;// 分数
 
     @Column
     private String comment ;//评价
 
+    /**
+     * (未支付，全支付，部分支付)(0, 1, 2)
+     */
     @Column
-    private int Refund_state;//(未支付，全支付，部分支付)
+    private int Refund_state;
+
+    /**
+     * //  订单类型（一般，众筹，众包） (0, 1, 2)
+     */
+    @Column
+    private int type = 0;
 
     @Column
-    private int type;//  订单类型（一般，众筹，众包）
+    private int customerDelete = 0;//消费者不想看
 
     @Column
-    private int customerDelete ;//消费者不想看
+    private int adminDelete = 0;// 管理员不想看
 
     @Column
-    private int adminDelete;// 管理员不想看
+    private int salerDelete = 0;//茶农不想看
 
     @Column
-    private int sellerDelete;//茶农不想看
+    private int  alive ;//是否删除
 
     public Long getId() {
         return id;
@@ -265,11 +277,19 @@ public class OrderEn {
         this.adminDelete = adminDelete;
     }
 
-    public int getSellerDelete() {
-        return sellerDelete;
+    public int getSalerDelete() {
+        return salerDelete;
     }
 
-    public void setSellerDelete(int sellerDelete) {
-        this.sellerDelete = sellerDelete;
+    public void setSalerDelete(int salerDelete) {
+        this.salerDelete = salerDelete;
+    }
+
+    public int getAlive() {
+        return alive;
+    }
+
+    public void setAlive(int alive) {
+        this.alive = alive;
     }
 }
