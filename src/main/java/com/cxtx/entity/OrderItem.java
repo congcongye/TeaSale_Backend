@@ -14,22 +14,70 @@ public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
-    public Product product;//商品
+    private Product product;//商品
 
     @ManyToOne
     @JoinColumn(name = "orderen_id")
-    public OrderEn orderen ;//对应订单
+    private OrderEn orderen ;//对应订单
 
     @Column
-    public double num;// 商品数量
+    private double num;// 商品数量
 
     @Column
-    public double totalPrice;// 总价
+    private double totalPrice;// 总价
 
     @Column
-    public int  alive ;//是否删除
+    private int  alive ;//是否删除
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public OrderEn getOrderen() {
+        return orderen;
+    }
+
+    public void setOrderen(OrderEn orderen) {
+        this.orderen = orderen;
+    }
+
+    public double getNum() {
+        return num;
+    }
+
+    public void setNum(double num) {
+        this.num = num;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public int getAlive() {
+        return alive;
+    }
+
+    public void setAlive(int alive) {
+        this.alive = alive;
+    }
 }
