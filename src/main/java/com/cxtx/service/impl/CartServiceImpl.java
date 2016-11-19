@@ -87,10 +87,11 @@ public class CartServiceImpl implements CartService {
     /**
      *获得某个消费者的购物车中所有的产品
      */
-    public Map<TeaSaler,ArrayList<Cart>> searchAll(Customer customer){
+    public ArrayList<ArrayList<Cart>> searchAll(Customer customer){
         List<Cart> list =new ArrayList<Cart>();
         list =cartDao.findByCustomerAndAlive(customer,1);
         Map<TeaSaler,ArrayList<Cart>> map =new HashMap<TeaSaler,ArrayList<Cart>>();
+        ArrayList<ArrayList<Cart>> result =new ArrayList<ArrayList<Cart>>();
         if(!list.isEmpty()){
             for(Cart cart:list){
                 Product product=cart.getProduct();
@@ -106,7 +107,10 @@ public class CartServiceImpl implements CartService {
                     map.put(teaSaler,carts);
                 }
             }
+            for(Map.Entry<TeaSaler,ArrayList<Cart>> entry:map.entrySet()){
+                  result.add(entry.getValue());
+            }
         }
-        return map;
+        return result;
     }
 }

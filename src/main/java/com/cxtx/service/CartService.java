@@ -18,5 +18,5 @@ public interface CartService {
      Cart addToCart(Product product, double num,Customer customer);
      int delete(List<DeleteImageModel> list);
      List<Cart> update(List<UpdateCartModel> list);
-     Map<TeaSaler,ArrayList<Cart>> searchAll(Customer customer);
+     ArrayList<ArrayList<Cart>> searchAll(Customer customer);
 }

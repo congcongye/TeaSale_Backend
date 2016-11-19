@@ -90,7 +90,7 @@ public class CartController extends ApiController{
     public ServiceResult searchAll( @RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id){
         Customer customer =customerDao.findByIdAndAlive(customer_id,1);
         checkParameter(customer!=null,"customer is empty");
-        Map<TeaSaler,ArrayList<Cart>> result =new HashMap<TeaSaler,ArrayList<Cart>>();
+        ArrayList<ArrayList<Cart>> result =new ArrayList<ArrayList<Cart>>();
         result = cartService.searchAll(customer);
         return ServiceResult.success(result);
     }
