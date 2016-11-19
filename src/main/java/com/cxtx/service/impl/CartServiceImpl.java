@@ -4,15 +4,14 @@ import com.cxtx.dao.CartDao;
 import com.cxtx.entity.Cart;
 import com.cxtx.entity.Customer;
 import com.cxtx.entity.Product;
+import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.DeleteImageModel;
 import com.cxtx.model.UpdateCartModel;
 import com.cxtx.service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ycc on 16/11/12.
@@ -59,6 +58,7 @@ public class CartServiceImpl implements CartService {
             Cart cart =cartDao.findByIdAndAlive(deleteImageModel.id,1);
             if(cart!=null){
                 cart.setAlive(0);
+                cartDao.save(cart);
                 succCount++;
             }
         }
@@ -87,9 +87,26 @@ public class CartServiceImpl implements CartService {
     /**
      *获得某个消费者的购物车中所有的产品
      */
-    public List<Cart> searchAll(Customer customer){
+    public Map<TeaSaler,ArrayList<Cart>> searchAll(Customer customer){
         List<Cart> list =new ArrayList<Cart>();
         list =cartDao.findByCustomerAndAlive(customer,1);
-        return list;
+        Map<TeaSaler,ArrayList<Cart>> map =new HashMap<TeaSaler,ArrayList<Cart>>();
+        if(!list.isEmpty()){
+            for(Cart cart:list){
+                Product product=cart.getProduct();
+                if(product!=null){
+                    TeaSaler teaSaler=product.getTeaSaler();
+                    ArrayList<Cart> carts =new ArrayList<Cart>();
+                    if(map.containsKey(teaSaler)){
+                        carts =map.get(teaSaler);
+                        carts.add(cart);
+                    }else{
+                        carts.add(cart);
+                    }
+                    map.put(teaSaler,carts);
+                }
+            }
+        }
+        return map;
     }
 }
