@@ -122,4 +122,21 @@ public class OrderController extends ApiController{
     }
 
 
+    /**
+     *
+     * @param orderId
+     * @return
+     */
+    @RequestMapping(value = "/orderItems/search/{orderId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult searchOrderItems(@PathVariable(value = "orderId")long orderId){
+        checkParameter(orderId > 0,"no such order!");
+        //checkParameter(orderEnId > 0, "no order");
+        List<OrderItem> orderItems =orderItemService.searchItemsByOrder(orderId);
+        if (orderItems == null || orderItems.size() == 0){
+            return ServiceResult.fail(500, " 订单查询失败");
+        }
+        return ServiceResult.success(orderItems);
+    }
+
 }

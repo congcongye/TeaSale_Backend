@@ -13,4 +13,6 @@ import java.util.List;
 public interface OrderItemService {
 
     List<OrderItem> insertItems(List<CreateOrderItemModel> createOrderItemModels);
+
+    List<OrderItem> searchItemsByOrder(long orderId);
 }
