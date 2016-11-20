@@ -100,8 +100,8 @@ public class CartServiceImpl implements CartService {
                 if(product!=null){
                     TeaSaler teaSaler=product.getTeaSaler();
                     ArrayList<Cart> carts =new ArrayList<Cart>();
-                    if(map.containsKey(teaSaler)){
-                        carts =map.get(teaSaler);
+                    if(map.containsKey(teaSaler.getId())){
+                        carts =map.get(teaSaler.getId());
                         carts.add(cart);
                     }else{
                         carts.add(cart);
@@ -115,7 +115,7 @@ public class CartServiceImpl implements CartService {
                 carts=entry.getValue();
                 searchCartModel.list=carts;
                 if(carts!=null){
-                    searchCartModel.teaSaler=list.get(0).getProduct().getTeaSaler();
+                    searchCartModel.teaSaler=carts.get(0).getProduct().getTeaSaler();
                 }
                 result.add(searchCartModel);
             }
