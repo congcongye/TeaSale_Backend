@@ -5,16 +5,20 @@ import com.cxtx.dao.ProductDao;
 import com.cxtx.entity.Cart;
 import com.cxtx.entity.Customer;
 import com.cxtx.entity.Product;
+import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.DeleteImageModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.UpdateCartModel;
 import com.cxtx.service.CartService;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by ycc on 16/11/12.
@@ -86,7 +90,7 @@ public class CartController extends ApiController{
     public ServiceResult searchAll( @RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id){
         Customer customer =customerDao.findByIdAndAlive(customer_id,1);
         checkParameter(customer!=null,"customer is empty");
-        List<Cart> result =new ArrayList<Cart>();
+        ArrayList<ArrayList<Cart>> result =new ArrayList<ArrayList<Cart>>();
         result = cartService.searchAll(customer);
         return ServiceResult.success(result);
     }
