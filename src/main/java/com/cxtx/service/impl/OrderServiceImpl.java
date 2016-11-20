@@ -78,6 +78,7 @@ public class OrderServiceImpl implements OrderService {
             orderEn.setCustomer(customer);
             orderEn.setTeaSaler(teaSaler);
             orderEn.setType(createOrderModel.type);
+            orderEn.setName(createOrderModel.name);
             orderEn.setCreateDate(new Date());
             orderEn.setAlive(1);
             orderEn = orderEnDao.save(orderEn);

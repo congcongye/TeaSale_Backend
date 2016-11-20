@@ -76,4 +76,14 @@ public class OrderItemServiceImpl implements OrderItemService{
         }
         return null;
     }
+
+    @Override
+    public List<OrderItem> searchItemsByOrder(long orderId) {
+        OrderEn orderEn = orderEnDao.findOne(orderId);
+        if (orderEn == null || orderEn.getAlive() ==0){
+            return  null;
+        }
+        List<OrderItem> orderItems = orderItemDao.findByOrderenAndAlive(orderEn, 1);
+        return orderItems;
+    }
 }
