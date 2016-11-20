@@ -1,11 +1,8 @@
 package com.cxtx.service.impl;
 
-import com.cxtx.dao.CustomerDao;
-import com.cxtx.dao.OrderEnDao;
-import com.cxtx.dao.TeaSalerDao;
-import com.cxtx.entity.Customer;
-import com.cxtx.entity.OrderEn;
-import com.cxtx.entity.TeaSaler;
+import com.cxtx.dao.*;
+import com.cxtx.entity.*;
+import com.cxtx.model.CreateOrderItemModel;
 import com.cxtx.model.CreateOrderModel;
 import com.cxtx.service.OrderItemService;
 import com.cxtx.service.OrderService;
@@ -20,7 +17,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by ycc on 16/11/12.
@@ -34,6 +33,10 @@ public class OrderServiceImpl implements OrderService {
     private TeaSalerDao teaSalerDao;
     @Autowired
     private OrderEnDao orderEnDao;
+    @Autowired
+    private ProductDao productDao;
+    @Autowired
+    private OrderItemDao orderItemDao;
 
     @Override
     public OrderEn insertOrder(CreateOrderModel createOrderModel) {
@@ -55,6 +58,74 @@ public class OrderServiceImpl implements OrderService {
         orderEn.setAlive(1);
         //orderEn.set
         return orderEnDao.save(orderEn);
+    }
+
+    @Override
+    public List<OrderEn> insertOrders(List<CreateOrderModel> createOrderModels) {
+        List<OrderEn> orderEns = new ArrayList<OrderEn>();
+        for ( CreateOrderModel createOrderModel : createOrderModels){
+            long customerId = createOrderModel.customerId;
+            long teaSalerId = createOrderModel.teaSalerId;
+            Customer customer = customerDao.findOne(customerId);
+            TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
+            if (customer == null || customer.getAlive() == 0 || teaSaler == null || teaSaler.getAlive() == 0){
+                return null;
+            }
+            OrderEn orderEn = new OrderEn();
+            orderEn.setTel(createOrderModel.tel);
+            orderEn.setZip(createOrderModel.zip);
+            orderEn.setAddress(createOrderModel.address);
+            orderEn.setCustomer(customer);
+            orderEn.setTeaSaler(teaSaler);
+            orderEn.setType(createOrderModel.type);
+            orderEn.setCreateDate(new Date());
+            orderEn.setAlive(1);
+            orderEn = orderEnDao.save(orderEn);
+            List<OrderItem> orderItems = new ArrayList<OrderItem>();
+            List<Product> products =  new ArrayList<Product>();
+            double totalMoney = 0;
+            double logistic = -1;
+            List<CreateOrderItemModel> createOrderItemModels = createOrderModel.createOrderItemModels;
+            for (CreateOrderItemModel createOrderItemModel : createOrderItemModels){
+                long productId = createOrderItemModel.productId;
+                // long orderEnId = createOrderItemModel.orderEnId;
+                Product product = productDao.findOne(productId);
+                if (product == null || product.getAlive() == 0){
+                    break;
+                }
+                OrderItem orderItem = new OrderItem();
+                orderItem.setAlive(1);
+                if (product.getStock() < createOrderItemModel.num){
+                    break;
+                }
+                product.setStock(product.getStock()-createOrderItemModel.num);
+                products.add(product);
+                if (logistic == 0 || product.getIsFree()==1 ){
+                    logistic=0;
+                }else {
+                    if (product.getPostage() > logistic){
+                        logistic = product.getPostage();
+                    }
+                }
+                orderItem.setNum(createOrderItemModel.num);
+                orderItem.setProduct(product);
+                orderItem.setOrderen(orderEn);
+                orderItem.setTotalPrice(createOrderItemModel.num * product.getPrice() * product.getDiscount());
+                totalMoney += createOrderItemModel.num * product.getPrice() * product.getDiscount();
+                orderItems.add(orderItem);
+            }
+            if (orderItems.size()==createOrderItemModels.size() && customer.getAccount().getMoney() >((totalMoney + logistic))){
+                orderItems = orderItemDao.save(orderItems);
+                products = productDao.save(products);
+                orderEn.setTotalPrice(totalMoney + logistic);
+                orderEn.setState(1);
+                orderEnDao.save(orderEn);
+                customer.getAccount().setMoney(customer.getAccount().getMoney() -((totalMoney + logistic)));
+                orderEns.add(orderEn);
+            }
+
+        }
+        return orderEns;
     }
 
     @Override

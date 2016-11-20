@@ -5,6 +5,5 @@ package com.cxtx.model;
  */
 public class CreateOrderItemModel {
     public long productId;
-    public long orderEnId;
     public double num;
 }

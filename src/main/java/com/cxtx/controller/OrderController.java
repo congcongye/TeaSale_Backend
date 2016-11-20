@@ -42,6 +42,22 @@ public class OrderController extends ApiController{
     }
 
     /**
+     *
+     * @param createOrderModels
+     * @return
+     */
+    @RequestMapping(value = "/orders/add", method = RequestMethod.POST)
+    @ResponseBody
+    public ServiceResult insertOrders(@RequestBody List<CreateOrderModel> createOrderModels){
+        checkParameter(createOrderModels != null && createOrderModels.size()!=0, "order can't be empty");
+        List<OrderEn> orderEns = orderService.insertOrders(createOrderModels);
+        if (orderEns == null && orderEns.size() != createOrderModels.size()) {
+            return ServiceResult.fail(500, "形成订单失败,成功"+orderEns.size() +"个,失败"+(createOrderModels.size()-orderEns.size())+"个");
+        }
+        return ServiceResult.success(orderEns);
+    }
+
+    /**
      * 确认订单项
      * @param createOrderItemModels
      * @return

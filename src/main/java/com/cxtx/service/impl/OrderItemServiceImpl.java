@@ -45,9 +45,9 @@ public class OrderItemServiceImpl implements OrderItemService{
         double totalMoney = 0;
         for (CreateOrderItemModel createOrderItemModel :createOrderItemModels) {
             long productId = createOrderItemModel.productId;
-            long orderEnId = createOrderItemModel.orderEnId;
+           // long orderEnId = createOrderItemModel.orderEnId;
             product = productDao.findOne(productId);
-            orderEn = orderEnDao.findOne(orderEnId);
+            //orderEn = orderEnDao.findOne(orderEnId);
             if (product == null || product.getAlive() == 0 || orderEn == null || orderEn.getAlive() == 0){
                 break;
             }
