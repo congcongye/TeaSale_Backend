@@ -5,6 +5,7 @@ import com.cxtx.entity.Customer;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.DeleteImageModel;
+import com.cxtx.model.SearchCartModel;
 import com.cxtx.model.UpdateCartModel;
 
 import java.util.ArrayList;
@@ -18,5 +19,5 @@ public interface CartService {
      Cart addToCart(Product product, double num,Customer customer);
      int delete(List<DeleteImageModel> list);
      List<Cart> update(List<UpdateCartModel> list);
-     ArrayList<ArrayList<Cart>> searchAll(Customer customer);
+     List<SearchCartModel> searchAll(Customer customer);
 }

@@ -219,5 +219,8 @@ public class TeaSaler{
         this.createDate = createDate;
     }
 
+//    public String toString(){
+//        return "id: "+this.getId()+",nickname:"+this.getNickname()+",headurl:"+this.getHeadUrl();
+//    }
 
 }

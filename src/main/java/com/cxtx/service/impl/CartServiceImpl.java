@@ -6,8 +6,10 @@ import com.cxtx.entity.Customer;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.DeleteImageModel;
+import com.cxtx.model.SearchCartModel;
 import com.cxtx.model.UpdateCartModel;
 import com.cxtx.service.CartService;
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -87,11 +89,11 @@ public class CartServiceImpl implements CartService {
     /**
      *获得某个消费者的购物车中所有的产品
      */
-    public ArrayList<ArrayList<Cart>> searchAll(Customer customer){
+    public List<SearchCartModel> searchAll(Customer customer){
         List<Cart> list =new ArrayList<Cart>();
         list =cartDao.findByCustomerAndAlive(customer,1);
-        Map<TeaSaler,ArrayList<Cart>> map =new HashMap<TeaSaler,ArrayList<Cart>>();
-        ArrayList<ArrayList<Cart>> result =new ArrayList<ArrayList<Cart>>();
+        Map<Long,ArrayList<Cart>> map =new HashMap<Long,ArrayList<Cart>>();
+        List<SearchCartModel> result =new ArrayList<SearchCartModel>();
         if(!list.isEmpty()){
             for(Cart cart:list){
                 Product product=cart.getProduct();
@@ -104,13 +106,21 @@ public class CartServiceImpl implements CartService {
                     }else{
                         carts.add(cart);
                     }
-                    map.put(teaSaler,carts);
+                    map.put(teaSaler.getId(),carts);
                 }
             }
-            for(Map.Entry<TeaSaler,ArrayList<Cart>> entry:map.entrySet()){
-                  result.add(entry.getValue());
+            for(Map.Entry<Long,ArrayList<Cart>> entry:map.entrySet()){
+                  SearchCartModel searchCartModel =new SearchCartModel();
+                ArrayList<Cart> carts =new ArrayList<Cart>();
+                carts=entry.getValue();
+                searchCartModel.list=carts;
+                if(carts!=null){
+                    searchCartModel.teaSaler=list.get(0).getProduct().getTeaSaler();
+                }
+                result.add(searchCartModel);
             }
         }
         return result;
     }
+
 }

@@ -7,6 +7,7 @@ import com.cxtx.entity.Customer;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.DeleteImageModel;
+import com.cxtx.model.SearchCartModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.UpdateCartModel;
 import com.cxtx.service.CartService;
@@ -90,7 +91,7 @@ public class CartController extends ApiController{
     public ServiceResult searchAll( @RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id){
         Customer customer =customerDao.findByIdAndAlive(customer_id,1);
         checkParameter(customer!=null,"customer is empty");
-        ArrayList<ArrayList<Cart>> result =new ArrayList<ArrayList<Cart>>();
+        List<SearchCartModel> result =new ArrayList<SearchCartModel>();
         result = cartService.searchAll(customer);
         return ServiceResult.success(result);
     }
