@@ -220,84 +220,222 @@ customer_id:消费者的id
   "code": 200,
   "data": [
     {
-      "id": 2,
-      "customer": {
+      "teaSaler": {
         "id": 1,
+        "name": "ycc",
         "level": 1,
         "nickname": "ycc",
         "account": {
-          "id": 2,
-          "tel": "14524354",
-          "password": "123",
-          "label": 2,
+          "id": 1,
+          "tel": "13918966539",
+          "password": "123456",
+          "label": 0,
           "alive": 1,
-          "headURL": null,
-          "money": 1000
+          "headURL": "9d44c5fce521499faf8ec9260e0b8061.jpg",
+          "money": 20000
         },
         "address": "上海闵行区",
-        "zip": "12341",
-        "tel": "124324",
+        "tel": "2414143124",
+        "headUrl": "1.jpg",
         "money": 1000,
-        "headUrl": "234143",
+        "licenseUrl": "1.jpg",
+        "zip": "1234",
+        "idCard": "12412134132",
+        "state": 1,
         "alive": 1,
-        "createDate": "2016-11-15"
+        "createDate": "2016-11-11"
       },
-      "product": {
-        "id": 1,
-        "productType": {
-          "id": 1,
-          "name": "红茶",
-          "descript": "红茶",
-          "url": "1.jpg",
-          "state": 1,
-          "alive": 1
-        },
-        "remark": "产品1",
-        "name": "红茶",
-        "level": 1,
-        "locality": "上海闵行区",
-        "stock": 1000,
-        "price": 110,
-        "startNum": 5,
-        "discount": 0.8,
-        "isFree": 1,
-        "postage": 5,
-        "deliverLimit": 10,
-        "createDate": "2016-11-11",
-        "unit": "两",
-        "teaSaler": {
-          "id": 1,
-          "name": "ycc",
-          "level": 1,
-          "nickname": "ycc",
-          "account": {
+      "list": [
+        {
+          "id": 10,
+          "customer": {
             "id": 1,
-            "tel": "12314",
-            "password": "123",
-            "label": 1,
+            "level": 0,
+            "nickname": "marksun",
+            "account": {
+              "id": 1,
+              "tel": "13918966539",
+              "password": "123456",
+              "label": 0,
+              "alive": 1,
+              "headURL": "9d44c5fce521499faf8ec9260e0b8061.jpg",
+              "money": 20000
+            },
+            "address": "浙江 宁波 江东区 主任家",
+            "zip": "446543",
+            "tel": "13918966539",
+            "money": 0,
+            "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
             "alive": 1,
-            "headURL": null,
-            "money": 0
+            "createDate": "2016-11-11"
           },
-          "address": "上海市",
-          "tel": "12341341",
-          "headUrl": "1.jpg",
-          "money": 100,
-          "licenseUrl": "1.jpg",
-          "zip": "14134",
-          "idCard": "14rwerq",
-          "state": 1,
+          "product": {
+            "id": 1,
+            "productType": {
+              "id": 1,
+              "name": "红茶",
+              "descript": "红茶",
+              "url": "1.jpg",
+              "state": 1,
+              "alive": 1
+            },
+            "remark": "顶级红茶",
+            "name": "红茶",
+            "level": 1,
+            "locality": "上海闵行区",
+            "stock": 1000,
+            "price": 50,
+            "startNum": 1,
+            "discount": 0.8,
+            "isFree": 1,
+            "postage": 5,
+            "deliverLimit": 10,
+            "createDate": "2016-11-11",
+            "unit": "两",
+            "teaSaler": {
+              "id": 1,
+              "name": "ycc",
+              "level": 1,
+              "nickname": "ycc",
+              "account": {
+                "id": 1,
+                "tel": "13918966539",
+                "password": "123456",
+                "label": 0,
+                "alive": 1,
+                "headURL": "9d44c5fce521499faf8ec9260e0b8061.jpg",
+                "money": 20000
+              },
+              "address": "上海闵行区",
+              "tel": "2414143124",
+              "headUrl": "1.jpg",
+              "money": 1000,
+              "licenseUrl": "1.jpg",
+              "zip": "1234",
+              "idCard": "12412134132",
+              "state": 1,
+              "alive": 1,
+              "createDate": "2016-11-11"
+            },
+            "state": 1,
+            "alive": 1,
+            "url": "1.jpg"
+          },
+          "num": 12,
+          "price": 50,
+          "joinDate": "2016-11-15",
+          "alive": 1
+        }
+      ]
+    },
+    {
+      "teaSaler": {
+        "id": 1,
+        "name": "ycc",
+        "level": 1,
+        "nickname": "ycc",
+        "account": {
+          "id": 1,
+          "tel": "13918966539",
+          "password": "123456",
+          "label": 0,
           "alive": 1,
-          "createDate": "2016-11-11"
+          "headURL": "9d44c5fce521499faf8ec9260e0b8061.jpg",
+          "money": 20000
         },
-        "state": 0,
+        "address": "上海闵行区",
+        "tel": "2414143124",
+        "headUrl": "1.jpg",
+        "money": 1000,
+        "licenseUrl": "1.jpg",
+        "zip": "1234",
+        "idCard": "12412134132",
+        "state": 1,
         "alive": 1,
-        "url": "1.jpg"
+        "createDate": "2016-11-11"
       },
-      "num": 10,
-      "price": 110,
-      "joinDate": "2016-11-15",
-      "alive": 1
+      "list": [
+        {
+          "id": 11,
+          "customer": {
+            "id": 1,
+            "level": 0,
+            "nickname": "marksun",
+            "account": {
+              "id": 1,
+              "tel": "13918966539",
+              "password": "123456",
+              "label": 0,
+              "alive": 1,
+              "headURL": "9d44c5fce521499faf8ec9260e0b8061.jpg",
+              "money": 20000
+            },
+            "address": "浙江 宁波 江东区 主任家",
+            "zip": "446543",
+            "tel": "13918966539",
+            "money": 0,
+            "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
+            "alive": 1,
+            "createDate": "2016-11-11"
+          },
+          "product": {
+            "id": 2,
+            "productType": {
+              "id": 1,
+              "name": "红茶",
+              "descript": "红茶",
+              "url": "1.jpg",
+              "state": 1,
+              "alive": 1
+            },
+            "remark": "最好喝辣",
+            "name": "李桐宇测试",
+            "level": 2,
+            "locality": "陕西",
+            "stock": 1300,
+            "price": 22,
+            "startNum": 22,
+            "discount": 0.8,
+            "isFree": 1,
+            "postage": 0,
+            "deliverLimit": 0,
+            "createDate": "2016-11-12",
+            "unit": "两",
+            "teaSaler": {
+              "id": 2,
+              "name": "李桐宇",
+              "level": 0,
+              "nickname": "小公举",
+              "account": {
+                "id": 2,
+                "tel": "13166225809",
+                "password": "123456",
+                "label": 0,
+                "alive": 1,
+                "headURL": null,
+                "money": 0
+              },
+              "address": "江苏 徐州 睢宁县",
+              "tel": "13166225809",
+              "headUrl": null,
+              "money": 0,
+              "licenseUrl": "2404978654b34c2cadd61978c5da6c65.jpg",
+              "zip": "132465",
+              "idCard": "123465789132456789",
+              "state": 1,
+              "alive": 1,
+              "createDate": "2016-11-11"
+            },
+            "state": 1,
+            "alive": 1,
+            "url": "1.jpg"
+          },
+          "num": 10,
+          "price": 22,
+          "joinDate": "2016-11-16",
+          "alive": 1
+        }
+      ]
     }
   ]
 }
