@@ -78,7 +78,7 @@ public class ImageController extends  ApiController{
     @ResponseBody
     public void downloadLogo(HttpServletRequest request, HttpServletResponse response,
                              @RequestParam(value="url") String url) throws IOException {// @PathVariable(value="url") String url
-        System.out.print(request.getRequestURL() + "\t" + request.getMethod());
+        //System.out.print(request.getRequestURL() + "\t" + request.getMethod());
         OutputStream os = response.getOutputStream();
         try {
             InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
