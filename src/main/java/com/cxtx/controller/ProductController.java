@@ -7,6 +7,7 @@ import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.CreateProductModel;
+import com.cxtx.model.DeleteImageModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.StartSellProductModel;
 import com.cxtx.service.ProductService;
@@ -163,6 +164,30 @@ public class ProductController extends ApiController {
         }
         return ServiceResult.success(list);
 
+    }
+
+    /**
+     * 茶产品的批量删除
+     * @param list
+     * @return
+     */
+    @RequestMapping(value = "/products/delete", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult deleteProduct(@RequestParam(value="product_id",defaultValue ="-1")List<DeleteImageModel> list){
+        checkParameter(list!=null,"products are empty");
+        int succCount=0;
+        for(DeleteImageModel model:list){
+            Product product =productDao.findByIdAndAlive(model.id,1);
+            if(null!=product&&product.getState()==0){
+                product.setAlive(0);
+                productDao.save(product);
+                succCount++;
+            }
+        }
+        if(succCount!=list.size()){
+            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(list.size()-succCount));
+        }
+        return ServiceResult.success("all succeed");
     }
 
 }
