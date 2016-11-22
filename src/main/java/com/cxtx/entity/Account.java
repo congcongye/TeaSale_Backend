@@ -28,11 +28,7 @@ public class Account {
     private String password;
 
     /**
-<<<<<<< HEAD
-     *  0管理员，1茶农，2消费者
-=======
      * 0管理员，1茶农，2消费者
->>>>>>> e8259b3f8b6234ef48d385f24895d5be7035708a
      */
     @Column
     private int label;
