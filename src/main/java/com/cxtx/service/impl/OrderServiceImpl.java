@@ -144,6 +144,7 @@ public class OrderServiceImpl implements OrderService {
         if (sortOrder.toUpperCase().equals("ASC")) {
             direction = Sort.Direction.ASC;
         }
+        teaSalerName = "%" + teaSalerName + "%";
         Specification<OrderEn> specification = this.buildSpecification(customerId, teaSalerId,teaSalerName, state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
                 salerDelete, refund_state, name, address, tel);
         Page<OrderEn> orders = orderEnDao.findAll(specification, new PageRequest(pageIndex, pageSize, direction,sortField));
