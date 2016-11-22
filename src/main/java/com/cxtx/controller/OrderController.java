@@ -100,6 +100,7 @@ public class OrderController extends ApiController{
     @ResponseBody
     public ServiceResult searchOrder(@RequestParam(value = "customerId", defaultValue = "-1")long customerId,
                                      @RequestParam(value = "teaSalerId", defaultValue = "-1")long teaSalerId,
+                                     @RequestParam(value = "teaSalerName", defaultValue = "")String teaSalerName,
                                      @RequestParam(value = "state", defaultValue = "-1")int state,
                                      @RequestParam(value = "isSend", defaultValue = "-1")int isSend,
                                      @RequestParam(value = "isConfirm", defaultValue = "-1")int isConfirm,
@@ -116,7 +117,7 @@ public class OrderController extends ApiController{
                                      @RequestParam(value="pageSize", defaultValue="10") int pageSize,
                                      @RequestParam(value="sortField", defaultValue="id") String sortField,
                                      @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
-        Page<OrderEn> orderEns = orderService.search(customerId, teaSalerId, state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
+        Page<OrderEn> orderEns = orderService.search(customerId, teaSalerId, teaSalerName,state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
                 salerDelete, Refund_state, name, address, tel, pageIndex, pageSize, sortField, sortOrder);
         return ServiceResult.success(orderEns);
     }

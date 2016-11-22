@@ -4,7 +4,6 @@ import com.cxtx.dao.*;
 import com.cxtx.entity.*;
 import com.cxtx.model.CreateOrderItemModel;
 import com.cxtx.model.CreateOrderModel;
-import com.cxtx.service.OrderItemService;
 import com.cxtx.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -37,6 +36,8 @@ public class OrderServiceImpl implements OrderService {
     private ProductDao productDao;
     @Autowired
     private OrderItemDao orderItemDao;
+    @Autowired
+    private CartDao cartDao;
 
     @Override
     public OrderEn insertOrder(CreateOrderModel createOrderModel) {
@@ -123,6 +124,14 @@ public class OrderServiceImpl implements OrderService {
                 orderEnDao.save(orderEn);
                 customer.getAccount().setMoney(customer.getAccount().getMoney() -((totalMoney + logistic)));
                 orderEns.add(orderEn);
+                for (Product product : products){
+                    Cart cart = cartDao.findByProductAndCustomerAndAlive(product, customer, 1);
+                    if (cart != null && cart.getAlive() == 1){
+                        cart.setAlive(0);
+                        cartDao.save(cart);
+                    }
+
+                }
             }
 
         }
@@ -130,12 +139,12 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderEn> search(long customerId, long teaSalerId, int state, int isSend, int isConfirm, int isComment, int type, int customerDelete, int adminDelete, int salerDelete, int refund_state, String name, String address, String tel, int pageIndex, int pageSize, String sortField, String sortOrder) {
+    public Page<OrderEn> search(long customerId, long teaSalerId, String teaSalerName, int state, int isSend, int isConfirm, int isComment, int type, int customerDelete, int adminDelete, int salerDelete, int refund_state, String name, String address, String tel, int pageIndex, int pageSize, String sortField, String sortOrder) {
         Sort.Direction direction = Sort.Direction.DESC;
         if (sortOrder.toUpperCase().equals("ASC")) {
             direction = Sort.Direction.ASC;
         }
-        Specification<OrderEn> specification = this.buildSpecification(customerId, teaSalerId, state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
+        Specification<OrderEn> specification = this.buildSpecification(customerId, teaSalerId,teaSalerName, state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
                 salerDelete, refund_state, name, address, tel);
         Page<OrderEn> orders = orderEnDao.findAll(specification, new PageRequest(pageIndex, pageSize, direction,sortField));
         return orders;
@@ -143,6 +152,7 @@ public class OrderServiceImpl implements OrderService {
 
     private Specification<OrderEn> buildSpecification(final long customerId, //
                                                       final long teaSalerId, //
+                                                      final String teaSalerName,
                                                       final int state, //
                                                       final int isSend, //
                                                       final int isConfirm, //
@@ -157,6 +167,7 @@ public class OrderServiceImpl implements OrderService {
                                                       final String tel) {//
         final  Customer customer = customerDao.findOne(customerId);
         final TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
+        final List<TeaSaler> teaSalers = teaSalerDao.findByNameAndAlive(teaSalerName, 1);
         Specification<OrderEn> specification = new Specification<OrderEn>() {
             @Override
             public Predicate toPredicate(Root<OrderEn> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -169,6 +180,9 @@ public class OrderServiceImpl implements OrderService {
                 }
                 if (teaSaler !=null && teaSaler.getAlive() ==1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.<TeaSaler>get("teaSaler"),teaSaler));
+                }else if(teaSalers != null && teaSalers.size() >0){
+                    //predicate.getExpressions().add(root.<FileType>get("fileType").in(fileTypeList1));
+                    predicate.getExpressions().add(root.<TeaSaler>get("teaSaler").in(teaSalers));
                 }
                 if (state != -1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("state"),state));
