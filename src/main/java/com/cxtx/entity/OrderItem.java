@@ -33,6 +33,22 @@ public class OrderItem {
     @Column
     private int  alive ;//是否删除
 
+    /**
+     * 0未评论  1评论
+     */
+    @Column
+    private int isComment=0;//是否评价
+
+    public int getIsComment() {
+        return isComment;
+    }
+
+    public void setIsComment(int isComment) {
+        this.isComment = isComment;
+    }
+
+
+
     public Long getId() {
         return id;
     }
