@@ -112,4 +112,22 @@ public class TeaSalerController extends ApiController{
         }
         return ServiceResult.success("all succeed");
     }
+
+    /**
+     * 更新茶农信息
+     * @param teaSaler
+     * @param teaSalerId
+     * @return
+     */
+    @RequestMapping(value = "/teaSaler/update/{teaSalerId}", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult updateTeasaler(@RequestBody TeaSaler teaSaler,
+                                        @PathVariable (value = "teaSalerId") long teaSalerId){
+        checkParameter(teaSalerId > 0,"teaSaler is empty");
+        teaSaler = teaSalerService.updateTeaSaler(teaSalerId,teaSaler);
+        if(teaSaler == null){
+            return ServiceResult.fail(500, "update teaSaler fail!");
+        }
+        return ServiceResult.success(teaSaler);
+    }
 }

@@ -366,3 +366,44 @@ picture:MultipartFile
   "data": "head pic upload succeed "
 }
 ```
+### 更新茶农信息
+* URL /api/teaSaler/{teaSalerId}
+* Method: PUT
+* 参数:
+teaSaler:
+{
+    "nickname":"413",
+    "address":"x36-4041",
+    "zip":"210000"
+}
+只能更改昵称、地址、与邮编;
+```
+{
+  "code": 200,
+  "data": {
+    "id": 1,
+    "name": "李桐宇",
+    "level": 0,
+    "nickname": "413",
+    "account": {
+      "id": 3,
+      "tel": "15907823456",
+      "password": "1111111",
+      "label": 0,
+      "alive": 1,
+      "headURL": null,
+      "money": 10000000
+    },
+    "address": "x36-4041",
+    "tel": "15907823456",
+    "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
+    "money": 10000,
+    "licenseUrl": "7f839a068dab48aeb97a7a220c23abe4.png",
+    "zip": "210000",
+    "idCard": "12345678",
+    "state": 1,
+    "alive": 1,
+    "createDate": "2016-11-10"
+  }
+}
+```

@@ -20,4 +20,6 @@ public interface TeaSalerService {
     TeaSaler findById(long teaSalerId);
 
     int approveTeaSalers(List<TeaSaler> teaSalers);
+
+    TeaSaler updateTeaSaler(long teaSalerId, TeaSaler teaSaler);
 }

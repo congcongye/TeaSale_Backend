@@ -91,6 +91,18 @@ public class TeaSalerServiceImpl implements TeaSalerService{
         return succCount;
     }
 
+    @Override
+    public TeaSaler updateTeaSaler(long teaSalerId, TeaSaler teaSaler) {
+        TeaSaler teaSaler1 = teaSalerDao.findOne(teaSalerId);
+        if (teaSaler1 == null || teaSaler1.getAlive() == 0) {
+            return null;
+        }
+        teaSaler1.setAddress(teaSaler.getAddress());
+        teaSaler1.setNickname(teaSaler.getNickname());
+        teaSaler1.setZip(teaSaler.getZip());
+        return teaSalerDao.save(teaSaler1);
+    }
+
 
     private Specification<TeaSaler> buildSpecification(final String name, final int level, final String tel, final int state){
         Specification<TeaSaler> specification = new Specification<TeaSaler>() {
