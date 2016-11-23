@@ -1,5 +1,6 @@
 package com.cxtx.controller;
 
+import com.cxtx.model.ServiceResult;
 import com.cxtx.service.impl.SendMessageServiceImpl;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,9 @@ public class SendMessageController extends  ApiController {
 
     @RequestMapping(value = "/sendMessage/password", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, String> send(@RequestParam (value = "mobile",defaultValue = "")String mobile){
+    public ServiceResult send(@RequestParam (value = "mobile",defaultValue = "")String mobile){
         Map<String, String> result =sendMessageService.createMsg(mobile);
-        return result;
+        return ServiceResult.success(result);
     }
 
 //    /**
