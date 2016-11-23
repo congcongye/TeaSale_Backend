@@ -58,7 +58,8 @@ public class SendMessageServiceImpl {
             if ("2".equals(code)) {
                 System.out.println("短信提交成功");
                 Map<String, String> map = new HashMap<String, String>();
-                map.put(telephone, mobile_code);
+                map.put("phone",telephone);
+                map.put("code",mobile_code);
                 return map;
             }
         } catch (HttpException e) {

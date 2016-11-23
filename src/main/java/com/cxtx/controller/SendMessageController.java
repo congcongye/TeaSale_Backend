@@ -1,12 +1,15 @@
 package com.cxtx.controller;
 
+import com.cxtx.model.ServiceResult;
 import com.cxtx.service.impl.SendMessageServiceImpl;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import redis.clients.jedis.Jedis;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -23,9 +26,9 @@ public class SendMessageController extends  ApiController {
 
     @RequestMapping(value = "/sendMessage/password", method = RequestMethod.GET)
     @ResponseBody
-    public Map<String, String> send(@RequestParam (value = "mobile",defaultValue = "")String mobile){
+    public ServiceResult send(@RequestParam (value = "mobile",defaultValue = "")String mobile){
         Map<String, String> result =sendMessageService.createMsg(mobile);
-        return result;
+        return ServiceResult.success(result);
     }
 
 //    /**

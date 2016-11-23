@@ -11,4 +11,5 @@ import java.util.List;
  */
 public interface OrderItemDao extends JpaRepository<OrderItem,Long> {
     List<OrderItem> findByOrderenAndAlive(OrderEn orderen, int alive);
+    OrderItem findByIdAndAlive(Long id,int alive);
 }
