@@ -173,7 +173,7 @@ public class ProductController extends ApiController {
      */
     @RequestMapping(value = "/products/delete", method = RequestMethod.PUT)
     @ResponseBody
-    public ServiceResult deleteProduct(@RequestParam(value="product_id",defaultValue ="-1")List<DeleteImageModel> list){
+    public ServiceResult deleteProduct(@RequestBody List<DeleteImageModel> list){
         checkParameter(list!=null,"products are empty");
         int succCount=0;
         for(DeleteImageModel model:list){
