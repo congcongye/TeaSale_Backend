@@ -16,6 +16,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -139,14 +141,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderEn> search(long customerId, long teaSalerId, String teaSalerName, int state, int isSend, int isConfirm, int isComment, int type, int customerDelete, int adminDelete, int salerDelete, int refund_state, String name, String address, String tel, int pageIndex, int pageSize, String sortField, String sortOrder) {
+    public Page<OrderEn> search(long customerId, long teaSalerId, String teaSalerName, int state, int isSend, int isConfirm, int isComment, int type, int customerDelete, int adminDelete, int salerDelete, int refund_state, String name, String address, String tel, String beginDateStr, String endDateStr, int pageIndex, int pageSize, String sortField, String sortOrder) {
         Sort.Direction direction = Sort.Direction.DESC;
         if (sortOrder.toUpperCase().equals("ASC")) {
             direction = Sort.Direction.ASC;
         }
         teaSalerName = "%" + teaSalerName + "%";
+
+
         Specification<OrderEn> specification = this.buildSpecification(customerId, teaSalerId,teaSalerName, state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
-                salerDelete, refund_state, name, address, tel);
+                salerDelete, refund_state, name, address, tel, beginDateStr, endDateStr);
         Page<OrderEn> orders = orderEnDao.findAll(specification, new PageRequest(pageIndex, pageSize, direction,sortField));
         return orders;
     }
@@ -165,10 +169,13 @@ public class OrderServiceImpl implements OrderService {
                                                       final int refund_state,
                                                       final String name, //
                                                       final String address, //
-                                                      final String tel) {//
+                                                      final String tel,
+                                                      final String beginDateStr,
+                                                      final String endDateStr) {//
         final  Customer customer = customerDao.findOne(customerId);
         final TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
         final List<TeaSaler> teaSalers = teaSalerDao.findByNameAndAlive(teaSalerName, 1);
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Specification<OrderEn> specification = new Specification<OrderEn>() {
             @Override
             public Predicate toPredicate(Root<OrderEn> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -211,6 +218,24 @@ public class OrderServiceImpl implements OrderService {
                 }
                 if (refund_state != -1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("Refund_state"),refund_state));
+                }
+                if (beginDateStr != null && !"".equals(beginDateStr)){
+                    Date beginDate = null;
+                    try {
+                        beginDate = sdf.parse(beginDateStr);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("createDate"),beginDate));
+                }
+                if (endDateStr != null && !"".equals(endDateStr)){
+                    Date endDate = null;
+                    try {
+                        endDate = sdf.parse(beginDateStr);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("createDate"),endDate));
                 }
                 return predicate;
             }

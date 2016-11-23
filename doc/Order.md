@@ -1,7 +1,7 @@
 # Api
 
 ### 搜索订单
-* URL /api/orders/search?customerId=1&teaSalerId=1&state=1&isSend=0&isConfirm=0&isComment=0&type=0&customerDelete=0&adminDelete=0&salerDelete=0&Refund_state=0&name=""&address=""&tel=""&pageIndex=0&pageSize=10&sortField=id&sortOrder=ASC
+* URL /api/orders/search?customerId=1&teaSalerId=1&state=1&isSend=0&isConfirm=0&isComment=0&type=0&customerDelete=0&adminDelete=0&salerDelete=0&Refund_state=0&name=""&address=""&tel=""&beginDateStr=2016-10-10&endDateStr=2016-12-10&pageIndex=0&pageSize=10&sortField=id&sortOrder=ASC
 * Method: GET
 * 参数:
 ```
@@ -13,6 +13,8 @@ isConfirm:是否确认收货 0 否, 1是
 isComment:是否评论 0 否, 1是
 type:订单类型（一般，众筹，众包） (0, 1, 2)
 Refund_state:(未支付，全支付，部分支付)(0, 1, 2)
+beginDateStr=2016-10-10 订单创建起始时间
+endDateStr=2016-12-10 订单创建结束时间
 ```
 * 返回:
 ```

@@ -113,12 +113,14 @@ public class OrderController extends ApiController{
                                      @RequestParam(value = "name", defaultValue = "")String name,
                                      @RequestParam(value = "address", defaultValue = "")String address,
                                      @RequestParam(value = "tel", defaultValue =  "")String tel,
+                                     @RequestParam(value = "beginDateStr", defaultValue =  "")String beginDateStr,
+                                     @RequestParam(value = "endDateStr", defaultValue =  "")String endDateStr,
                                      @RequestParam(value="pageIndex", defaultValue="0") int pageIndex,
                                      @RequestParam(value="pageSize", defaultValue="10") int pageSize,
                                      @RequestParam(value="sortField", defaultValue="id") String sortField,
                                      @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
         Page<OrderEn> orderEns = orderService.search(customerId, teaSalerId, teaSalerName,state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
-                salerDelete, Refund_state, name, address, tel, pageIndex, pageSize, sortField, sortOrder);
+                salerDelete, Refund_state, name, address, tel, beginDateStr,endDateStr,pageIndex, pageSize, sortField, sortOrder);
         return ServiceResult.success(orderEns);
     }
 
