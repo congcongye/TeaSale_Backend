@@ -2,6 +2,7 @@ package com.cxtx.service;
 
 import com.cxtx.entity.OrderEn;
 import com.cxtx.model.CreateOrderModel;
+import com.cxtx.model.UpdateOrderModel;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -18,4 +19,8 @@ public interface OrderService {
                          int pageIndex, int pageSize, String sortField, String sortOrder);
 
     List<OrderEn> insertOrders(List<CreateOrderModel> createOrderModels);
+
+    OrderEn confirmOrder(UpdateOrderModel updateOrderModel);
+
+    OrderEn sendOrder(UpdateOrderModel updateOrderModel);
 }

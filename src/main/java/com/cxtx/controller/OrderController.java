@@ -201,4 +201,25 @@ public class OrderController extends ApiController{
         return ServiceResult.success(pageListModel);
     }
 
+    /**
+     * 更新订单 确认发货与确认收货
+     * @param updateOrderModel
+     * @return
+     */
+    @RequestMapping(value = "/order/update", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult updateOrder(@RequestBody UpdateOrderModel updateOrderModel){
+        checkParameter(updateOrderModel.orderId > 0,"invaild order!");
+        OrderEn orderEn = null;
+        if (updateOrderModel.isConfirm == 1){
+            orderEn = orderService.confirmOrder(updateOrderModel);
+        }
+        if (updateOrderModel.isSend == 1){
+            orderEn = orderService.sendOrder(updateOrderModel);
+        }
+        if (orderEn == null ){
+            return  ServiceResult.fail(500, "update fail");
+        }
+        return ServiceResult.success(orderEn);
+    }
 }

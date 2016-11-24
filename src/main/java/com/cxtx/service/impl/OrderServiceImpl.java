@@ -4,7 +4,7 @@ import com.cxtx.dao.*;
 import com.cxtx.entity.*;
 import com.cxtx.model.CreateOrderItemModel;
 import com.cxtx.model.CreateOrderModel;
-import com.cxtx.model.GetOrderModel;
+import com.cxtx.model.UpdateOrderModel;
 import com.cxtx.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -41,6 +41,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderItemDao orderItemDao;
     @Autowired
     private CartDao cartDao;
+    @Autowired
+    private AccountDao accountDao;
 
     @Override
     public OrderEn insertOrder(CreateOrderModel createOrderModel) {
@@ -126,6 +128,7 @@ public class OrderServiceImpl implements OrderService {
                 orderEn.setState(1);
                 orderEnDao.save(orderEn);
                 customer.getAccount().setMoney(customer.getAccount().getMoney() -((totalMoney + logistic)));
+                //TODO manager account add money
                 orderEns.add(orderEn);
                 for (Product product : products){
                     Cart cart = cartDao.findByProductAndCustomerAndAlive(product, customer, 1);
@@ -139,6 +142,30 @@ public class OrderServiceImpl implements OrderService {
 
         }
         return orderEns;
+    }
+
+    @Override
+    public OrderEn confirmOrder(UpdateOrderModel updateOrderModel) {
+        OrderEn orderEn = orderEnDao.findOne(updateOrderModel.orderId);
+        if (orderEn != null && orderEn.getAlive() == 1){
+            Account account = orderEn.getTeaSaler().getAccount();
+            account.setMoney(account.getMoney() + orderEn.getTotalPrice());
+            accountDao.save(account);
+            //TODO manager account reduce money
+            orderEn.setIsComment(1);
+            return  orderEnDao.save(orderEn);
+        }
+        return null;
+    }
+
+    @Override
+    public OrderEn sendOrder(UpdateOrderModel updateOrderModel) {
+        OrderEn orderEn = orderEnDao.findOne(updateOrderModel.orderId);
+        if (orderEn != null && orderEn.getAlive() == 1){
+            orderEn.setIsSend(1);
+            return  orderEnDao.save(orderEn);
+        }
+        return null;
     }
 
     @Override

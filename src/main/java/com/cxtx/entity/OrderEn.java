@@ -62,7 +62,7 @@ public class OrderEn {
     private Date SendDate ;//发货时间
 
     @Column
-    public int isConfirm = 0;//是否确认收货
+    private int isConfirm = 0;//是否确认收货
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
     @Column
