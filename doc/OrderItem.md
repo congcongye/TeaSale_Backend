@@ -1,6 +1,6 @@
 # Api
 
-### 确认订单项
+### 增加订单项
 * URL /api/orderItems/add
 * Method: POST
 * 参数:
@@ -285,7 +285,7 @@
   ]
 }
 ```
-### 确认订单项
+### 查询订单项
 * URL /api/orderItems/search/{orderId}
 * Method: GET
 * 参数:
