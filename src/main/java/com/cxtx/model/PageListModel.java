@@ -20,7 +20,7 @@ public class PageListModel {
 
         private PageListModel model = new PageListModel();
 
-        public Builder totalCount(int totalCount) {
+        public Builder totalCount(long totalCount) {
             model.setTotalCount(totalCount);
             return this;
         }
@@ -30,13 +30,17 @@ public class PageListModel {
             return this;
         }
 
-        public Builder offset(int offset) {
-            model.setOffset(offset);
+        public Builder totalPage(int totalPage) {
+            model.setTotalPage(totalPage);
             return this;
         }
 
-        public Builder limit(int limit) {
-            model.setLimit(limit);
+        public Builder pageSize(int pageSize) {
+            model.setPageSize(pageSize);
+            return this;
+        }
+        public Builder pageIndex(int pageIndex) {
+            model.setPageIndex(pageIndex);
             return this;
         }
 
@@ -45,13 +49,15 @@ public class PageListModel {
         }
     }
 
-    private int totalCount;
+    private long totalCount;
+
+    private int totalPage;
 
     private List list;
 
-    private int offset;
+    private int pageSize;
 
-    private int limit;
+    private int pageIndex;
 
     private PageListModel(int totalCount, List list) {
         this.totalCount = totalCount;
@@ -59,11 +65,11 @@ public class PageListModel {
     }
 
 
-    public int getTotalCount() {
+    public long getTotalCount() {
         return totalCount;
     }
 
-    public void setTotalCount(int totalCount) {
+    public void setTotalCount(long totalCount) {
         this.totalCount = totalCount;
     }
 
@@ -75,20 +81,28 @@ public class PageListModel {
         this.list = list;
     }
 
-    public int getOffset() {
-        return offset;
+    public int getTotalPage() {
+        return totalPage;
     }
 
-    public void setOffset(int offset) {
-        this.offset = offset;
+    public void setTotalPage(int totalPage) {
+        this.totalPage = totalPage;
     }
 
-    public int getLimit() {
-        return limit;
+    public int getPageSize() {
+        return pageSize;
     }
 
-    public void setLimit(int limit) {
-        this.limit = limit;
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public int getPageIndex() {
+        return pageIndex;
+    }
+
+    public void setPageIndex(int pageIndex) {
+        this.pageIndex = pageIndex;
     }
 
     public static <E> PageListModel empty() {

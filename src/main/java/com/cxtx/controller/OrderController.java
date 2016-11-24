@@ -2,9 +2,7 @@ package com.cxtx.controller;
 
 import com.cxtx.entity.OrderEn;
 import com.cxtx.entity.OrderItem;
-import com.cxtx.model.CreateOrderItemModel;
-import com.cxtx.model.CreateOrderModel;
-import com.cxtx.model.ServiceResult;
+import com.cxtx.model.*;
 import com.cxtx.service.OrderItemService;
 import com.cxtx.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -126,7 +125,7 @@ public class OrderController extends ApiController{
 
 
     /**
-     *
+     * 查询某一订单对应的订单项
      * @param orderId
      * @return
      */
@@ -140,6 +139,66 @@ public class OrderController extends ApiController{
             return ServiceResult.fail(500, " 订单查询失败");
         }
         return ServiceResult.success(orderItems);
+    }
+
+    /**
+     *
+     * @param customerId
+     * @param teaSalerId
+     * @param state
+     * @param isSend
+     * @param isConfirm
+     * @param isComment
+     * @param type
+     * @param customerDelete
+     * @param adminDelete
+     * @param salerDelete
+     * @param Refund_state
+     * @param name
+     * @param address
+     * @param tel
+     * @param pageIndex
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return
+     */
+    @RequestMapping(value = "/orders/orderItems/search", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult searchOrders(@RequestParam(value = "customerId", defaultValue = "-1")long customerId,
+                                     @RequestParam(value = "teaSalerId", defaultValue = "-1")long teaSalerId,
+                                     @RequestParam(value = "teaSalerName", defaultValue = "")String teaSalerName,
+                                     @RequestParam(value = "state", defaultValue = "-1")int state,
+                                     @RequestParam(value = "isSend", defaultValue = "-1")int isSend,
+                                     @RequestParam(value = "isConfirm", defaultValue = "-1")int isConfirm,
+                                     @RequestParam(value = "isComment", defaultValue = "-1")int isComment,
+                                     @RequestParam(value = "type", defaultValue = "-1")int type,
+                                     @RequestParam(value = "customerDelete", defaultValue = "-1")int customerDelete,
+                                     @RequestParam(value = "adminDelete", defaultValue = "-1")int adminDelete,
+                                     @RequestParam(value = "salerDelete", defaultValue = "-1")int salerDelete,
+                                     @RequestParam(value = "Refund_state", defaultValue = "-1")int Refund_state,
+                                     @RequestParam(value = "name", defaultValue = "")String name,
+                                     @RequestParam(value = "address", defaultValue = "")String address,
+                                     @RequestParam(value = "tel", defaultValue =  "")String tel,
+                                     @RequestParam(value = "beginDateStr", defaultValue =  "")String beginDateStr,
+                                     @RequestParam(value = "endDateStr", defaultValue =  "")String endDateStr,
+                                     @RequestParam(value="pageIndex", defaultValue="0") int pageIndex,
+                                     @RequestParam(value="pageSize", defaultValue="10") int pageSize,
+                                     @RequestParam(value="sortField", defaultValue="id") String sortField,
+                                     @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
+        Page<OrderEn> orderEns = orderService.search(customerId, teaSalerId, teaSalerName,state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
+                salerDelete, Refund_state, name, address, tel, beginDateStr,endDateStr,pageIndex, pageSize, sortField, sortOrder);
+
+        List<GetOrderModel> orderModels = new ArrayList<GetOrderModel>();
+        for (OrderEn orderEn : orderEns) {
+            GetOrderModel orderModel = new GetOrderModel();
+            orderModel.orderEn = orderEn;
+            orderModel.orderItems = orderItemService.searchItemsByOrder(orderEn.getId());
+            orderModels.add(orderModel);
+        }
+        PageListModel pageListModel = PageListModel.Builder().pageIndex(pageIndex).pageSize(pageSize).
+                totalCount(orderEns.getTotalElements()).totalPage(orderEns.getTotalPages()).list(orderModels).build();
+        return ServiceResult.success(pageListModel);
     }
 
 }
