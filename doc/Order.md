@@ -17,6 +17,7 @@ beginDateStr=2016-10-10 订单创建起始时间
 endDateStr=2016-12-10 订单创建结束时间
 ```
 * 返回:
+
 ```
 {
   "code": 200,
@@ -41,10 +42,13 @@ endDateStr=2016-12-10 订单创建结束时间
   }
 }
 ```
+
 ### 新增订单
 * URL /api/orders/add
 * Method: POST
 * 参数:
+* 
+
 ```
 [
     {
@@ -69,7 +73,9 @@ endDateStr=2016-12-10 订单创建结束时间
 ]
 
 ```
+
 * 返回:
+
 ```
 {
   "code": 200,
@@ -148,10 +154,12 @@ endDateStr=2016-12-10 订单创建结束时间
   ]
 }
 ```
+
 ### 搜索订单
 * URL /api/orders/orderItems/search?customerId=1&teaSalerId=1&state=1&isSend=0&isConfirm=0&isComment=0&type=0&customerDelete=0&adminDelete=0&salerDelete=0&Refund_state=0&name=""&address=""&tel=""&beginDateStr=2016-10-10&endDateStr=2016-12-10&pageIndex=0&pageSize=10&sortField=id&sortOrder=ASC
 * Method: GET
 * 参数:
+
 ```
 说明
 teaSalerName:茶农名字,当不传茶农id时使用该参数
@@ -164,7 +172,9 @@ Refund_state:(未支付，全支付，部分支付)(0, 1, 2)
 beginDateStr=2016-10-10 订单创建起始时间
 endDateStr=2016-12-10 订单创建结束时间
 ```
-* 返回:
+
+* 返回
+
 ```
 {
   "code": 200,
@@ -527,7 +537,9 @@ endDateStr=2016-12-10 订单创建结束时间
 }
 
 ```
-* 返回:
+
+* 返回
+
 ```
 {
   "code": 200,
