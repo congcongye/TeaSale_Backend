@@ -123,11 +123,25 @@ public class Product {
     private int alive=1;
 
 
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     /**
      * 主图图片
      */
     @Column
     private String url;
+
+    /**
+     * 用来区分普通0,众筹1,众包2
+     */
+    @Column
+    private int type=0;
 
 
     public Long getId() {
