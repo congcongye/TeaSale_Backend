@@ -109,7 +109,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
      * @return
      */
     @Override
-    public List<CrowdFunding> joinCrowdFunding(Long product_id, Long teaSaler_id, int type, double lowEarnest, double highEarnest, double lowUnitNum, double highUnitNum, double lowUnitMoney, double highUnitMoney, int state, double lowRemainderNum, double highRemainderNum){
+    public List<CrowdFunding> searchCrowdFunding(Long product_id, Long teaSaler_id, int type, double lowEarnest, double highEarnest, double lowUnitNum, double highUnitNum, double lowUnitMoney, double highUnitMoney, int state, double lowRemainderNum, double highRemainderNum){
         Specification<CrowdFunding> specification = this.buildSpecifications(product_id, teaSaler_id, type, lowEarnest, highEarnest, lowUnitNum, highUnitNum, lowUnitMoney, highUnitMoney, state, lowRemainderNum, highRemainderNum);
         return  crowdFundingDao.findAll(Specifications.where(specification));
 

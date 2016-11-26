@@ -13,5 +13,5 @@ public interface CrowdFundingService {
      CrowdFunding newCrowdFunding(CrowdFunding crowdFunding);
      CrowdFunding updateCrowdFunding(CrowdFunding model);
      int deleteCrowdFunding(List<IdModel> list);
-     List<CrowdFunding> joinCrowdFunding(Long product_id, Long teaSaler_id, int type, double lowEarnest, double highEarnest, double lowUnitNum, double highUnitNum, double lowUnitMoney, double highUnitMoney, int state, double lowRemainderNum, double highRemainderNum);
+     List<CrowdFunding> searchCrowdFunding(Long product_id, Long teaSaler_id, int type, double lowEarnest, double highEarnest, double lowUnitNum, double highUnitNum, double lowUnitMoney, double highUnitMoney, int state, double lowRemainderNum, double highRemainderNum);
 }
