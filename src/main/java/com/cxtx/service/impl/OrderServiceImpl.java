@@ -152,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
             account.setMoney(account.getMoney() + orderEn.getTotalPrice());
             accountDao.save(account);
             //TODO manager account reduce money
-            orderEn.setIsComment(1);
+            orderEn.setIsConfirm(1);
             return  orderEnDao.save(orderEn);
         }
         return null;
