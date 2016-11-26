@@ -56,6 +56,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
             p.setType(1);//众筹
             Product newProduct = productDao.save(p);
             crowdFunding.setProduct(newProduct);
+            crowdFunding.setRemainderNum(crowdFunding.getTotalNum());
             result=crowdFundingDao.save(crowdFunding);
           }
           return result;

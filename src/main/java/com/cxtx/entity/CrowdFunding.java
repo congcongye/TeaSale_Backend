@@ -26,7 +26,7 @@ public class CrowdFunding {
      * (现货／预售) 0, 1
      */
     @Column
-    private int type;
+    private int type=0;
 
     @Column
     private double earnest;
@@ -61,6 +61,29 @@ public class CrowdFunding {
 
     @Column
     private int alive;
+
+    public double getTotalNum() {
+        return totalNum;
+    }
+
+    public void setTotalNum(double totalNum) {
+        this.totalNum = totalNum;
+    }
+
+    public double getRemainderNum() {
+        return remainderNum;
+    }
+
+    public void setRemainderNum(double remainderNum) {
+        this.remainderNum = remainderNum;
+    }
+
+    @Column
+
+    private double totalNum=0;
+
+    @Column
+    private double remainderNum;
 
     public Long getId() {
         return id;
