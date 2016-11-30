@@ -9,6 +9,7 @@ import com.cxtx.entity.OrderItem;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.IdModel;
+import com.cxtx.model.UpdateCrowdFundingModel;
 import com.cxtx.service.CrowdFundingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -56,6 +57,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
             p.setType(1);//众筹
             Product newProduct = productDao.save(p);
             crowdFunding.setProduct(newProduct);
+            crowdFunding.setCreateDate(new Date());
             crowdFunding.setRemainderNum(crowdFunding.getTotalNum());
             result=crowdFundingDao.save(crowdFunding);
           }
@@ -68,10 +70,23 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
      * @return
      */
     @Override
-    public CrowdFunding updateCrowdFunding(CrowdFunding model){
+    public CrowdFunding updateCrowdFunding(UpdateCrowdFundingModel model){
+        CrowdFunding oldCrowdFunding =crowdFundingDao.findByIdAndAlive(model.id,1);
+        oldCrowdFunding.setType(model.type);
+        oldCrowdFunding.setUnitMoney(model.unitMoney);
+        oldCrowdFunding.setUnitNum(model.unitNum);
+        oldCrowdFunding.setDealDate(model.dealDate);
+        oldCrowdFunding.setDeliverDate(model.deliverDate);
+        if(model.type==1){ //预售才需要修改交付剩余金钱的时间
+            oldCrowdFunding.setPayDate(model.payDate);
+            oldCrowdFunding.setEarnest(model.earnest);
+        }
+        oldCrowdFunding.setTotalNum(model.totalNum);
+        oldCrowdFunding.setRemainderNum(model.totalNum);
+        oldCrowdFunding.setJoinNum(model.joinNum);
          CrowdFunding result=null;
-        if(isWorking(model)==false){
-            result=crowdFundingDao.save(model);
+        if(isWorking(oldCrowdFunding)==false){
+            result=crowdFundingDao.save(oldCrowdFunding);
         }
         return result;
     }
@@ -87,6 +102,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
             CrowdFunding cd =crowdFundingDao.findByIdAndAlive(idmodel.id,1);
             if(isWorking(cd)==false){
                 cd.setAlive(0);
+                crowdFundingDao.save(cd);
                 succCount++;
             }
         }

@@ -7,14 +7,15 @@ import java.util.Date;
  */
 public class UpdateCrowdFundingModel {
     public Long id;
-    public int type=-1;
-    public double earnest=-1;
-    public double unitNum=-1;
-    public double unitMoney=-1;
-    public int joinNum=-1;
-    public Date createDate=null;
+    public int type=0;
+    public double earnest=0;
+    public double unitNum=0;
+    public double unitMoney=0;
+    public int joinNum=0;
     public Date dealDate=null;
     public  Date deliverDate=null;
     public Date payDate=null;
+    public double totalNum=0;
+
 
 }

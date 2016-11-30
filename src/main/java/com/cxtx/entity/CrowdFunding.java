@@ -29,7 +29,7 @@ public class CrowdFunding {
     private int type=0;
 
     @Column
-    private double earnest;
+    private double earnest=0;
 
     @Column
     private double unitNum;
@@ -57,10 +57,10 @@ public class CrowdFunding {
     private Date payDate;
 
     @Column
-    private int state;
+    private int state=0;
 
     @Column
-    private int alive;
+    private int alive=1;
 
     public double getTotalNum() {
         return totalNum;

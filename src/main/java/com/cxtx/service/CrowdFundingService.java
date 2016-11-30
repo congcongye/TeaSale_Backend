@@ -2,6 +2,7 @@ package com.cxtx.service;
 
 import com.cxtx.entity.CrowdFunding;
 import com.cxtx.model.IdModel;
+import com.cxtx.model.UpdateCrowdFundingModel;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public interface CrowdFundingService {
 
      CrowdFunding newCrowdFunding(CrowdFunding crowdFunding);
-     CrowdFunding updateCrowdFunding(CrowdFunding model);
+     CrowdFunding updateCrowdFunding(UpdateCrowdFundingModel model);
      int deleteCrowdFunding(List<IdModel> list);
      List<CrowdFunding> searchCrowdFunding(Long product_id, Long teaSaler_id, int type, double lowEarnest, double highEarnest, double lowUnitNum, double highUnitNum, double lowUnitMoney, double highUnitMoney, int state, double lowRemainderNum, double highRemainderNum);
 }

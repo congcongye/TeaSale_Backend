@@ -1,302 +1,285 @@
 #### 发起众筹
-* URL:http://localhost:7000/api/crowdFund/new
+* URL:http://localhost:7000/api/crowdFund/new?product_id=7
 * Method: POST
-* 输入：将整个众包对象传入，具体参数的含义，请参考数据库表
+* 输入：众筹分成现货和预售，两者中传入的参数不同 <pre>
+ RequestBody中
+{
+    "type":0,  现货0，预售1
+    "earnest":1, 现货的话，不用定金
+    "unitNum":1,  每份数量
+    "unitMoney":10, 每份金额
+    "JoinNum":1, 当前参与的人数
+    "dealDate":"",众筹结束时间
+    "deliverDate":"", 开始发货的时间
+    "payDate":"",  交付剩余金钱的时间（如果是现货，则不需要）
+    "totalNum":100  商品总量
+}
+
+</pre> 
+
+* 输入：  
  <pre>
 {
-    "product": {
-      "id": 1,
-      "productType": {
-        "id": 1,
-        "name": "红茶",
-        "descript": "红茶",
-        "url": "1.jpg",
-        "state": 1,
-        "alive": 1
-      },
-      "remark": "产品1",
-      "name": "红茶",
-      "level": 1,
-      "locality": "上海闵行区",
-      "stock": 1000,
-      "price": 100,
-      "startNum": 5,
-      "discount": 0.8,
-      "isFree": 1,
-      "postage": 5,
-      "deliverLimit": 10,
-      "createDate": "2016-11-11",
-      "unit": "两",
-      "teaSaler": {
-        "id": 1,
-        "name": "ycc",
-        "level": 1,
-        "nickname": "ycc",
-        "account": {
-          "id": 1,
-          "tel": "12314",
-          "password": "123",
-          "label": 1,
-          "alive": 1,
-          "headURL": null,
-          "money": 0
-        },
-        "address": "上海市",
-        "tel": "12341341",
-        "headUrl": "1.jpg",
-        "money": 100,
-        "licenseUrl": "1.jpg",
-        "zip": "14134",
-        "idCard": "14rwerq",
-        "state": 1,
-        "alive": 1,
-        "createDate": "2016-11-11"
-      },
-      "state": 0,
-      "alive": 1,
-      "url": "1.jpg",
-      "type": 0
-    },
-    "type":0,
-    "earnest":1,
-    "unitNum":1,
-    "unitMoney":10,
-    "JoinNum":1,
-    "createDate":"",
-    "dealDate":"",
-    "deliverDate":"",
-    "payDate":"",
-    "totalNum":100
-}
-</pre>    
-* 输出:    
-  <pre>
- {
   "code": 200,
   "data": {
     "id": 1,
     "product": {
-      "id": 1,
+      "id": 7,
       "productType": {
         "id": 1,
         "name": "红茶",
-        "descript": "红茶",
-        "url": "1.jpg",
-        "state": 1,
+        "descript": "红茶属全发酵茶，是以适宜的茶树新牙叶为原料，经萎凋、揉捻（切）、发酵、干燥等一系列工艺过程精制而成的茶。萎凋是红茶初制的重要工艺，红茶在初制时称为“乌茶”。红茶因其干茶冲泡后的茶汤和叶底色呈红色而得名。",
+        "url": "11.png",
+        "state": 0,
         "alive": 1
       },
-      "remark": "产品1",
+      "remark": "红茶富含胡萝卜素、维生素A、钙、磷、镁、钾、咖啡碱、异亮氨酸、亮氨酸、赖氨酸、谷氨酸、丙氨酸、天门冬氨酸等多种营养元素。红茶在发酵过程中多酚类物质的化学反应使鲜叶中的化学成分变化较大，会产生茶黄素、茶红素等成分，其香气比鲜叶明显增加，形成红茶特有的色、香、味。",
       "name": "红茶",
       "level": 1,
-      "locality": "上海闵行区",
-      "stock": 1000,
-      "price": 100,
-      "startNum": 5,
-      "discount": 0.8,
-      "isFree": 1,
+      "locality": "浙江 湖州 长兴县",
+      "stock": 9996,
+      "price": 50,
+      "startNum": 1,
+      "discount": 0.9,
+      "isFree": 0,
       "postage": 5,
-      "deliverLimit": 10,
-      "createDate": "2016-11-27",
+      "deliverLimit": 5,
+      "createDate": "2016-11-30",
       "unit": "两",
       "teaSaler": {
         "id": 1,
-        "name": "ycc",
+        "name": "叶聪聪",
         "level": 1,
         "nickname": "ycc",
         "account": {
           "id": 1,
-          "tel": "12314",
-          "password": "123",
+          "tel": "15821527768",
+          "password": "123456",
           "label": 1,
           "alive": 1,
-          "headURL": null,
-          "money": 0
+          "headURL": "h1.png",
+          "money": 2460
         },
-        "address": "上海市",
-        "tel": "12341341",
-        "headUrl": "1.jpg",
-        "money": 100,
-        "licenseUrl": "1.jpg",
-        "zip": "14134",
-        "idCard": "14rwerq",
+        "address": "上海市 闵行区",
+        "tel": "15821527768",
+        "headUrl": "h1.png",
+        "money": 1000,
+        "licenseUrl": "c1.png",
+        "zip": "435100",
+        "idCard": "420281199311118111",
         "state": 1,
         "alive": 1,
         "createDate": "2016-11-11"
       },
       "state": 1,
       "alive": 1,
-      "url": "1.jpg",
+      "url": "12.png",
       "type": 1
     },
     "type": 0,
-    "earnest": 0,
-    "unitNum": 0,
-    "unitMoney": 0,
+    "earnest": 1,
+    "unitNum": 1,
+    "unitMoney": 10,
     "createDate": null,
     "dealDate": null,
     "deliverDate": null,
     "payDate": null,
     "state": 0,
     "alive": 0,
+    "totalNum": 100,
+    "remainderNum": 100,
     "joinNum": 0
   }
 }
-</pre>
+ </pre>
 #### 修改众筹
 * URL:http://localhost:7000/api/crowdFund/update
 * Method:PUT
 * 输入：
  <pre>
 {
+ 
     "id": 1,
-    "product": {
-      "id": 1,
-      "productType": {
-        "id": 1,
-        "name": "红茶",
-        "descript": "红茶",
-        "url": "1.jpg",
-        "state": 1,
-        "alive": 1
-      },
-      "remark": "产品1",
-      "name": "红茶",
-      "level": 1,
-      "locality": "上海闵行区",
-      "stock": 1000,
-      "price": 100,
-      "startNum": 5,
-      "discount": 0.8,
-      "isFree": 1,
-      "postage": 5,
-      "deliverLimit": 10,
-      "createDate": "2016-11-27",
-      "unit": "两",
-      "teaSaler": {
-        "id": 1,
-        "name": "ycc",
-        "level": 1,
-        "nickname": "ycc",
-        "account": {
-          "id": 1,
-          "tel": "12314",
-          "password": "123",
-          "label": 1,
-          "alive": 1,
-          "headURL": null,
-          "money": 0
-        },
-        "address": "上海市",
-        "tel": "12341341",
-        "headUrl": "1.jpg",
-        "money": 100,
-        "licenseUrl": "1.jpg",
-        "zip": "14134",
-        "idCard": "14rwerq",
-        "state": 1,
-        "alive": 1,
-        "createDate": "2016-11-11"
-      },
-      "state": 1,
-      "alive": 1,
-      "url": "1.jpg",
-      "type": 1
-    },
     "type": 0,
-    "earnest": 0,
-    "unitNum": 0,
-    "unitMoney": 0,
-    "createDate": null,
-    "dealDate": null,
-    "deliverDate": null,
-    "payDate": null,
-    "state": 0,
-    "alive": 0,
-    "joinNum": 0
-  }
-</pre>
+    "earnest": 1,
+    "unitNum": 1,
+    "unitMoney": 10,
+    "dealDate": "",
+    "deliverDate":"",
+    "payDate":"",
+    "joinNum":5,
+    "totalNum": 1000
+}
+ </pre>
 * 输出：
-<pre>
+ <pre>
 {
-"code":200,
-"data":
-{
+  "code": 200,
+  "data": {
     "id": 1,
     "product": {
-      "id": 1,
+      "id": 7,
       "productType": {
         "id": 1,
         "name": "红茶",
-        "descript": "红茶",
-        "url": "1.jpg",
-        "state": 1,
+        "descript": "红茶属全发酵茶，是以适宜的茶树新牙叶为原料，经萎凋、揉捻（切）、发酵、干燥等一系列工艺过程精制而成的茶。萎凋是红茶初制的重要工艺，红茶在初制时称为“乌茶”。红茶因其干茶冲泡后的茶汤和叶底色呈红色而得名。",
+        "url": "11.png",
+        "state": 0,
         "alive": 1
       },
-      "remark": "产品1",
+      "remark": "红茶富含胡萝卜素、维生素A、钙、磷、镁、钾、咖啡碱、异亮氨酸、亮氨酸、赖氨酸、谷氨酸、丙氨酸、天门冬氨酸等多种营养元素。红茶在发酵过程中多酚类物质的化学反应使鲜叶中的化学成分变化较大，会产生茶黄素、茶红素等成分，其香气比鲜叶明显增加，形成红茶特有的色、香、味。",
       "name": "红茶",
       "level": 1,
-      "locality": "上海闵行区",
-      "stock": 1000,
-      "price": 100,
-      "startNum": 5,
-      "discount": 0.8,
-      "isFree": 1,
+      "locality": "浙江 湖州 长兴县",
+      "stock": 9996,
+      "price": 50,
+      "startNum": 1,
+      "discount": 0.9,
+      "isFree": 0,
       "postage": 5,
-      "deliverLimit": 10,
-      "createDate": "2016-11-27",
+      "deliverLimit": 5,
+      "createDate": "2016-11-30",
       "unit": "两",
       "teaSaler": {
         "id": 1,
-        "name": "ycc",
+        "name": "叶聪聪",
         "level": 1,
         "nickname": "ycc",
         "account": {
           "id": 1,
-          "tel": "12314",
-          "password": "123",
+          "tel": "15821527768",
+          "password": "123456",
           "label": 1,
           "alive": 1,
-          "headURL": null,
-          "money": 0
+          "headURL": "h1.png",
+          "money": 2460
         },
-        "address": "上海市",
-        "tel": "12341341",
-        "headUrl": "1.jpg",
-        "money": 100,
-        "licenseUrl": "1.jpg",
-        "zip": "14134",
-        "idCard": "14rwerq",
+        "address": "上海市 闵行区",
+        "tel": "15821527768",
+        "headUrl": "h1.png",
+        "money": 1000,
+        "licenseUrl": "c1.png",
+        "zip": "435100",
+        "idCard": "420281199311118111",
         "state": 1,
         "alive": 1,
         "createDate": "2016-11-11"
       },
       "state": 1,
       "alive": 1,
-      "url": "1.jpg",
+      "url": "12.png",
       "type": 1
     },
     "type": 0,
-    "earnest": 0,
-    "unitNum": 0,
-    "unitMoney": 0,
-    "createDate": null,
+    "earnest": 1,
+    "unitNum": 1,
+    "unitMoney": 10,
+    "createDate": "2016-11-30",
     "dealDate": null,
     "deliverDate": null,
-    "payDate": null,
+    "payDate": "2016-12-03",
     "state": 0,
-    "alive": 0,
-    "joinNum": 0,
-    "totalNum":100
+    "alive": 1,
+    "totalNum": 1000,
+    "remainderNum": 1000,
+    "joinNum": 5
   }
 }
 </pre>
-#### 众包删除
+#### 众筹删除
 * URL:http://localhost:7000/api/crowdFund/delete
 * Method:PUT
 * 输入：
 	<pre>[
 {
-    "id":1
+    "id":1  众筹的id
 }
 ]</pre>
 * 输出：
+ <pre>
+{
+  "code": 200,
+  "data": "all succeed!"
+} 
+</pre>
+#### 众筹的查询
+* URL:http://localhost:7000/api/crowdFund/search?product_id=7&teaser_id=1&type=0&lowEarnest=1&highEarnest=100&lowUnitNum=1&highUnitNum=100&lowUnitMoney=1&highUnitMoney=1000&state=0&lowRemainderNum=1&highRemainderNum=1000
+* Method: GET
+* 输入：url中的参数可以都不填，如果填写的话，不需要该查询条件时，数字写－1，字符串写“”
+* 输出：
+ <pre>
+{
+  "code": 200,
+  "data": [
+    {
+      "id": 1,
+      "product": {
+        "id": 7,
+        "productType": {
+          "id": 1,
+          "name": "红茶",
+          "descript": "红茶属全发酵茶，是以适宜的茶树新牙叶为原料，经萎凋、揉捻（切）、发酵、干燥等一系列工艺过程精制而成的茶。萎凋是红茶初制的重要工艺，红茶在初制时称为“乌茶”。红茶因其干茶冲泡后的茶汤和叶底色呈红色而得名。",
+          "url": "11.png",
+          "state": 0,
+          "alive": 1
+        },
+        "remark": "红茶富含胡萝卜素、维生素A、钙、磷、镁、钾、咖啡碱、异亮氨酸、亮氨酸、赖氨酸、谷氨酸、丙氨酸、天门冬氨酸等多种营养元素。红茶在发酵过程中多酚类物质的化学反应使鲜叶中的化学成分变化较大，会产生茶黄素、茶红素等成分，其香气比鲜叶明显增加，形成红茶特有的色、香、味。",
+        "name": "红茶",
+        "level": 1,
+        "locality": "浙江 湖州 长兴县",
+        "stock": 9996,
+        "price": 50,
+        "startNum": 1,
+        "discount": 0.9,
+        "isFree": 0,
+        "postage": 5,
+        "deliverLimit": 5,
+        "createDate": "2016-11-30",
+        "unit": "两",
+        "teaSaler": {
+          "id": 1,
+          "name": "叶聪聪",
+          "level": 1,
+          "nickname": "ycc",
+          "account": {
+            "id": 1,
+            "tel": "15821527768",
+            "password": "123456",
+            "label": 1,
+            "alive": 1,
+            "headURL": "h1.png",
+            "money": 2460
+          },
+          "address": "上海市 闵行区",
+          "tel": "15821527768",
+          "headUrl": "h1.png",
+          "money": 1000,
+          "licenseUrl": "c1.png",
+          "zip": "435100",
+          "idCard": "420281199311118111",
+          "state": 1,
+          "alive": 1,
+          "createDate": "2016-11-11"
+        },
+        "state": 1,
+        "alive": 1,
+        "url": "12.png",
+        "type": 1
+      },
+      "type": 0,
+      "earnest": 1,
+      "unitNum": 1,
+      "unitMoney": 10,
+      "createDate": "2016-11-30",
+      "dealDate": null,
+      "deliverDate": "2016-11-30",
+      "payDate": "2016-12-03",
+      "state": 0,
+      "alive": 1,
+      "totalNum": 1000,
+      "remainderNum": 1000,
+      "joinNum": 5
+    }
+  ]
+}
+</pre>

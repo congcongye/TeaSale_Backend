@@ -1,8 +1,12 @@
 package com.cxtx.controller;
 
+import com.cxtx.dao.CrowdFundingDao;
+import com.cxtx.dao.ProductDao;
 import com.cxtx.entity.CrowdFunding;
+import com.cxtx.entity.Product;
 import com.cxtx.model.IdModel;
 import com.cxtx.model.ServiceResult;
+import com.cxtx.model.UpdateCrowdFundingModel;
 import com.cxtx.service.CrowdFundingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,6 +22,10 @@ public class CrowdFundingController extends ApiController{
 
     @Autowired
     private CrowdFundingService crowdFundingService;
+    @Autowired
+    private ProductDao productDao;
+    @Autowired
+    private CrowdFundingDao crowdFundingDao;
 
     /**
      * 发起众包
@@ -26,11 +34,13 @@ public class CrowdFundingController extends ApiController{
      */
     @RequestMapping(value = "/crowdFund/new", method = RequestMethod.POST)
     @ResponseBody
-    public ServiceResult newCrowdFund(@RequestBody CrowdFunding crowdFunding){
+    public ServiceResult newCrowdFund(@RequestBody CrowdFunding crowdFunding,@RequestParam(value="product_id",defaultValue = "-1")Long product_id){
          checkParameter(crowdFunding!=null,"data is empty");
-         if(crowdFunding.getProduct()==null){
+         Product product =productDao.findByIdAndAlive(product_id,1);
+         if(product==null){
              return ServiceResult.fail(500, "product is empty!");
          }
+         crowdFunding.setProduct(product);
          CrowdFunding result = crowdFundingService.newCrowdFunding(crowdFunding);
          if(result==null){
              return ServiceResult.fail(500, "crowdFunding repeat!");
@@ -40,12 +50,16 @@ public class CrowdFundingController extends ApiController{
 
     @RequestMapping(value = "/crowdFund/update", method = RequestMethod.PUT)
     @ResponseBody
-    public ServiceResult updateCrowdFund(@RequestBody CrowdFunding crowdFunding){
-        checkParameter(crowdFunding!=null,"data is empty");
+    public ServiceResult updateCrowdFund(@RequestBody UpdateCrowdFundingModel updateCrowdFundingModel){
+        checkParameter(updateCrowdFundingModel!=null,"data is empty");
+        CrowdFunding crowdFunding =crowdFundingDao.findByIdAndAlive(updateCrowdFundingModel.id,1);
+        if(crowdFunding==null){
+            return ServiceResult.fail(500, "old crowdFunding is empty!");
+        }
         if(crowdFunding.getProduct()==null){
             return ServiceResult.fail(500, "product is empty!");
         }
-        CrowdFunding result = crowdFundingService.updateCrowdFunding(crowdFunding);
+        CrowdFunding result = crowdFundingService.updateCrowdFunding(updateCrowdFundingModel);
         if(result==null){
             return ServiceResult.fail(500, "crowdFunding can't be update!");
         }
