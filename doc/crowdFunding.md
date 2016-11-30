@@ -203,7 +203,7 @@
 } 
 </pre>
 #### 众筹的查询
-* URL:http://localhost:7000/api/crowdFund/search?product_id=7&teaser_id=1&type=0&lowEarnest=1&highEarnest=100&lowUnitNum=1&highUnitNum=100&lowUnitMoney=1&highUnitMoney=1000&state=0&lowRemainderNum=1&highRemainderNum=1000
+* URL:http://localhost:7000/api/crowdFund/search?product_id=7&teaser_id=1&type=0&lowEarnest=1&highEarnest=100&lowUnitNum=1&highUnitNum=100&lowUnitMoney=1&highUnitMoney=1000&state=0&lowRemainderNum=1&highRemainderNum=1000&productType_id=1&productType_name=“ haha”&product_name="haha"
 * Method: GET
 * 输入：url中的参数可以都不填，如果填写的话，不需要该查询条件时，数字写－1，字符串写“”
 * 输出：
