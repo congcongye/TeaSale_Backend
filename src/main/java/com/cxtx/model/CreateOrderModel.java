@@ -13,6 +13,7 @@ public class CreateOrderModel {
     public String zip;
     public String tel;
     public int type;
+    public long crowdFundingId;
     /**
      * long productId;
      * double num;
