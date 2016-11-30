@@ -84,8 +84,8 @@ public class CrowdFundingController extends ApiController{
                                             @RequestParam(value = "highEarnest",defaultValue = "-1")double highEarnest,@RequestParam(value = "lowUnitNum",defaultValue = "-1")double lowUnitNum,@RequestParam(value = "highUnitNum",defaultValue = "-1")double highUnitNum,
                                             @RequestParam(value = "lowUnitMoney",defaultValue = "-1")double lowUnitMoney,@RequestParam(value = "highUnitMoney",defaultValue = "-1")double highUnitMoney,@RequestParam(value = "state",defaultValue = "-1")int state,
                                             @RequestParam(value = "lowRemainderNum",defaultValue = "-1")double lowRemainderNum,@RequestParam(value = "highRemainderNum",defaultValue = "-1")double highRemainderNum,@RequestParam (value = "productType_name",defaultValue = "")String productType_name,
-                                            @RequestParam (value = "product_name",defaultValue = "")String product_name,@RequestParam (value = "productType_id",defaultValue = "")Long productType_id) {
-        List<CrowdFunding> list =crowdFundingService.searchCrowdFunding(product_id,teaSaler_id,type,lowEarnest,highEarnest,lowUnitNum,highUnitNum,lowUnitMoney,highUnitMoney,state,lowRemainderNum,highRemainderNum,productType_id,productType_name,product_name);
+                                            @RequestParam (value = "product_name",defaultValue = "")String product_name,@RequestParam (value = "productType_id",defaultValue = "")Long productType_id, @RequestParam(value="pageIndex", defaultValue="0") int pageIndex, @RequestParam(value="pageSize", defaultValue="10") int pageSize, @RequestParam(value="sortField", defaultValue="id") String sortField, @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder) {
+        List<CrowdFunding> list =crowdFundingService.searchCrowdFunding(product_id,teaSaler_id,type,lowEarnest,highEarnest,lowUnitNum,highUnitNum,lowUnitMoney,highUnitMoney,state,lowRemainderNum,highRemainderNum,productType_id,productType_name,product_name,pageIndex,pageSize, sortField,sortOrder);
         return ServiceResult.success(list);
     }
 

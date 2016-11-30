@@ -122,10 +122,14 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
      * @return
      */
     @Override
-    public List<CrowdFunding> searchCrowdFunding(Long product_id, Long teaSaler_id, int type, double lowEarnest, double highEarnest, double lowUnitNum, double highUnitNum, double lowUnitMoney, double highUnitMoney, int state, double lowRemainderNum, double highRemainderNum,Long productType_id,String productType_name,String product_name){
+    public Page<CrowdFunding> searchCrowdFunding(Long product_id, Long teaSaler_id, int type, double lowEarnest, double highEarnest, double lowUnitNum, double highUnitNum, double lowUnitMoney, double highUnitMoney, int state, double lowRemainderNum, double highRemainderNum,Long productType_id,String productType_name,String product_name, int pageIndex, int pageSize, String sortField, String sortOrder){
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (sortOrder.toUpperCase().equals("DESC")) {
+            direction = Sort.Direction.DESC;
+        }
+        Sort sort = new Sort(direction, sortField);
         Specification<CrowdFunding> specification = this.buildSpecifications(product_id, teaSaler_id, type, lowEarnest, highEarnest, lowUnitNum, highUnitNum, lowUnitMoney, highUnitMoney, state, lowRemainderNum, highRemainderNum,productType_id,productType_name,product_name);
-        return  crowdFundingDao.findAll(Specifications.where(specification));
-
+        return  crowdFundingDao.findAll(Specifications.where(specification), new PageRequest(pageIndex, pageSize, sort));
     }
 
     private Specification<CrowdFunding> buildSpecifications(Long product_id,Long teaSaler_id,int type,double lowEarnest,double highEarnest,double lowUnitNum,double highUnitNum,double lowUnitMoney,double highUnitMoney,int state,double lowRemainderNum,double highRemainderNum,Long productType_id,String productType_name,String product_name) {
