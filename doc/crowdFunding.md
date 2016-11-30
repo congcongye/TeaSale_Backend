@@ -1,8 +1,10 @@
 #### 发起众筹
 * URL:http://localhost:7000/api/crowdFund/new?product_id=7
 * Method: POST
-* 输入：众筹分成现货和预售，两者中传入的参数不同 <pre>
+* 输入：众筹分成现货和预售，两者中传入的参数不同
  RequestBody中
+
+```
 {
     "type":0,  现货0，预售1
     "earnest":1, 现货的话，不用定金
@@ -14,8 +16,9 @@
     "payDate":"",  交付剩余金钱的时间（如果是现货，则不需要）
     "totalNum":100  商品总量
 }
+```
 
-</pre> 
+
 
 * 输入：  
  <pre>
