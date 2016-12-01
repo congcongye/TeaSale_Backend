@@ -158,9 +158,9 @@ public class ProductController extends ApiController {
         checkParameter(teaSaler!=null,"teaSaler is empty");
         List<Product> list =new ArrayList<Product>();
         if(state>-1){
-            list =productDao.findByTeaSalerAndStateAndAlive(teaSaler,state,1);
+            list =productDao.findByTeaSalerAndStateAndAliveAndType(teaSaler,state,1,0);
         }else{
-            list=productDao.findByTeaSalerAndAlive(teaSaler,1);
+            list=productDao.findByTeaSalerAndAliveAndType(teaSaler,1,0);
         }
         return ServiceResult.success(list);
 
