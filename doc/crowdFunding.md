@@ -10,7 +10,6 @@
     "earnest":1, 现货的话，不用定金
     "unitNum":1,  每份数量
     "unitMoney":10, 每份金额
-    "JoinNum":1, 当前参与的人数
     "dealDate":"",众筹结束时间
     "deliverDate":"", 开始发货的时间
     "payDate":"",  交付剩余金钱的时间（如果是现货，则不需要）
