@@ -212,76 +212,94 @@
  <pre>
 {
   "code": 200,
-  "data": [
-    {
-      "id": 1,
-      "product": {
-        "id": 7,
-        "productType": {
-          "id": 1,
-          "name": "红茶",
-          "descript": "红茶属全发酵茶，是以适宜的茶树新牙叶为原料，经萎凋、揉捻（切）、发酵、干燥等一系列工艺过程精制而成的茶。萎凋是红茶初制的重要工艺，红茶在初制时称为“乌茶”。红茶因其干茶冲泡后的茶汤和叶底色呈红色而得名。",
-          "url": "11.png",
-          "state": 0,
-          "alive": 1
-        },
-        "remark": "红茶富含胡萝卜素、维生素A、钙、磷、镁、钾、咖啡碱、异亮氨酸、亮氨酸、赖氨酸、谷氨酸、丙氨酸、天门冬氨酸等多种营养元素。红茶在发酵过程中多酚类物质的化学反应使鲜叶中的化学成分变化较大，会产生茶黄素、茶红素等成分，其香气比鲜叶明显增加，形成红茶特有的色、香、味。",
-        "name": "红茶",
-        "level": 1,
-        "locality": "浙江 湖州 长兴县",
-        "stock": 9996,
-        "price": 50,
-        "startNum": 1,
-        "discount": 0.9,
-        "isFree": 0,
-        "postage": 5,
-        "deliverLimit": 5,
-        "createDate": "2016-11-30",
-        "unit": "两",
-        "teaSaler": {
-          "id": 1,
-          "name": "叶聪聪",
-          "level": 1,
-          "nickname": "ycc",
-          "account": {
+  "data": {
+    "content": [
+      {
+        "id": 1,
+        "product": {
+          "id": 7,
+          "productType": {
             "id": 1,
-            "tel": "15821527768",
-            "password": "123456",
-            "label": 1,
-            "alive": 1,
-            "headURL": "h1.png",
-            "money": 2460
+            "name": "红茶",
+            "descript": "红茶属全发酵茶，是以适宜的茶树新牙叶为原料，经萎凋、揉捻（切）、发酵、干燥等一系列工艺过程精制而成的茶。萎凋是红茶初制的重要工艺，红茶在初制时称为“乌茶”。红茶因其干茶冲泡后的茶汤和叶底色呈红色而得名。",
+            "url": "11.png",
+            "state": 0,
+            "alive": 1
           },
-          "address": "上海市 闵行区",
-          "tel": "15821527768",
-          "headUrl": "h1.png",
-          "money": 1000,
-          "licenseUrl": "c1.png",
-          "zip": "435100",
-          "idCard": "420281199311118111",
+          "remark": "红茶富含胡萝卜素、维生素A、钙、磷、镁、钾、咖啡碱、异亮氨酸、亮氨酸、赖氨酸、谷氨酸、丙氨酸、天门冬氨酸等多种营养元素。红茶在发酵过程中多酚类物质的化学反应使鲜叶中的化学成分变化较大，会产生茶黄素、茶红素等成分，其香气比鲜叶明显增加，形成红茶特有的色、香、味。",
+          "name": "红茶",
+          "level": 1,
+          "locality": "浙江 湖州 长兴县",
+          "stock": 9996,
+          "price": 50,
+          "startNum": 1,
+          "discount": 0.9,
+          "isFree": 0,
+          "postage": 5,
+          "deliverLimit": 5,
+          "createDate": "2016-11-30",
+          "unit": "两",
+          "teaSaler": {
+            "id": 1,
+            "name": "叶聪聪",
+            "level": 1,
+            "nickname": "ycc",
+            "account": {
+              "id": 1,
+              "tel": "15821527768",
+              "password": "123456",
+              "label": 1,
+              "alive": 1,
+              "headURL": "h1.png",
+              "money": 2460
+            },
+            "address": "上海市 闵行区",
+            "tel": "15821527768",
+            "headUrl": "h1.png",
+            "money": 1000,
+            "licenseUrl": "c1.png",
+            "zip": "435100",
+            "idCard": "420281199311118111",
+            "state": 1,
+            "alive": 1,
+            "createDate": "2016-11-11"
+          },
           "state": 1,
           "alive": 1,
-          "createDate": "2016-11-11"
+          "url": "12.png",
+          "type": 1
         },
-        "state": 1,
+        "type": 0,
+        "earnest": 1,
+        "unitNum": 1,
+        "unitMoney": 10,
+        "createDate": "2016-11-30 09:12:31",
+        "dealDate": "2016-12-01 10:56:55",
+        "deliverDate": "2016-11-30 09:38:02",
+        "payDate": "2016-12-03 09:14:15",
+        "state": 0,
         "alive": 1,
-        "url": "12.png",
-        "type": 1
-      },
-      "type": 0,
-      "earnest": 1,
-      "unitNum": 1,
-      "unitMoney": 10,
-      "createDate": "2016-11-30",
-      "dealDate": null,
-      "deliverDate": "2016-11-30",
-      "payDate": "2016-12-03",
-      "state": 0,
-      "alive": 1,
-      "totalNum": 1000,
-      "remainderNum": 1000,
-      "joinNum": 5
-    }
-  ]
+        "totalNum": 1000,
+        "remainderNum": 1000,
+        "joinNum": 5
+      }
+    ],
+    "last": true,
+    "totalElements": 1,
+    "totalPages": 1,
+    "first": true,
+    "numberOfElements": 1,
+    "sort": [
+      {
+        "direction": "ASC",
+        "property": "id",
+        "ignoreCase": false,
+        "nullHandling": "NATIVE",
+        "ascending": true
+      }
+    ],
+    "size": 10,
+    "number": 0
+  }
 }
 </pre>
