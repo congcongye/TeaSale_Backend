@@ -38,7 +38,7 @@ public class CrowdFunding {
     private double unitMoney;
 
     @Column
-    private int JoinNum;
+    private int JoinNum=0;
 
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
     @Column
