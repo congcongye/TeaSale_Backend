@@ -90,6 +90,13 @@ public class CrowdFundingController extends ApiController{
         return ServiceResult.success(page);
     }
 
+    @RequestMapping(value = "/crowdFund/searchById", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult searchById(@RequestParam(value = "id",defaultValue = "-1")Long id){
+        CrowdFunding cd = crowdFundingDao.findByIdAndAlive(id,1);
+        return ServiceResult.success(cd);
+    }
+
 
 
 }
