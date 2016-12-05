@@ -50,7 +50,7 @@ public class OrderController extends ApiController{
     public ServiceResult insertOrders(@RequestBody List<CreateOrderModel> createOrderModels){
         checkParameter(createOrderModels != null && createOrderModels.size()!=0, "order can't be empty");
         List<OrderEn> orderEns = orderService.insertOrders(createOrderModels);
-        if (orderEns == null && orderEns.size() != createOrderModels.size()) {
+        if (orderEns == null || orderEns.size() != createOrderModels.size()) {
             return ServiceResult.fail(500, "形成订单失败,成功"+orderEns.size() +"个,失败"+(createOrderModels.size()-orderEns.size())+"个");
         }
         return ServiceResult.success(orderEns);

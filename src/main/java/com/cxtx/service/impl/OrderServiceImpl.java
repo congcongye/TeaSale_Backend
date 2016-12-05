@@ -123,6 +123,7 @@ public class OrderServiceImpl implements OrderService {
                             orderEn = orderEnDao.save(orderEn);
                             orderEns.add(orderEn);
                             crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - createOrderItemModel.num);
+                            crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
                             crowdFundingDao.save(crowdFunding);
                         }
                     } else {
@@ -145,6 +146,7 @@ public class OrderServiceImpl implements OrderService {
                             orderEn = orderEnDao.save(orderEn);
                             orderEns.add(orderEn);
                             crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - createOrderItemModel.num);
+                            crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
                             crowdFundingDao.save(crowdFunding);
                         }
                     }

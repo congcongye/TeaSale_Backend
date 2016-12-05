@@ -300,3 +300,108 @@
 }
 ]</pre>
 * 输出：
+
+
+#### 众筹订单的生成
+* URL:http://localhost:7000/api/orders/add
+* Method: POST
+* 输入：
+ <pre>
+[
+    {
+        "teaSalerId":1,
+        "customerId":1,
+        "name":"test",
+        "address":"dongchuanlu",
+        "zip":"213000",
+        "tel":"12345678908",
+        "type":1,
+        "crowdFundingId":1,
+        "createOrderItemModels":[
+            {
+                "productId":4,
+                "num":10
+            }
+         ]
+    }
+    ]
+</pre>    
+* 输出:    
+<pre> 
+ {
+   "code": 200,
+   "data": [
+     {
+       "id": 22,
+       "createDate": "2016-12-05",
+       "teaSaler": {
+         "id": 1,
+         "name": "李桐宇",
+         "level": 0,
+         "nickname": "413",
+         "account": {
+           "id": 3,
+           "tel": "15907823456",
+           "password": "1111111",
+           "label": 0,
+           "alive": 1,
+           "headURL": null,
+           "money": 10436320
+         },
+         "address": "x36-4041",
+         "tel": "15907823456",
+         "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
+         "money": 10000,
+         "licenseUrl": "7f839a068dab48aeb97a7a220c23abe4.png",
+         "zip": "210000",
+         "idCard": "12345678",
+         "state": 1,
+         "alive": 1,
+         "createDate": "2016-11-10"
+       },
+       "customer": {
+         "id": 1,
+         "level": 0,
+         "nickname": "123",
+         "account": {
+           "id": 8,
+           "tel": "13918966539",
+           "password": "123456",
+           "label": 0,
+           "alive": 1,
+           "headURL": "836e8e3a0af54847902cc1d31cb68e89.jpg",
+           "money": 10000000
+         },
+         "address": "闵行东川路",
+         "zip": "12344567",
+         "tel": "13918966539",
+         "money": 0,
+         "headUrl": null,
+         "alive": 1,
+         "createDate": "2016-11-11"
+       },
+       "name": "test",
+       "address": "dongchuanlu",
+       "zip": "213000",
+       "tel": "12345678908",
+       "totalPrice": 0,
+       "logistic": 0,
+       "state": 0,
+       "isSend": 0,
+       "SendDate": null,
+       "isConfirm": 0,
+       "confirmDate": null,
+       "isComment": 0,
+       "score": -1,
+       "comment": null,
+       "type": 1,
+       "customerDelete": 0,
+       "adminDelete": 0,
+       "salerDelete": 0,
+       "alive": 1,
+       "sendDate": null,
+       "refund_state": 0
+     }
+   ]
+ }
+</pre>
