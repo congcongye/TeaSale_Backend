@@ -29,7 +29,7 @@ public class CrowdFunding {
     private int type=0;
 
     @Column
-    private double earnest;
+    private double earnest=0;
 
     @Column
     private double unitNum;
@@ -38,29 +38,29 @@ public class CrowdFunding {
     private double unitMoney;
 
     @Column
-    private int JoinNum;
+    private int JoinNum=0;
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     @Column
     private Date createDate;
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     @Column
     private Date dealDate;
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     @Column
     private  Date deliverDate;
 
-    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="GMT+8")
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     @Column
     private Date payDate;
 
     @Column
-    private int state;
+    private int state=0;
 
     @Column
-    private int alive;
+    private int alive=1;
 
     public double getTotalNum() {
         return totalNum;

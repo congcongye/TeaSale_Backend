@@ -1,14 +1,9 @@
 package com.cxtx.service.impl;
 
-import com.cxtx.dao.CrowdFundingDao;
-import com.cxtx.dao.OrderItemDao;
-import com.cxtx.dao.ProductDao;
-import com.cxtx.dao.TeaSalerDao;
-import com.cxtx.entity.CrowdFunding;
-import com.cxtx.entity.OrderItem;
-import com.cxtx.entity.Product;
-import com.cxtx.entity.TeaSaler;
+import com.cxtx.dao.*;
+import com.cxtx.entity.*;
 import com.cxtx.model.IdModel;
+import com.cxtx.model.UpdateCrowdFundingModel;
 import com.cxtx.service.CrowdFundingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,6 +35,8 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
     private ProductDao productDao;
     @Autowired
     private TeaSalerDao teaSalerDao;
+    @Autowired
+    private ProductTypeDao productTypeDao;
 
     /**
      * 发起众筹,点击发起众筹前,先需要更商品类型和状态
@@ -56,6 +53,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
             p.setType(1);//众筹
             Product newProduct = productDao.save(p);
             crowdFunding.setProduct(newProduct);
+            crowdFunding.setCreateDate(new Date());
             crowdFunding.setRemainderNum(crowdFunding.getTotalNum());
             result=crowdFundingDao.save(crowdFunding);
           }
@@ -68,10 +66,23 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
      * @return
      */
     @Override
-    public CrowdFunding updateCrowdFunding(CrowdFunding model){
+    public CrowdFunding updateCrowdFunding(UpdateCrowdFundingModel model){
+        CrowdFunding oldCrowdFunding =crowdFundingDao.findByIdAndAlive(model.id,1);
+        oldCrowdFunding.setType(model.type);
+        oldCrowdFunding.setUnitMoney(model.unitMoney);
+        oldCrowdFunding.setUnitNum(model.unitNum);
+        oldCrowdFunding.setDealDate(model.dealDate);
+        oldCrowdFunding.setDeliverDate(model.deliverDate);
+        if(model.type==1){ //预售才需要修改交付剩余金钱的时间
+            oldCrowdFunding.setPayDate(model.payDate);
+            oldCrowdFunding.setEarnest(model.earnest);
+        }
+        oldCrowdFunding.setTotalNum(model.totalNum);
+        oldCrowdFunding.setRemainderNum(model.totalNum);
+        oldCrowdFunding.setJoinNum(model.joinNum);
          CrowdFunding result=null;
-        if(isWorking(model)==false){
-            result=crowdFundingDao.save(model);
+        if(isWorking(oldCrowdFunding)==false){
+            result=crowdFundingDao.save(oldCrowdFunding);
         }
         return result;
     }
@@ -87,6 +98,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
             CrowdFunding cd =crowdFundingDao.findByIdAndAlive(idmodel.id,1);
             if(isWorking(cd)==false){
                 cd.setAlive(0);
+                crowdFundingDao.save(cd);
                 succCount++;
             }
         }
@@ -110,13 +122,17 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
      * @return
      */
     @Override
-    public List<CrowdFunding> searchCrowdFunding(Long product_id, Long teaSaler_id, int type, double lowEarnest, double highEarnest, double lowUnitNum, double highUnitNum, double lowUnitMoney, double highUnitMoney, int state, double lowRemainderNum, double highRemainderNum){
-        Specification<CrowdFunding> specification = this.buildSpecifications(product_id, teaSaler_id, type, lowEarnest, highEarnest, lowUnitNum, highUnitNum, lowUnitMoney, highUnitMoney, state, lowRemainderNum, highRemainderNum);
-        return  crowdFundingDao.findAll(Specifications.where(specification));
-
+    public Page<CrowdFunding> searchCrowdFunding(Long product_id, Long teaSaler_id, int type, double lowEarnest, double highEarnest, double lowUnitNum, double highUnitNum, double lowUnitMoney, double highUnitMoney, int state, double lowRemainderNum, double highRemainderNum,Long productType_id,String productType_name,String product_name, int pageIndex, int pageSize, String sortField, String sortOrder){
+        Sort.Direction direction = Sort.Direction.ASC;
+        if (sortOrder.toUpperCase().equals("DESC")) {
+            direction = Sort.Direction.DESC;
+        }
+        Sort sort = new Sort(direction, sortField);
+        Specification<CrowdFunding> specification = this.buildSpecifications(product_id, teaSaler_id, type, lowEarnest, highEarnest, lowUnitNum, highUnitNum, lowUnitMoney, highUnitMoney, state, lowRemainderNum, highRemainderNum,productType_id,productType_name,product_name);
+        return  crowdFundingDao.findAll(Specifications.where(specification), new PageRequest(pageIndex, pageSize, sort));
     }
 
-    private Specification<CrowdFunding> buildSpecifications(Long product_id,Long teaSaler_id,int type,double lowEarnest,double highEarnest,double lowUnitNum,double highUnitNum,double lowUnitMoney,double highUnitMoney,int state,double lowRemainderNum,double highRemainderNum) {
+    private Specification<CrowdFunding> buildSpecifications(Long product_id,Long teaSaler_id,int type,double lowEarnest,double highEarnest,double lowUnitNum,double highUnitNum,double lowUnitMoney,double highUnitMoney,int state,double lowRemainderNum,double highRemainderNum,Long productType_id,String productType_name,String product_name) {
         final Product product =productDao.findByIdAndAlive(product_id,1);
         final TeaSaler teaSaler =teaSalerDao.findByIdAndStateAndAlive(teaSaler_id,1,1);
         final int ftype=type;
@@ -129,6 +145,9 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         final double fstate=state;
         final double flowRemainderNum=lowRemainderNum;
         final double fhighRemainderNum=highRemainderNum;
+        final ProductType productType =productTypeDao.findByIdAndAlive(productType_id,1);
+        final String fproduct_name =product_name;
+        final String fproductType_name =productType_name;
            Specification<CrowdFunding> specification = new Specification<CrowdFunding>() {
             @Override
             public Predicate toPredicate(Root<CrowdFunding> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
@@ -138,6 +157,9 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
                 }
                 if(null!=teaSaler){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.<Product>get("product").get("teaSaler"),teaSaler));
+                }
+                if(null!=productType){
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.<Product>get("product").get("productType"),productType));
                 }
                 if(ftype>-1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("type"),ftype));
@@ -170,6 +192,8 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
                     predicate.getExpressions().add(criteriaBuilder.lessThanOrEqualTo(root.get("remainderNum"),fhighRemainderNum));
                 }
                 predicate.getExpressions().add(criteriaBuilder.equal(root.get("alive"),1));
+                predicate.getExpressions().add(criteriaBuilder.like(root.<Product>get("product").get("productType").get("name"),"%"+fproductType_name+"%"));
+                predicate.getExpressions().add(criteriaBuilder.like(root.<Product>get("product").get("name"),"%"+fproduct_name+"%"));
                 return criteriaBuilder.and(predicate);
             }
         };
