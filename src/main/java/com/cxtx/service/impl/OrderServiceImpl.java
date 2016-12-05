@@ -113,6 +113,7 @@ public class OrderServiceImpl implements OrderService {
                             totalMoney += createOrderItemModel.num * product.getPrice() * product.getDiscount();
                             orderItem.setNum(createOrderItemModel.num);
                             orderItem.setIsComment(0);
+                            orderItem.setProduct(product);
                             orderItem.setOrderen(orderEn);
                             orderItemDao.save(orderItem);
                             Account account = customer.getAccount();
