@@ -1,5 +1,6 @@
 package com.cxtx.service.impl;
 
+import com.cxtx.dao.AccountDao;
 import com.cxtx.dao.ManagerDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Manager;
@@ -18,6 +19,8 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Autowired
     private ManagerDao managerDao;
+    @Autowired
+    private AccountDao accountDao;
 
 
     @Override
@@ -39,5 +42,22 @@ public class ManagerServiceImpl implements ManagerService {
         manager.setName(createManagerModel.getName());
         manager.setCreateDate(new Date());
         return managerDao.save(manager);
+    }
+
+    @Override
+    public Manager update(CreateManagerModel createManagerModel) {
+        Manager manager = null;
+        if (createManagerModel.getTel()== null || "".equals(createManagerModel.getTel())){
+            return  null;
+        }
+        Account account = accountDao.findByTelAndAlive(createManagerModel.getTel(),1);
+        if (account!= null){
+            account.setPassword(createManagerModel.getPassword());
+            accountDao.save(account);
+            manager = managerDao.findByAccountAndAlive(account, 1);
+            manager.setName(createManagerModel.getName());
+            manager = managerDao.save(manager);
+        }
+        return manager;
     }
 }

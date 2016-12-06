@@ -14,4 +14,6 @@ public interface ManagerService {
     //Manager addManager(Manager manager);
 
     Manager addManager(CreateManagerModel createManagerModel, Account account);
+
+    Manager update(CreateManagerModel createManagerModel);
 }

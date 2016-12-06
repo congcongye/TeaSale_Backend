@@ -14,4 +14,6 @@ import java.util.List;
 public interface CrowdFundingDao extends JpaRepository<CrowdFunding, Long>, JpaSpecificationExecutor<CrowdFunding> {
     CrowdFunding findByIdAndAlive(Long id,int alive);
     List<CrowdFunding> findByProductAndAlive(Product product, int alive);
+
+    List<CrowdFunding> findByAlive(int alive);
 }

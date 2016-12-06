@@ -20,6 +20,7 @@ import javax.persistence.criteria.Root;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -226,4 +227,27 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
             return false;
         }
     }
+
+    /**
+     * 定时任务
+     */
+    @Override
+    public void checkNum() {
+        List<CrowdFunding> oldcrowdFundingList = crowdFundingDao.findByAlive(1);
+        List<CrowdFunding> newCrowdFundingList = new ArrayList<CrowdFunding>();
+        for (CrowdFunding crowdFunding : oldcrowdFundingList){
+            Date dealDate = crowdFunding.getDealDate();
+            Date now = new Date();
+            if (now.after(dealDate)){
+                if (crowdFunding.getRemainderNum() <= 0){
+                    crowdFunding.setState(1);
+                }else{
+                    crowdFunding.setState(2);
+                }
+            }
+            newCrowdFundingList.add(crowdFunding);
+        }
+        crowdFundingDao.save(newCrowdFundingList);
+    }
+
 }

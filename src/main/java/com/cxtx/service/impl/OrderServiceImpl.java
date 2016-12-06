@@ -128,7 +128,7 @@ public class OrderServiceImpl implements OrderService {
                             crowdFundingDao.save(crowdFunding);
                         }
                     } else {
-                        if (crowdFunding.getRemainderNum() > createOrderItemModel.num
+                        if (crowdFunding.getRemainderNum() >= createOrderItemModel.num
                                 && customer.getAccount().getMoney() > createOrderItemModel.num * crowdFunding.getEarnest()){
 
                             OrderItem orderItem = new OrderItem();

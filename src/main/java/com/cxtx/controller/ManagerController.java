@@ -64,6 +64,27 @@ public class ManagerController extends ApiController{
         }
         //return ServiceResult.success(account);
         Manager manager = managerService.addManager(createManagerModel, account);
+        if (manager == null){
+            return ServiceResult.fail(500,"register fail");
+        }
+        return ServiceResult.success(manager);
+    }
+
+    /**
+     *
+     * @param createManagerModel
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/manager/update", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult update(@RequestBody CreateManagerModel createManagerModel) throws Exception{
+        checkParameter(createManagerModel !=null,"manager cannot be empty!");
+        //return ServiceResult.success(account);
+        Manager manager = managerService.update(createManagerModel);
+        if (manager == null){
+            return ServiceResult.fail(500,"update fail");
+        }
         return ServiceResult.success(manager);
     }
 }

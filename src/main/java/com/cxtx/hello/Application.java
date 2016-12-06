@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @EnableAutoConfiguration
 @ComponentScan(
@@ -17,11 +18,13 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 				"com.cxtx.controller",
 				"com.cxtx.service",
 				"com.cxtx.aop",
-				"com.cxtx.filter"})
+				"com.cxtx.filter",
+				"com.cxtx.hello"})
 @ImportResource("classpath:extra-beans.xml")
 @EnableSpringDataWebSupport
 @SpringBootApplication
 @EnableJpaRepositories
+@EnableScheduling
 @EntityScan(basePackages = {"com.cxtx.entity"})
 public class Application extends SpringBootServletInitializer {
 

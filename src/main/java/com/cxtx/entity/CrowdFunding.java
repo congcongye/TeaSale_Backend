@@ -56,6 +56,11 @@ public class CrowdFunding {
     @Column
     private Date payDate;
 
+    /**
+     * 0  创建
+     * 1  成功(关闭)
+     * 2  未完成(关闭)
+     */
     @Column
     private int state=0;
 
