@@ -1,5 +1,8 @@
 package com.cxtx.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.util.Date;
 
 /**
@@ -12,8 +15,13 @@ public class UpdateCrowdFundingModel {
     public double unitNum=0;
     public double unitMoney=0;
     public int joinNum=0;
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     public Date dealDate=null;
+
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     public  Date deliverDate=null;
+
+    @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     public Date payDate=null;
     public double totalNum=0;
 

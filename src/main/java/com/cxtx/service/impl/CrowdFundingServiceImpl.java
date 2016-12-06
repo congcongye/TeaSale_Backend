@@ -18,6 +18,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -67,24 +69,25 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
      */
     @Override
     public CrowdFunding updateCrowdFunding(UpdateCrowdFundingModel model){
-        CrowdFunding oldCrowdFunding =crowdFundingDao.findByIdAndAlive(model.id,1);
-        oldCrowdFunding.setType(model.type);
-        oldCrowdFunding.setUnitMoney(model.unitMoney);
-        oldCrowdFunding.setUnitNum(model.unitNum);
-        oldCrowdFunding.setDealDate(model.dealDate);
-        oldCrowdFunding.setDeliverDate(model.deliverDate);
-        if(model.type==1){ //预售才需要修改交付剩余金钱的时间
-            oldCrowdFunding.setPayDate(model.payDate);
-            oldCrowdFunding.setEarnest(model.earnest);
-        }
-        oldCrowdFunding.setTotalNum(model.totalNum);
-        oldCrowdFunding.setRemainderNum(model.totalNum);
-        oldCrowdFunding.setJoinNum(model.joinNum);
-         CrowdFunding result=null;
-        if(isWorking(oldCrowdFunding)==false){
-            result=crowdFundingDao.save(oldCrowdFunding);
-        }
-        return result;
+
+            CrowdFunding oldCrowdFunding =crowdFundingDao.findByIdAndAlive(model.id,1);
+            oldCrowdFunding.setType(model.type);
+            oldCrowdFunding.setUnitMoney(model.unitMoney);
+            oldCrowdFunding.setUnitNum(model.unitNum);
+            oldCrowdFunding.setDealDate(model.dealDate);
+            oldCrowdFunding.setDeliverDate(model.deliverDate);
+            if(model.type==1){ //预售才需要修改交付剩余金钱的时间
+                oldCrowdFunding.setPayDate(model.payDate);
+                oldCrowdFunding.setEarnest(model.earnest);
+            }
+            oldCrowdFunding.setTotalNum(model.totalNum);
+            oldCrowdFunding.setRemainderNum(model.totalNum);
+            oldCrowdFunding.setJoinNum(model.joinNum);
+            CrowdFunding result=null;
+            if(isWorking(oldCrowdFunding)==false){
+                result=crowdFundingDao.save(oldCrowdFunding);
+            }
+            return result;
     }
 
     /**
