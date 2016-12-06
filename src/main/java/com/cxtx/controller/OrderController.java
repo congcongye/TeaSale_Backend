@@ -24,21 +24,21 @@ public class OrderController extends ApiController{
     @Autowired
     private OrderItemService orderItemService;
 
-    /**
-     * 新增订单
-     * @param createOrderModel
-     * @return
-     */
-    @RequestMapping(value = "/order/add", method = RequestMethod.POST)
-    @ResponseBody
-    public ServiceResult insertOrder(@RequestBody CreateOrderModel createOrderModel){
-        checkParameter(createOrderModel != null, "order can't be empty");
-        OrderEn orderEn = orderService.insertOrder(createOrderModel);
-        if (orderEn == null) {
-            return ServiceResult.fail(500, "insert failed!");
-        }
-        return ServiceResult.success(orderEn);
-    }
+//    /**
+//     * 新增订单
+//     * @param createOrderModel
+//     * @return
+//     */
+//    @RequestMapping(value = "/order/add", method = RequestMethod.POST)
+//    @ResponseBody
+//    public ServiceResult insertOrder(@RequestBody CreateOrderModel createOrderModel){
+//        checkParameter(createOrderModel != null, "order can't be empty");
+//        OrderEn orderEn = orderService.insertOrder(createOrderModel);
+//        if (orderEn == null) {
+//            return ServiceResult.fail(500, "insert failed!");
+//        }
+//        return ServiceResult.success(orderEn);
+//    }
 
     /**
      *
@@ -56,22 +56,22 @@ public class OrderController extends ApiController{
         return ServiceResult.success(orderEns);
     }
 
-    /**
-     * 确认订单项
-     * @param createOrderItemModels
-     * @return
-     */
-    @RequestMapping(value = "/orderItems/add", method = RequestMethod.POST)
-    @ResponseBody
-    public ServiceResult insertOrderItems(@RequestBody List<CreateOrderItemModel> createOrderItemModels){
-        checkParameter(createOrderItemModels != null && createOrderItemModels.size() != 0,"orderItem can't be null");
-        //checkParameter(orderEnId > 0, "no order");
-        List<OrderItem> orderItems =orderItemService.insertItems(createOrderItemModels);
-        if (orderItems == null || orderItems.size() != createOrderItemModels.size()){
-            return ServiceResult.fail(500, " 订单失败");
-        }
-        return ServiceResult.success(orderItems);
-    }
+//    /**
+//     * 确认订单项
+//     * @param createOrderItemModels
+//     * @return
+//     */
+//    @RequestMapping(value = "/orderItems/add", method = RequestMethod.POST)
+//    @ResponseBody
+//    public ServiceResult insertOrderItems(@RequestBody List<CreateOrderItemModel> createOrderItemModels){
+//        checkParameter(createOrderItemModels != null && createOrderItemModels.size() != 0,"orderItem can't be null");
+//        //checkParameter(orderEnId > 0, "no order");
+//        List<OrderItem> orderItems =orderItemService.insertItems(createOrderItemModels);
+//        if (orderItems == null || orderItems.size() != createOrderItemModels.size()){
+//            return ServiceResult.fail(500, " 订单失败");
+//        }
+//        return ServiceResult.success(orderItems);
+//    }
 
     /**
      *

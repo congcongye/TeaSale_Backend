@@ -105,19 +105,19 @@ public class OrderServiceImpl implements OrderService {
                         break;
                     }
                     if (crowdFunding.getType() == 0){
-                        if (customer.getAccount().getMoney() > createOrderItemModel.num * product.getPrice() * product.getDiscount()
-                                && crowdFunding.getRemainderNum() > createOrderItemModel.num ){
+                        if (customer.getAccount().getMoney() >= createOrderItemModel.num * crowdFunding.getUnitMoney()
+                                && crowdFunding.getRemainderNum() >= createOrderItemModel.num ){
                             OrderItem orderItem = new OrderItem();
                             orderItem.setAlive(1);
                             orderItem.setTotalPrice(createOrderItemModel.num * product.getPrice() * product.getDiscount());
-                            totalMoney += createOrderItemModel.num * product.getPrice() * product.getDiscount();
+                            totalMoney += createOrderItemModel.num * crowdFunding.getUnitMoney();
                             orderItem.setNum(createOrderItemModel.num);
                             orderItem.setIsComment(0);
                             orderItem.setProduct(product);
                             orderItem.setOrderen(orderEn);
                             orderItemDao.save(orderItem);
                             Account account = customer.getAccount();
-                            account.setMoney(account.getMoney() - (createOrderItemModel.num * product.getPrice() * product.getDiscount()));
+                            account.setMoney(account.getMoney() - (createOrderItemModel.num * crowdFunding.getUnitMoney()));
                             accountDao.save(account);
                             orderEn.setState(1);
                             orderEn.setTotalPrice(totalMoney);
@@ -129,12 +129,12 @@ public class OrderServiceImpl implements OrderService {
                         }
                     } else {
                         if (crowdFunding.getRemainderNum() >= createOrderItemModel.num
-                                && customer.getAccount().getMoney() > createOrderItemModel.num * crowdFunding.getEarnest()){
+                                && customer.getAccount().getMoney() >= createOrderItemModel.num * crowdFunding.getEarnest()){
 
                             OrderItem orderItem = new OrderItem();
                             orderItem.setAlive(1);
                             orderItem.setTotalPrice(createOrderItemModel.num * product.getPrice() * product.getDiscount());
-                            totalMoney += createOrderItemModel.num * product.getPrice() * product.getDiscount();
+                            totalMoney += createOrderItemModel.num * crowdFunding.getUnitMoney();
                             orderItem.setNum(createOrderItemModel.num);
                             orderItem.setIsComment(0);
                             orderItem.setOrderen(orderEn);

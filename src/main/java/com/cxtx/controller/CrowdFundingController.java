@@ -2,11 +2,14 @@ package com.cxtx.controller;
 
 import com.cxtx.dao.CrowdFundingDao;
 import com.cxtx.dao.ProductDao;
+import com.cxtx.entity.CrowdFundOrder;
 import com.cxtx.entity.CrowdFunding;
 import com.cxtx.entity.Product;
+import com.cxtx.model.CreateCrowdFundOrderModel;
 import com.cxtx.model.IdModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.UpdateCrowdFundingModel;
+import com.cxtx.service.CrowdFundOrderService;
 import com.cxtx.service.CrowdFundingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +30,8 @@ public class CrowdFundingController extends ApiController{
     private ProductDao productDao;
     @Autowired
     private CrowdFundingDao crowdFundingDao;
+    @Autowired
+    private CrowdFundOrderService crowdFundOrderService;
 
     /**
      * 发起众包
@@ -97,6 +102,28 @@ public class CrowdFundingController extends ApiController{
         return ServiceResult.success(cd);
     }
 
+//    @RequestMapping(value = "/crowdFund/confirm", method = RequestMethod.PUT)
+//    @ResponseBody
+//    public ServiceResult confirmCrowdFund(@RequestBody List<IdModel> list){
+//        checkParameter(list!=null,"data is empty");
+//        checkParameter(!list.isEmpty(),"data is empty");
+//        int succCount = crowdFundingService.deleteCrowdFunding(list);
+//        if(succCount!=list.size()){
+//            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(list.size()-succCount));
+//        }
+//        return ServiceResult.success("all succeed!");
+//    }
+
+    @RequestMapping(value = "/crowdFund/addOrder", method = RequestMethod.POST)
+    @ResponseBody
+    public ServiceResult addOrder(@RequestBody CreateCrowdFundOrderModel createCrowdFundOrderModel){
+        checkParameter(createCrowdFundOrderModel != null,"order can't be null");
+        CrowdFundOrder crowdFundOrder =  crowdFundOrderService.insertOrder(createCrowdFundOrderModel);
+        if (crowdFundOrder == null){
+            return  ServiceResult.fail(500,"create order failed");
+        }
+        return ServiceResult.success(crowdFundOrder);
+    }
 
 
 }
