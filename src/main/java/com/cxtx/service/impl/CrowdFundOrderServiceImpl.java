@@ -40,6 +40,11 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
     private CrowdFundOrderDao crowdFundOrderDao;
 
 
+    /**
+     * 新增众筹订单
+     * @param createCrowdFundOrderModel
+     * @return
+     */
     @Override
     public CrowdFundOrder insertOrder(CreateCrowdFundOrderModel createCrowdFundOrderModel) {
         Long customerId = createCrowdFundOrderModel.customerId;
@@ -54,6 +59,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         Product product = crowdFunding.getProduct();
         Account account = customer.getAccount();
         double totalMoney = 0;
+        double needPay = 0;
         CrowdFundOrder crowdFundOrder = new CrowdFundOrder();
         crowdFundOrder.setTel(createCrowdFundOrderModel.tel);
         crowdFundOrder.setZip(createCrowdFundOrderModel.zip);
@@ -72,6 +78,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
                     && crowdFunding.getRemainderNum() >= createCrowdFundOrderModel.num ){
                 totalMoney += createCrowdFundOrderModel.num * crowdFunding.getUnitMoney();
                 totalMoney += product.getIsFree()==1? 0:product.getPostage();
+                needPay = totalMoney;
             }
         }
         if (crowdFunding.getType() == 1){//预付
@@ -79,10 +86,11 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
                     && customer.getAccount().getMoney() >= createCrowdFundOrderModel.num * crowdFunding.getEarnest()){
                 totalMoney += createCrowdFundOrderModel.num * crowdFunding.getUnitMoney();
                 totalMoney += product.getIsFree()==1? 0:product.getPostage();
+                needPay = createCrowdFundOrderModel.num * crowdFunding.getEarnest();
             }
         }
         if (totalMoney > 0){
-            account.setMoney(account.getMoney() - totalMoney);
+            account.setMoney(account.getMoney() - needPay);
             accountDao.save(account);
             crowdFundOrder.setState(2);
             crowdFundOrder.setTotalPrice(totalMoney);
@@ -95,6 +103,30 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         return crowdFundOrder;
     }
 
+    /**
+     * 搜索众筹订单
+     * @param customerId
+     * @param teaSalerId
+     * @param crowdFundingId
+     * @param teaSalerName
+     * @param state
+     * @param isSend
+     * @param isConfirm
+     * @param customerDelete
+     * @param adminDelete
+     * @param salerDelete
+     * @param refund_state
+     * @param name
+     * @param address
+     * @param tel
+     * @param beginDateStr
+     * @param endDateStr
+     * @param pageIndex
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return
+     */
     @Override
     public Page<CrowdFundOrder> search(long customerId, long teaSalerId, long crowdFundingId, String teaSalerName, int state, int isSend, int isConfirm, int customerDelete, int adminDelete, int salerDelete, int refund_state, String name, String address, String tel, String beginDateStr, String endDateStr, int pageIndex, int pageSize, String sortField, String sortOrder) {
         Sort.Direction direction = Sort.Direction.DESC;

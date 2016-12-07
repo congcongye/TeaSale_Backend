@@ -30,6 +30,11 @@ public class CrowdFundOrderController extends ApiController{
     @Autowired
     private CrowdFundOrderService crowdFundOrderService;
 
+    /**
+     * 新增众筹订单
+     * @param createCrowdFundOrderModel
+     * @return
+     */
     @RequestMapping(value = "/crowdFundOrder/new", method = RequestMethod.POST)
     @ResponseBody
     public ServiceResult addOrder(@RequestBody CreateCrowdFundOrderModel createCrowdFundOrderModel){
@@ -41,6 +46,30 @@ public class CrowdFundOrderController extends ApiController{
         return ServiceResult.success(crowdFundOrder);
     }
 
+    /**
+     * 搜索众筹订单
+     * @param customerId
+     * @param teaSalerId
+     * @param crowdFundingId
+     * @param teaSalerName
+     * @param state
+     * @param isSend
+     * @param isConfirm
+     * @param customerDelete
+     * @param adminDelete
+     * @param salerDelete
+     * @param Refund_state
+     * @param name
+     * @param address
+     * @param tel
+     * @param beginDateStr
+     * @param endDateStr
+     * @param pageIndex
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return
+     */
     @RequestMapping(value = "/crowdFundOrders/search", method = RequestMethod.GET)
     @ResponseBody
     public ServiceResult searchOrder(@RequestParam(value = "customerId", defaultValue = "-1")long customerId,
