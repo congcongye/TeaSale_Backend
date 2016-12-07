@@ -13,5 +13,5 @@ public class CreateCrowdFundOrderModel {
     public String zip;
     public String tel;
     public long crowdFundingId;
-    public double num;
+    public int num;
 }

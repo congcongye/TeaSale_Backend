@@ -64,6 +64,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         crowdFundOrder.setCreateDate(new Date());
         crowdFundOrder.setAlive(1);
         crowdFundOrder.setState(0);
+        crowdFundOrder.setNum(createCrowdFundOrderModel.num);
         crowdFundOrder.setCrowdFunding(crowdFunding);
         crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
         if (crowdFunding.getType() == 0){//现付
