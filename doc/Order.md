@@ -58,7 +58,6 @@ endDateStr=2016-12-10 订单创建结束时间
         "address":"1111",
         "zip":"111",
         "tel":"11111111111",
-        "type":1,
         "createOrderItemModels":[
             {
                 "productId":2,
@@ -143,7 +142,6 @@ endDateStr=2016-12-10 订单创建结束时间
       "isComment": 0,
       "score": -1,
       "comment": null,
-      "type": 1,
       "customerDelete": 0,
       "adminDelete": 0,
       "salerDelete": 0,

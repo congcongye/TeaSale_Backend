@@ -86,8 +86,8 @@ public class OrderEn {
     /**
      * //  订单类型（一般，众筹，众包） (0, 1, 2)
      */
-    @Column
-    private int type = 0;
+//    @Column
+//    private int type = 0;
 
     @Column
     private int customerDelete = 0;//消费者不想看
@@ -253,13 +253,13 @@ public class OrderEn {
         Refund_state = refund_state;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
+//    public int getType() {
+//        return type;
+//    }
+//
+//    public void setType(int type) {
+//        this.type = type;
+//    }
 
     public int getCustomerDelete() {
         return customerDelete;

@@ -11,10 +11,10 @@ import java.util.List;
  * Created by jinchuyang on 16/11/15.
  */
 public interface OrderService {
-    OrderEn insertOrder(CreateOrderModel createOrderModel);
+   // OrderEn insertOrder(CreateOrderModel createOrderModel);
 
     Page<OrderEn> search(long customerId, long teaSalerId, String teaSalerName, int state, int isSend, int isConfirm, int isComment,
-                         int type, int customerDelete, int adminDelete, int salerDelete, int refund_state, String name, String address,
+                         int customerDelete, int adminDelete, int salerDelete, int refund_state, String name, String address,
                          String tel, String beginDateStr, String endDateStr,
                          int pageIndex, int pageSize, String sortField, String sortOrder);
 

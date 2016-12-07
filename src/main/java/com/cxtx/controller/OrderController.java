@@ -118,7 +118,7 @@ public class OrderController extends ApiController{
                                      @RequestParam(value="pageSize", defaultValue="10") int pageSize,
                                      @RequestParam(value="sortField", defaultValue="id") String sortField,
                                      @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
-        Page<OrderEn> orderEns = orderService.search(customerId, teaSalerId, teaSalerName,state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
+        Page<OrderEn> orderEns = orderService.search(customerId, teaSalerId, teaSalerName,state, isSend, isConfirm, isComment, customerDelete, adminDelete,
                 salerDelete, Refund_state, name, address, tel, beginDateStr,endDateStr,pageIndex, pageSize, sortField, sortOrder);
         return ServiceResult.success(orderEns);
     }
@@ -186,7 +186,7 @@ public class OrderController extends ApiController{
                                      @RequestParam(value="pageSize", defaultValue="10") int pageSize,
                                      @RequestParam(value="sortField", defaultValue="id") String sortField,
                                      @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
-        Page<OrderEn> orderEns = orderService.search(customerId, teaSalerId, teaSalerName,state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
+        Page<OrderEn> orderEns = orderService.search(customerId, teaSalerId, teaSalerName,state, isSend, isConfirm, isComment,customerDelete, adminDelete,
                 salerDelete, Refund_state, name, address, tel, beginDateStr,endDateStr,pageIndex, pageSize, sortField, sortOrder);
 
         List<GetOrderModel> orderModels = new ArrayList<GetOrderModel>();

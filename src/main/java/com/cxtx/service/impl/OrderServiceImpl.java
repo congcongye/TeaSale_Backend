@@ -46,27 +46,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CrowdFundingDao crowdFundingDao;
 
-    @Override
-    public OrderEn insertOrder(CreateOrderModel createOrderModel) {
-        long customerId = createOrderModel.customerId;
-        long teaSalerId = createOrderModel.teaSalerId;
-        Customer customer = customerDao.findOne(customerId);
-        TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
-        if (customer == null || customer.getAlive() == 0 || teaSaler == null || teaSaler.getAlive() == 0){
-            return null;
-        }
-        OrderEn orderEn = new OrderEn();
-        orderEn.setTel(createOrderModel.tel);
-        orderEn.setZip(createOrderModel.zip);
-        orderEn.setAddress(createOrderModel.address);
-        orderEn.setCustomer(customer);
-        orderEn.setTeaSaler(teaSaler);
-        orderEn.setType(createOrderModel.type);
-        orderEn.setCreateDate(new Date());
-        orderEn.setAlive(1);
-        //orderEn.set
-        return orderEnDao.save(orderEn);
-    }
 
     @Override
     public List<OrderEn> insertOrders(List<CreateOrderModel> createOrderModels) {
@@ -82,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
             orderEn.setAddress(createOrderModel.address);
             orderEn.setCustomer(customer);
             orderEn.setTeaSaler(teaSaler);
-            orderEn.setType(createOrderModel.type);
+            //orderEn.setType(createOrderModel.type);
             orderEn.setName(createOrderModel.name);
             orderEn.setCreateDate(new Date());
             orderEn.setAlive(1);
@@ -92,119 +71,56 @@ public class OrderServiceImpl implements OrderService {
             if (customer == null || customer.getAlive() == 0 || teaSaler == null || teaSaler.getAlive() == 0){
                 continue;
             }
-            if (createOrderModel.type == 1){
-                CrowdFunding crowdFunding = crowdFundingDao.findByIdAndAlive(createOrderModel.crowdFundingId, 1);
-                if (crowdFunding == null){
-                    continue;
+            List<OrderItem> orderItems = new ArrayList<OrderItem>();
+            List<Product> products =  new ArrayList<Product>();
+            double totalMoney = 0;
+            double logistic = -1;
+            for (CreateOrderItemModel createOrderItemModel : createOrderItemModels){
+                long productId = createOrderItemModel.productId;
+                // long orderEnId = createOrderItemModel.orderEnId;
+                Product product = productDao.findOne(productId);
+                if (product == null || product.getAlive() == 0){
+                    break;
                 }
-                double totalMoney = 0;
-                for (CreateOrderItemModel createOrderItemModel : createOrderItemModels){
-                    long productId = createOrderItemModel.productId;
-                    Product product = productDao.findOne(productId);
-                    if (product == null || product.getAlive() == 0){
-                        break;
+                OrderItem orderItem = new OrderItem();
+                orderItem.setAlive(1);
+                if (product.getStock() < createOrderItemModel.num){
+                    break;
+                }
+                product.setStock(product.getStock()-createOrderItemModel.num);
+                products.add(product);
+                if (logistic == 0 || product.getIsFree()==1 ){
+                    logistic=0;
+                }else {
+                    if (product.getPostage() > logistic){
+                        logistic = product.getPostage();
                     }
-                    if (crowdFunding.getType() == 0){
-                        if (customer.getAccount().getMoney() >= createOrderItemModel.num * crowdFunding.getUnitMoney()
-                                && crowdFunding.getRemainderNum() >= createOrderItemModel.num ){
-                            OrderItem orderItem = new OrderItem();
-                            orderItem.setAlive(1);
-                            orderItem.setTotalPrice(createOrderItemModel.num * product.getPrice() * product.getDiscount());
-                            totalMoney += createOrderItemModel.num * crowdFunding.getUnitMoney();
-                            orderItem.setNum(createOrderItemModel.num);
-                            orderItem.setIsComment(0);
-                            orderItem.setProduct(product);
-                            orderItem.setOrderen(orderEn);
-                            orderItemDao.save(orderItem);
-                            Account account = customer.getAccount();
-                            account.setMoney(account.getMoney() - (createOrderItemModel.num * crowdFunding.getUnitMoney()));
-                            accountDao.save(account);
-                            orderEn.setState(1);
-                            orderEn.setTotalPrice(totalMoney);
-                            orderEn = orderEnDao.save(orderEn);
-                            orderEns.add(orderEn);
-                            crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - createOrderItemModel.num);
-                            crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
-                            crowdFundingDao.save(crowdFunding);
-                        }
-                    } else {
-                        if (crowdFunding.getRemainderNum() >= createOrderItemModel.num
-                                && customer.getAccount().getMoney() >= createOrderItemModel.num * crowdFunding.getEarnest()){
-
-                            OrderItem orderItem = new OrderItem();
-                            orderItem.setAlive(1);
-                            orderItem.setTotalPrice(createOrderItemModel.num * product.getPrice() * product.getDiscount());
-                            totalMoney += createOrderItemModel.num * crowdFunding.getUnitMoney();
-                            orderItem.setNum(createOrderItemModel.num);
-                            orderItem.setIsComment(0);
-                            orderItem.setOrderen(orderEn);
-                            orderItemDao.save(orderItem);
-                            Account account = customer.getAccount();
-                            account.setMoney(account.getMoney() - (createOrderItemModel.num * crowdFunding.getEarnest()));
-                            accountDao.save(account);
-                            orderEn.setState(2);
-                            orderEn.setTotalPrice(totalMoney);
-                            orderEn = orderEnDao.save(orderEn);
-                            orderEns.add(orderEn);
-                            crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - createOrderItemModel.num);
-                            crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
-                            crowdFundingDao.save(crowdFunding);
-                        }
+                }
+                orderItem.setNum(createOrderItemModel.num);
+                orderItem.setProduct(product);
+                orderItem.setOrderen(orderEn);
+                orderItem.setTotalPrice(createOrderItemModel.num * product.getPrice() * product.getDiscount());
+                totalMoney += createOrderItemModel.num * product.getPrice() * product.getDiscount();
+                orderItems.add(orderItem);
+            }
+            if (orderItems.size()==createOrderItemModels.size() && customer.getAccount().getMoney() >((totalMoney + logistic))){
+                orderItems = orderItemDao.save(orderItems);
+                products = productDao.save(products);
+                orderEn.setTotalPrice(totalMoney + logistic);
+                orderEn.setState(1);
+                orderEn = orderEnDao.save(orderEn);
+                customer.getAccount().setMoney(customer.getAccount().getMoney() -((totalMoney + logistic)));
+                //TODO manager account add money
+                for (Product product : products){
+                    Cart cart = cartDao.findByProductAndCustomerAndAlive(product, customer, 1);
+                    if (cart != null && cart.getAlive() == 1){
+                        cart.setAlive(0);
+                        cartDao.save(cart);
                     }
 
                 }
             }
-            if (createOrderModel.type == 0){
-                List<OrderItem> orderItems = new ArrayList<OrderItem>();
-                List<Product> products =  new ArrayList<Product>();
-                double totalMoney = 0;
-                double logistic = -1;
-                for (CreateOrderItemModel createOrderItemModel : createOrderItemModels){
-                    long productId = createOrderItemModel.productId;
-                    // long orderEnId = createOrderItemModel.orderEnId;
-                    Product product = productDao.findOne(productId);
-                    if (product == null || product.getAlive() == 0){
-                        break;
-                    }
-                    OrderItem orderItem = new OrderItem();
-                    orderItem.setAlive(1);
-                    if (product.getStock() < createOrderItemModel.num){
-                        break;
-                    }
-                    product.setStock(product.getStock()-createOrderItemModel.num);
-                    products.add(product);
-                    if (logistic == 0 || product.getIsFree()==1 ){
-                        logistic=0;
-                    }else {
-                        if (product.getPostage() > logistic){
-                            logistic = product.getPostage();
-                        }
-                    }
-                    orderItem.setNum(createOrderItemModel.num);
-                    orderItem.setProduct(product);
-                    orderItem.setOrderen(orderEn);
-                    orderItem.setTotalPrice(createOrderItemModel.num * product.getPrice() * product.getDiscount());
-                    totalMoney += createOrderItemModel.num * product.getPrice() * product.getDiscount();
-                    orderItems.add(orderItem);
-                }
-                if (orderItems.size()==createOrderItemModels.size() && customer.getAccount().getMoney() >((totalMoney + logistic))){
-                    orderItems = orderItemDao.save(orderItems);
-                    products = productDao.save(products);
-                    orderEn.setTotalPrice(totalMoney + logistic);
-                    orderEn.setState(1);
-                    orderEn = orderEnDao.save(orderEn);
-                    customer.getAccount().setMoney(customer.getAccount().getMoney() -((totalMoney + logistic)));
-                    //TODO manager account add money
-                    for (Product product : products){
-                        Cart cart = cartDao.findByProductAndCustomerAndAlive(product, customer, 1);
-                        if (cart != null && cart.getAlive() == 1){
-                            cart.setAlive(0);
-                            cartDao.save(cart);
-                        }
 
-                    }
-                }
-            }
             orderEns.add(orderEn);
 
         }
@@ -236,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderEn> search(long customerId, long teaSalerId, String teaSalerName, int state, int isSend, int isConfirm, int isComment, int type, int customerDelete, int adminDelete, int salerDelete, int refund_state, String name, String address, String tel, String beginDateStr, String endDateStr, int pageIndex, int pageSize, String sortField, String sortOrder) {
+    public Page<OrderEn> search(long customerId, long teaSalerId, String teaSalerName, int state, int isSend, int isConfirm, int isComment,  int customerDelete, int adminDelete, int salerDelete, int refund_state, String name, String address, String tel, String beginDateStr, String endDateStr, int pageIndex, int pageSize, String sortField, String sortOrder) {
         Sort.Direction direction = Sort.Direction.DESC;
         if (sortOrder.toUpperCase().equals("ASC")) {
             direction = Sort.Direction.ASC;
@@ -244,7 +160,7 @@ public class OrderServiceImpl implements OrderService {
         teaSalerName = "%" + teaSalerName + "%";
 
 
-        Specification<OrderEn> specification = this.buildSpecification(customerId, teaSalerId,teaSalerName, state, isSend, isConfirm, isComment,type, customerDelete, adminDelete,
+        Specification<OrderEn> specification = this.buildSpecification(customerId, teaSalerId,teaSalerName, state, isSend, isConfirm, isComment, customerDelete, adminDelete,
                 salerDelete, refund_state, name, address, tel, beginDateStr, endDateStr);
         Page<OrderEn> orders = orderEnDao.findAll(specification, new PageRequest(pageIndex, pageSize, direction,sortField));
         return orders;
@@ -257,7 +173,6 @@ public class OrderServiceImpl implements OrderService {
                                                       final int isSend, //
                                                       final int isConfirm, //
                                                       final int isComment, //
-                                                      final int type,
                                                       final int customerDelete,
                                                       final int adminDelete,
                                                       final int salerDelete,
@@ -298,9 +213,6 @@ public class OrderServiceImpl implements OrderService {
                 }
                 if (isComment != -1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("isComment"),isComment));
-                }
-                if (type != -1){
-                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("type"),type));
                 }
                 if (customerDelete != -1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("customerDelete"),customerDelete));

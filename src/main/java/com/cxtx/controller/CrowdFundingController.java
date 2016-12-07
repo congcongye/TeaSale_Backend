@@ -114,16 +114,6 @@ public class CrowdFundingController extends ApiController{
 //        return ServiceResult.success("all succeed!");
 //    }
 
-    @RequestMapping(value = "/crowdFund/addOrder", method = RequestMethod.POST)
-    @ResponseBody
-    public ServiceResult addOrder(@RequestBody CreateCrowdFundOrderModel createCrowdFundOrderModel){
-        checkParameter(createCrowdFundOrderModel != null,"order can't be null");
-        CrowdFundOrder crowdFundOrder =  crowdFundOrderService.insertOrder(createCrowdFundOrderModel);
-        if (crowdFundOrder == null){
-            return  ServiceResult.fail(500,"create order failed");
-        }
-        return ServiceResult.success(crowdFundOrder);
-    }
 
 
 }
