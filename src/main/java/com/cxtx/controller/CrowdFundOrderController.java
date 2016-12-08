@@ -36,11 +36,9 @@ public class CrowdFundOrderController extends ApiController{
     @ResponseBody
     public ServiceResult addOrder(@RequestBody CreateCrowdFundOrderModel createCrowdFundOrderModel){
         checkParameter(createCrowdFundOrderModel != null,"order can't be null");
-        CrowdFundOrder crowdFundOrder =  crowdFundOrderService.insertOrder(createCrowdFundOrderModel);
-        if (crowdFundOrder == null){
-            return  ServiceResult.fail(500,"create order failed");
-        }
-        return ServiceResult.success(crowdFundOrder);
+        ServiceResult result =  crowdFundOrderService.insertOrder(createCrowdFundOrderModel);
+
+        return result;
     }
 
     /**

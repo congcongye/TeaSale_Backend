@@ -2,6 +2,7 @@ package com.cxtx.service;
 
 import com.cxtx.entity.OrderEn;
 import com.cxtx.model.CreateOrderModel;
+import com.cxtx.model.ServiceResult;
 import com.cxtx.model.UpdateOrderModel;
 import org.springframework.data.domain.Page;
 
@@ -23,4 +24,6 @@ public interface OrderService {
     OrderEn confirmOrder(UpdateOrderModel updateOrderModel);
 
     OrderEn sendOrder(UpdateOrderModel updateOrderModel);
+
+    ServiceResult cancelOrder(Long id);
 }

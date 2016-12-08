@@ -4,6 +4,7 @@ import com.cxtx.dao.*;
 import com.cxtx.entity.*;
 import com.cxtx.model.CreateOrderItemModel;
 import com.cxtx.model.CreateOrderModel;
+import com.cxtx.model.ServiceResult;
 import com.cxtx.model.UpdateOrderModel;
 import com.cxtx.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -137,6 +138,7 @@ public class OrderServiceImpl implements OrderService {
             //TODO manager account reduce money
             orderEn.setIsConfirm(1);
             orderEn.setConfirmDate(new Date());
+            orderEn.setState(2);
             return  orderEnDao.save(orderEn);
         }
         return null;
@@ -151,6 +153,21 @@ public class OrderServiceImpl implements OrderService {
             return  orderEnDao.save(orderEn);
         }
         return null;
+    }
+
+    @Override
+    public ServiceResult cancelOrder(Long id) {
+        OrderEn orderEn = orderEnDao.findOne(id);
+        if (orderEn == null || orderEn.getAlive() == 0 ){
+            return ServiceResult.fail(500,"no order record");
+        }
+        Customer customer = orderEn.getCustomer();
+        Account account = customer.getAccount();
+        account.setMoney(account.getMoney() + orderEn.getTotalPrice());
+        accountDao.save(account);
+        orderEn.setState(3);
+        orderEn = orderEnDao.save(orderEn);
+        return ServiceResult.success(orderEn);
     }
 
     @Override

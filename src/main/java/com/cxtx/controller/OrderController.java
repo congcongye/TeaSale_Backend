@@ -228,12 +228,11 @@ public class OrderController extends ApiController{
      * @param idModel
      * @return
      */
-    @RequestMapping(value = "/order/cancle", method = RequestMethod.PUT)
+    @RequestMapping(value = "/order/cancel", method = RequestMethod.PUT)
     @ResponseBody
-    public ServiceResult cancleOrder(@RequestBody IdModel idModel){
+    public ServiceResult cancelOrder(@RequestBody IdModel idModel){
         checkParameter(idModel.id > 0,"invalid order!");
-        OrderEn orderEn = null;
-
-        return ServiceResult.success(orderEn);
+        ServiceResult result = orderService.cancelOrder(idModel.id);
+        return result;
     }
 }

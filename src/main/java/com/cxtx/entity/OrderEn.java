@@ -49,7 +49,7 @@ public class OrderEn {
     private double logistic ;//邮费
 
     /**
-     * 订单状态 0 未完成, 1已付款,2已完成
+     * 订单状态 0 未完成, 1已付款,2已完成3,已取消
      */
     @Column
     private int state = 0;

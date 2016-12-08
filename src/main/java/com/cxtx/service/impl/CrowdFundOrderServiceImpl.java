@@ -48,7 +48,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
      * @return
      */
     @Override
-    public CrowdFundOrder insertOrder(CreateCrowdFundOrderModel createCrowdFundOrderModel) {
+    public ServiceResult insertOrder(CreateCrowdFundOrderModel createCrowdFundOrderModel) {
         Long customerId = createCrowdFundOrderModel.customerId;
         Long teaSalerId = createCrowdFundOrderModel.teaSalerId;
         Long crowdFundingId = createCrowdFundOrderModel.crowdFundingId;
@@ -56,10 +56,11 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
         CrowdFunding crowdFunding = crowdFundingDao.findOne(crowdFundingId);
         if (customer == null || customer.getAlive() == 0 || teaSaler == null || teaSaler.getAlive() == 0 || crowdFunding == null || crowdFunding.getAlive() == 0){
-            return null;
+            return ServiceResult.fail(500,"no customer, teasaler or crowd funding");
         }
         if (createCrowdFundOrderModel.num < crowdFunding.getUnitNum()){
             //TODO
+            return ServiceResult.fail(500,"the num is less the unit num");
         }
         Product product = crowdFunding.getProduct();
         Account account = customer.getAccount();
@@ -99,15 +100,16 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         if (totalMoney > 0){
             account.setMoney(account.getMoney() - needPay);
             accountDao.save(account);
-            crowdFundOrder.setState(2);
-            crowdFundOrder.setTotalPrice(totalMoney);
-            crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
             crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - createCrowdFundOrderModel.num);
             crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
             crowdFundingDao.save(crowdFunding);
+            crowdFundOrder.setState(2);
+            crowdFundOrder.setTotalPrice(totalMoney);
+            crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
+
         }
 
-        return crowdFundOrder;
+        return ServiceResult.success(crowdFundOrder);
     }
 
     /**
