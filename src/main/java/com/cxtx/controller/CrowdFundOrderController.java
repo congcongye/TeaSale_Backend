@@ -117,7 +117,7 @@ public class CrowdFundOrderController extends ApiController{
     @RequestMapping(value = "/crowdFundOrder/update", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult updateOrder(@RequestBody UpdateOrderModel updateOrderModel){
-        checkParameter(updateOrderModel.orderId > 0,"invaild order!");
+        checkParameter(updateOrderModel.orderId > 0,"invalid order!");
         CrowdFundOrder crowdFundOrder = null;
         if (updateOrderModel.isConfirm == 1){
             crowdFundOrder = crowdFundOrderService.confirmOrder(updateOrderModel);

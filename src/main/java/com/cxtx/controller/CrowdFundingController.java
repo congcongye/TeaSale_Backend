@@ -110,7 +110,7 @@ public class CrowdFundingController extends ApiController{
     @RequestMapping(value = "/crowdFund/confirm", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult confirmCrowdFund(@RequestBody IdModel idModel ){
-        checkParameter(idModel.id > 0,"invaild id");
+        checkParameter(idModel.id > 0,"invalid id");
         CrowdFunding crowdFunding = crowdFundingService.confirmCrowdFunding(idModel.id);
         if(crowdFunding ==  null){
             return ServiceResult.fail(500, "confirm fail");

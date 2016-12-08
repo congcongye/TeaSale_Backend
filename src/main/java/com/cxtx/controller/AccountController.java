@@ -51,7 +51,7 @@ public class AccountController extends  ApiController{
     @ResponseBody
     public  ServiceResult recharge(@RequestParam("money") double money,
                                    @RequestParam("accountId") long accountId){
-        checkParameter(accountId > 0 ,"invaild account id");
+        checkParameter(accountId > 0 ,"invalid account id");
         Account account = accountService.findAliveAccount(accountId);
         checkParameter(account!=null,"no account");
         account = accountService.recharge(money,accountId);

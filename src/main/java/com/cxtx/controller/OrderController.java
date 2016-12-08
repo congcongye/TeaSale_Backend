@@ -209,7 +209,7 @@ public class OrderController extends ApiController{
     @RequestMapping(value = "/order/update", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult updateOrder(@RequestBody UpdateOrderModel updateOrderModel){
-        checkParameter(updateOrderModel.orderId > 0,"invaild order!");
+        checkParameter(updateOrderModel.orderId > 0,"invalid order!");
         OrderEn orderEn = null;
         if (updateOrderModel.isConfirm == 1){
             orderEn = orderService.confirmOrder(updateOrderModel);
@@ -220,6 +220,20 @@ public class OrderController extends ApiController{
         if (orderEn == null ){
             return  ServiceResult.fail(500, "update fail");
         }
+        return ServiceResult.success(orderEn);
+    }
+
+    /**
+     * 取消订单
+     * @param idModel
+     * @return
+     */
+    @RequestMapping(value = "/order/cancle", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult cancleOrder(@RequestBody IdModel idModel){
+        checkParameter(idModel.id > 0,"invalid order!");
+        OrderEn orderEn = null;
+
         return ServiceResult.success(orderEn);
     }
 }
