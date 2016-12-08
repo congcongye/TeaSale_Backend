@@ -250,4 +250,14 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         crowdFundingDao.save(newCrowdFundingList);
     }
 
+    @Override
+    public CrowdFunding confirmCrowdFunding(Long id) {
+        CrowdFunding crowdFunding = crowdFundingDao.findByIdAndAlive(id, 1);
+        if (crowdFunding == null || crowdFunding.getAlive() == 0) {
+            return null;
+        }
+        crowdFunding.setState(1);//成功
+        return  crowdFundingDao.save(crowdFunding);
+    }
+
 }

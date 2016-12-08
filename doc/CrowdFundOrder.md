@@ -1,5 +1,5 @@
 #### 众筹订单的生成
-* URL:/crowdFund/addOrder
+* URL:/crowdFundOrder/new
 * Method: POST
 * 输入：
  <pre>

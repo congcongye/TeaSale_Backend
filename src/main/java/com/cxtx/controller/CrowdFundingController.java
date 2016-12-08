@@ -102,17 +102,16 @@ public class CrowdFundingController extends ApiController{
         return ServiceResult.success(cd);
     }
 
-//    @RequestMapping(value = "/crowdFund/confirm", method = RequestMethod.PUT)
-//    @ResponseBody
-//    public ServiceResult confirmCrowdFund(@RequestBody List<IdModel> list){
-//        checkParameter(list!=null,"data is empty");
-//        checkParameter(!list.isEmpty(),"data is empty");
-//        int succCount = crowdFundingService.deleteCrowdFunding(list);
-//        if(succCount!=list.size()){
-//            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(list.size()-succCount));
-//        }
-//        return ServiceResult.success("all succeed!");
-//    }
+    @RequestMapping(value = "/crowdFund/confirm", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult confirmCrowdFund(@RequestBody IdModel idModel ){
+        checkParameter(idModel.id > 0,"invaild id");
+        CrowdFunding crowdFunding = crowdFundingService.confirmCrowdFunding(idModel.id);
+        if(crowdFunding ==  null){
+            return ServiceResult.fail(500, "confirm fail");
+        }
+        return ServiceResult.success(crowdFunding);
+    }
 
 
 

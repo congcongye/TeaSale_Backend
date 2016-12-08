@@ -79,6 +79,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
                 totalMoney += createCrowdFundOrderModel.num * crowdFunding.getUnitMoney();
                 totalMoney += product.getIsFree()==1? 0:product.getPostage();
                 needPay = totalMoney;
+                crowdFundOrder.setRefund_state(1);
             }
         }
         if (crowdFunding.getType() == 1){//预付
@@ -87,6 +88,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
                 totalMoney += createCrowdFundOrderModel.num * crowdFunding.getUnitMoney();
                 totalMoney += product.getIsFree()==1? 0:product.getPostage();
                 needPay = createCrowdFundOrderModel.num * crowdFunding.getEarnest();
+                crowdFundOrder.setRefund_state(2);
             }
         }
         if (totalMoney > 0){
