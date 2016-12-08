@@ -19,4 +19,6 @@ public interface CrowdFundOrderService {
     CrowdFundOrder confirmOrder(UpdateOrderModel updateOrderModel);
 
     CrowdFundOrder sendOrder(UpdateOrderModel updateOrderModel);
+
+    ServiceResult cancelOrder(Long id);
 }

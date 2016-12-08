@@ -168,7 +168,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         if (account .getMoney() >= needPay){
             account.setMoney(account.getMoney()-needPay);
             accountDao.save(account);
-            crowdFundOrder.setRefund_state(2);
+            crowdFundOrder.setRefund_state(1);
             crowdFundOrder.setState(1);
             crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
             return ServiceResult.success(crowdFundOrder);
@@ -178,17 +178,6 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
 
     @Override
     public CrowdFundOrder confirmOrder(UpdateOrderModel updateOrderModel) {
-//        OrderEn orderEn = orderEnDao.findOne(updateOrderModel.orderId);
-//        if (orderEn != null && orderEn.getAlive() == 1){
-//            Account account = orderEn.getTeaSaler().getAccount();
-//            account.setMoney(account.getMoney() + orderEn.getTotalPrice());
-//            accountDao.save(account);
-//            //TODO manager account reduce money
-//            orderEn.setIsConfirm(1);
-//            orderEn.setConfirmDate(new Date());
-//            return  orderEnDao.save(orderEn);
-//        }
-//        return null;
         CrowdFundOrder crowdFundOrder = crowdFundOrderDao.findOne(updateOrderModel.orderId);
         if (crowdFundOrder != null && crowdFundOrder.getAlive() == 1){
             Account account = crowdFundOrder.getTeaSaler().getAccount();
@@ -210,6 +199,29 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
             return  crowdFundOrderDao.save(crowdFundOrder);
         }
         return null;
+    }
+
+    @Override
+    public ServiceResult cancelOrder(Long id) {
+        CrowdFundOrder crowdFundOrder = crowdFundOrderDao.findOne(id);
+        if (crowdFundOrder == null || crowdFundOrder.getAlive() == 0){
+            return  ServiceResult.fail(500, "no crowdfund order record");
+        }
+        if (crowdFundOrder.getIsSend() == 1){
+            return ServiceResult.fail(500,"crodfunding has sended , can be canceled!");
+        }
+        Account account = crowdFundOrder.getCustomer().getAccount();
+        if (crowdFundOrder.getRefund_state() == 1){
+            account.setMoney(account.getMoney() + crowdFundOrder.getTotalPrice());
+        }
+        if (crowdFundOrder.getRefund_state() == 2){
+            double havePay = crowdFundOrder.getNum() * crowdFundOrder.getCrowdFunding().getEarnest();
+            account.setMoney(account.getMoney() + havePay);
+        }
+        accountDao.save(account);
+        crowdFundOrder.setState(3);
+        crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
+        return ServiceResult.success(crowdFundOrder);
     }
 
     private Specification<CrowdFundOrder> buildSpecification(final long customerId, //

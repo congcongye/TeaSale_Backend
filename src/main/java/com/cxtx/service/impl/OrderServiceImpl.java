@@ -161,6 +161,9 @@ public class OrderServiceImpl implements OrderService {
         if (orderEn == null || orderEn.getAlive() == 0 ){
             return ServiceResult.fail(500,"no order record");
         }
+        if (orderEn.getIsSend() == 1){
+            return ServiceResult.fail(500,"product has sended , can be canceled!");
+        }
         Customer customer = orderEn.getCustomer();
         Account account = customer.getAccount();
         account.setMoney(account.getMoney() + orderEn.getTotalPrice());

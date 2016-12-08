@@ -3,9 +3,8 @@
 ### 搜索订单
 * URL /api/orders/search?customerId=1&teaSalerId=1&state=1&isSend=0&isConfirm=0&isComment=0&type=0&customerDelete=0&adminDelete=0&salerDelete=0&Refund_state=0&name=""&address=""&tel=""&beginDateStr=2016-10-10&endDateStr=2016-12-10&pageIndex=0&pageSize=10&sortField=id&sortOrder=ASC
 * Method: GET
-* 参数:
+* 参数说明:
 ```
-说明
 teaSalerName:茶农名字,当不传茶农id时使用该参数
 state:订单状态 0 未完成, 1已付款,2已完成
 isSend:是否发货 0 否, 1是
@@ -614,3 +613,89 @@ endDateStr=2016-12-10 订单创建结束时间
   }
 }
 ```
+
+ #### 订单取消
+ * URL:/api/crowdFundOrder/cancel
+ * Method: PUT
+ * 参数：
+<pre>
+ {
+     "id":1
+ }
+</pre>    
+* 输出:    
+<pre> 
+  {
+    "code": 200,
+    "data": {
+      "id": 1,
+      "createDate": "2016-11-20",
+      "teaSaler": {
+        "id": 1,
+        "name": "叶聪聪",
+        "level": 1,
+        "nickname": "ycc",
+        "account": {
+          "id": 1,
+          "tel": "15821527768",
+          "password": "123456",
+          "label": 1,
+          "alive": 1,
+          "headURL": "h1.png",
+          "money": 2635
+        },
+        "address": "上海市 闵行区",
+        "tel": "15821527768",
+        "headUrl": "h1.png",
+        "money": 1000,
+        "licenseUrl": "c1.png",
+        "zip": "435100",
+        "idCard": "420281199311118111",
+        "state": 1,
+        "alive": 1,
+        "createDate": "2016-11-11"
+      },
+      "customer": {
+        "id": 1,
+        "level": 0,
+        "nickname": "孙晏",
+        "account": {
+          "id": 4,
+          "tel": "13918966539",
+          "password": "123456",
+          "label": 2,
+          "alive": 1,
+          "headURL": "h4.png",
+          "money": 3961
+        },
+        "address": "上海 虹口区 虹口足球场",
+        "zip": "446543",
+        "tel": "13918966539",
+        "money": 1000,
+        "headUrl": "h4.png",
+        "alive": 1,
+        "createDate": "2016-11-11"
+      },
+      "name": "",
+      "address": "浙江 宁波 江东区 主任家",
+      "zip": "446543",
+      "tel": "13918966539",
+      "totalPrice": 48,
+      "logistic": 0,
+      "state": 3,
+      "isSend": 1,
+      "SendDate": null,
+      "isConfirm": 0,
+      "confirmDate": null,
+      "isComment": 0,
+      "score": -1,
+      "comment": null,
+      "customerDelete": 0,
+      "adminDelete": 0,
+      "salerDelete": 0,
+      "alive": 1,
+      "refund_state": 0,
+      "sendDate": null
+    }
+  }
+</pre>

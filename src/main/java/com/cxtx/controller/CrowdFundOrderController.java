@@ -128,4 +128,17 @@ public class CrowdFundOrderController extends ApiController{
         }
         return ServiceResult.success(crowdFundOrder);
     }
+
+    /**
+     * 取消订单
+     * @param idModel
+     * @return
+     */
+    @RequestMapping(value = "/crowdFundOrder/cancel", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult cancelOrder(@RequestBody IdModel idModel) {
+        checkParameter(idModel.id > 0, "invalid order!");
+        ServiceResult result = crowdFundOrderService.cancelOrder(idModel.id);
+        return result;
+    }
 }
