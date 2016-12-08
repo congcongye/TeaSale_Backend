@@ -615,7 +615,7 @@ endDateStr=2016-12-10 订单创建结束时间
 ```
 
  #### 订单取消
- * URL:/api/crowdFundOrder/cancel
+ * URL:/api/order/cancel
  * Method: PUT
  * 参数：
 <pre>
