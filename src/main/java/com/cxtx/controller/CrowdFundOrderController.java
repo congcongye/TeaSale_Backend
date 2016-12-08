@@ -5,10 +5,7 @@ import com.cxtx.dao.ProductDao;
 import com.cxtx.entity.CrowdFundOrder;
 import com.cxtx.entity.CrowdFunding;
 import com.cxtx.entity.Product;
-import com.cxtx.model.CreateCrowdFundOrderModel;
-import com.cxtx.model.IdModel;
-import com.cxtx.model.ServiceResult;
-import com.cxtx.model.UpdateCrowdFundingModel;
+import com.cxtx.model.*;
 import com.cxtx.service.CrowdFundOrderService;
 import com.cxtx.service.CrowdFundingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -98,5 +95,39 @@ public class CrowdFundOrderController extends ApiController{
     }
 
 
+    /**
+     * 众筹支付全款
+     * @param idModel
+     * @return
+     */
+    @RequestMapping(value = "/crowdFundOrder/payRemain", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult payRemain(@RequestBody IdModel idModel){
+        checkParameter(idModel.id > 0,"invalid id");
+        ServiceResult result =  crowdFundOrderService.payRemain(idModel.id);
 
+        return result;
+    }
+
+    /**
+     * 更新订单 确认发货与确认收货
+     * @param updateOrderModel
+     * @return
+     */
+    @RequestMapping(value = "/crowdFundOrder/update", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult updateOrder(@RequestBody UpdateOrderModel updateOrderModel){
+        checkParameter(updateOrderModel.orderId > 0,"invaild order!");
+        CrowdFundOrder crowdFundOrder = null;
+        if (updateOrderModel.isConfirm == 1){
+            crowdFundOrder = crowdFundOrderService.confirmOrder(updateOrderModel);
+        }
+        if (updateOrderModel.isSend == 1){
+            crowdFundOrder = crowdFundOrderService.sendOrder(updateOrderModel);
+        }
+        if (crowdFundOrder == null ){
+            return  ServiceResult.fail(500, "update fail");
+        }
+        return ServiceResult.success(crowdFundOrder);
+    }
 }

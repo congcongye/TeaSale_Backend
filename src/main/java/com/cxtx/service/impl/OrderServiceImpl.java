@@ -136,6 +136,7 @@ public class OrderServiceImpl implements OrderService {
             accountDao.save(account);
             //TODO manager account reduce money
             orderEn.setIsConfirm(1);
+            orderEn.setConfirmDate(new Date());
             return  orderEnDao.save(orderEn);
         }
         return null;
@@ -146,6 +147,7 @@ public class OrderServiceImpl implements OrderService {
         OrderEn orderEn = orderEnDao.findOne(updateOrderModel.orderId);
         if (orderEn != null && orderEn.getAlive() == 1){
             orderEn.setIsSend(1);
+            orderEn.setSendDate(new Date());
             return  orderEnDao.save(orderEn);
         }
         return null;

@@ -302,164 +302,88 @@
   }
 }
 </pre>
-
-#### 众筹订单的生成
-* URL:/crowdFund/addOrder
-* Method: POST
-* 输入：
- <pre>
-{
-        "teaSalerId":1,
-        "customerId":1,
-        "name":"test",
-        "address":"dongchuanlu",
-        "zip":"213000",
-        "tel":"12345678908",
-        "crowdFundingId":1,
-        "num":10
-    }
-</pre>    
-* 输出:    
-<pre> 
+ 
+ #### 众筹确认成功(改变状态state->1)
+ * URL:/api/crowdFund/confirm
+ * Method: POST
+ * 输入：
+  <pre>
  {
-   "code": 200,
-   "data": {
-     "id": 1,
-     "createDate": "2016-12-07",
-     "teaSaler": {
-       "id": 1,
-       "name": "李桐宇",
-       "level": 0,
-       "nickname": "413",
-       "account": {
-         "id": 3,
-         "tel": "15907823456",
-         "password": "1111111",
-         "label": 0,
-         "alive": 1,
-         "headURL": null,
-         "money": 10436320
-       },
-       "address": "x36-4041",
-       "tel": "15907823456",
-       "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
-       "money": 10000,
-       "licenseUrl": "7f839a068dab48aeb97a7a220c23abe4.png",
-       "zip": "210000",
-       "idCard": "12345678",
-       "state": 1,
-       "alive": 1,
-       "createDate": "2016-11-10"
-     },
-     "customer": {
-       "id": 1,
-       "level": 0,
-       "nickname": "123",
-       "account": {
-         "id": 8,
-         "tel": "13918966539",
-         "password": "123456",
-         "label": 0,
-         "alive": 1,
-         "headURL": "836e8e3a0af54847902cc1d31cb68e89.jpg",
-         "money": 9999700
-       },
-       "address": "闵行东川路",
-       "zip": "12344567",
-       "tel": "13918966539",
-       "money": 0,
-       "headUrl": null,
-       "alive": 1,
-       "createDate": "2016-11-11"
-     },
-     "crowdFunding": {
-       "id": 1,
-       "product": {
-         "id": 4,
-         "productType": {
-           "id": 1,
-           "name": "绿茶",
-           "descript": "绿茶的描述信息",
-           "url": "图片地址url",
-           "state": 1,
-           "alive": 1
-         },
-         "remark": "",
-         "name": "",
-         "level": 1,
-         "locality": "",
-         "stock": 1000,
-         "price": 90,
-         "startNum": 1,
-         "discount": 0.8,
-         "isFree": 1,
-         "postage": 0,
-         "deliverLimit": 10,
-         "createDate": "2016-12-05",
-         "unit": "liang",
-         "teaSaler": {
-           "id": 1,
-           "name": "李桐宇",
-           "level": 0,
-           "nickname": "413",
-           "account": {
-             "id": 3,
-             "tel": "15907823456",
-             "password": "1111111",
-             "label": 0,
-             "alive": 1,
-             "headURL": null,
-             "money": 10436320
-           },
-           "address": "x36-4041",
-           "tel": "15907823456",
-           "headUrl": "/home/administrator/CXTX/upload/picture//default.jpg",
-           "money": 10000,
-           "licenseUrl": "7f839a068dab48aeb97a7a220c23abe4.png",
-           "zip": "210000",
-           "idCard": "12345678",
-           "state": 1,
-           "alive": 1,
-           "createDate": "2016-11-10"
-         },
-         "state": 1,
-         "alive": 1,
-         "url": "图片地址url",
-         "type": 1
-       },
-       "type": 1,
-       "earnest": 10,
-       "unitNum": 1,
-       "unitMoney": 20,
-       "createDate": "2016-12-06 15:22:51",
-       "dealDate": "2016-12-17 15:22:44",
-       "deliverDate": null,
-       "payDate": null,
-       "state": 1,
-       "alive": 1,
-       "totalNum": 10,
-       "remainderNum": 0,
-       "joinNum": 2
-     },
-     "name": "test",
-     "address": "dongchuanlu",
-     "zip": "213000",
-     "tel": "12345678908",
-     "totalPrice": 200,
-     "logistic": 0,
-     "num": 0,
-     "state": 2,
-     "isSend": 0,
-     "SendDate": null,
-     "isConfirm": 0,
-     "confirmDate": null,
-     "score": -1,
-     "customerDelete": 0,
-     "adminDelete": 0,
-     "salerDelete": 0,
-     "alive": 1,
-     "sendDate": null,
-     "refund_state": 0
-   }
- }
- <pre>
+         "id":4
+     }
+ </pre>    
+ * 输出:    
+ <pre> 
+  {
+    "code": 200,
+    "data": {
+      "id": 4,
+      "product": {
+        "id": 20,
+        "productType": {
+          "id": 2,
+          "name": "绿茶",
+          "descript": "绿茶是中国的主要茶类之一，是指采取茶树的新叶或芽，未经发酵，经杀青、整形、烘干等工艺而制作的饮品。其制成品的色泽和冲泡后的茶汤较多的保存了鲜茶叶的绿色格调。常饮绿茶能防癌，降脂和减肥，对吸烟者也可减轻其受到的尼古丁伤害。",
+          "url": "21.png",
+          "state": 1,
+          "alive": 1
+        },
+        "remark": "传统名茶龙井茶",
+        "name": "西湖龙井",
+        "level": 3,
+        "locality": "浙江 杭州 萧山区",
+        "stock": 6700,
+        "price": 34,
+        "startNum": 20,
+        "discount": 0.6,
+        "isFree": 1,
+        "postage": 0,
+        "deliverLimit": 5,
+        "createDate": "2016-12-07",
+        "unit": "两",
+        "teaSaler": {
+          "id": 1,
+          "name": "叶聪聪",
+          "level": 1,
+          "nickname": "ycc",
+          "account": {
+            "id": 1,
+            "tel": "15821527768",
+            "password": "123456",
+            "label": 1,
+            "alive": 1,
+            "headURL": "h1.png",
+            "money": 2535
+          },
+          "address": "上海市 闵行区",
+          "tel": "15821527768",
+          "headUrl": "h1.png",
+          "money": 1000,
+          "licenseUrl": "c1.png",
+          "zip": "435100",
+          "idCard": "420281199311118111",
+          "state": 1,
+          "alive": 1,
+          "createDate": "2016-11-11"
+        },
+        "state": 1,
+        "alive": 1,
+        "url": "21.png",
+        "type": 1
+      },
+      "type": 0,
+      "earnest": 0,
+      "unitNum": 20,
+      "unitMoney": 300,
+      "createDate": "2016-12-07 11:05:14",
+      "dealDate": "2017-03-21 00:00:00",
+      "deliverDate": "2017-04-01 00:00:00",
+      "payDate": null,
+      "state": 1,
+      "alive": 1,
+      "totalNum": 200,
+      "remainderNum": 200,
+      "joinNum": 0
+    }
+  }
+  </pre>

@@ -3,6 +3,8 @@ package com.cxtx.service.impl;
 import com.cxtx.dao.*;
 import com.cxtx.entity.*;
 import com.cxtx.model.CreateCrowdFundOrderModel;
+import com.cxtx.model.ServiceResult;
+import com.cxtx.model.UpdateOrderModel;
 import com.cxtx.service.CrowdFundOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -55,6 +57,9 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         CrowdFunding crowdFunding = crowdFundingDao.findOne(crowdFundingId);
         if (customer == null || customer.getAlive() == 0 || teaSaler == null || teaSaler.getAlive() == 0 || crowdFunding == null || crowdFunding.getAlive() == 0){
             return null;
+        }
+        if (createCrowdFundOrderModel.num < crowdFunding.getUnitNum()){
+            //TODO
         }
         Product product = crowdFunding.getProduct();
         Account account = customer.getAccount();
@@ -140,6 +145,69 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
                 salerDelete, refund_state, name, address, tel, beginDateStr, endDateStr);
         Page<CrowdFundOrder> crowdFundOrders = crowdFundOrderDao.findAll(specification,new PageRequest(pageIndex, pageSize, direction,sortField));
         return crowdFundOrders;
+    }
+
+    @Override
+    public ServiceResult payRemain(Long id) {
+        CrowdFundOrder crowdFundOrder = crowdFundOrderDao.findOne(id);
+        if (crowdFundOrder == null || crowdFundOrder.getAlive() == 0){
+            return ServiceResult.fail(500, "no crowdfund order record");
+        }
+        if (crowdFundOrder.getRefund_state() != 2){
+            return ServiceResult.fail(500, "the crowdfund order is not part pay order");
+        }
+        Account account = crowdFundOrder.getCustomer().getAccount();
+        CrowdFunding crowdFunding = crowdFundOrder.getCrowdFunding();
+        Product product = crowdFunding.getProduct();
+        if (account == null || account.getAlive() == 0){
+            return ServiceResult.fail(500, "no account record");
+        }
+        double needPay = crowdFundOrder.getNum() * (crowdFunding.getUnitMoney() - crowdFunding.getEarnest()) + product.getIsFree()== 1?0:product.getPostage();
+        if (account .getMoney() >= needPay){
+            account.setMoney(account.getMoney()-needPay);
+            accountDao.save(account);
+            crowdFundOrder.setRefund_state(2);
+            crowdFundOrder.setState(1);
+            crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
+            return ServiceResult.success(crowdFundOrder);
+        }
+        return ServiceResult.fail(500, "Sorry, your credit is running low");
+    }
+
+    @Override
+    public CrowdFundOrder confirmOrder(UpdateOrderModel updateOrderModel) {
+//        OrderEn orderEn = orderEnDao.findOne(updateOrderModel.orderId);
+//        if (orderEn != null && orderEn.getAlive() == 1){
+//            Account account = orderEn.getTeaSaler().getAccount();
+//            account.setMoney(account.getMoney() + orderEn.getTotalPrice());
+//            accountDao.save(account);
+//            //TODO manager account reduce money
+//            orderEn.setIsConfirm(1);
+//            orderEn.setConfirmDate(new Date());
+//            return  orderEnDao.save(orderEn);
+//        }
+//        return null;
+        CrowdFundOrder crowdFundOrder = crowdFundOrderDao.findOne(updateOrderModel.orderId);
+        if (crowdFundOrder != null && crowdFundOrder.getAlive() == 1){
+            Account account = crowdFundOrder.getTeaSaler().getAccount();
+            account.setMoney(account.getMoney() + crowdFundOrder.getTotalPrice());
+            accountDao.save(account);
+            crowdFundOrder.setConfirmDate(new Date());
+            crowdFundOrder.setIsConfirm(1);
+            return  crowdFundOrderDao.save(crowdFundOrder);
+        }
+        return null;
+    }
+
+    @Override
+    public CrowdFundOrder sendOrder(UpdateOrderModel updateOrderModel) {
+        CrowdFundOrder crowdFundOrder = crowdFundOrderDao.findOne(updateOrderModel.orderId);
+        if (crowdFundOrder != null && crowdFundOrder.getAlive() == 1){
+            crowdFundOrder.setIsSend(1);
+            crowdFundOrder.setSendDate(new Date());
+            return  crowdFundOrderDao.save(crowdFundOrder);
+        }
+        return null;
     }
 
     private Specification<CrowdFundOrder> buildSpecification(final long customerId, //

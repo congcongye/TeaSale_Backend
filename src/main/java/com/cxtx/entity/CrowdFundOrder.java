@@ -1,5 +1,6 @@
 package com.cxtx.entity;
 
+import com.cxtx.model.UpdateOrderModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -280,5 +281,7 @@ public class CrowdFundOrder {
     public void setNum(int num) {
         this.num = num;
     }
+
+
 }
 

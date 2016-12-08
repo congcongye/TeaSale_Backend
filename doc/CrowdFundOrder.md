@@ -164,6 +164,7 @@
  * URL:/api//crowdFundOrders/search?customerId&teaSalerId&crowdFundingId&teaSalerName&state&isSend&isConfirm&customerDelete&adminDelete&salerDelete&Refund_state&name&address&beginDateStr&endDateStr&pageIndex&pageSize&sortField&sortOrder
  * Method: GET
  * 参数：
+ <pre>
   teaSalerName:茶农名字,当不传茶农id时使用该参数
   state:订单状态 0 未完成, 1已付款,2已完成
   isSend:是否发货 0 否, 1是
@@ -336,4 +337,471 @@
       "numberOfElements": 1
     }
   }
+  </pre>
+  
+  
+  #### 众筹订单支付全款
+   * URL:/api/crowdFundOrder/payRemain
+   * Method: PUT
+   * 参数：
+    <pre>
+    {
+        "id":9
+    }
+   </pre>    
+   * 输出:    
+   <pre> 
+    {
+      "code": 200,
+      "data": {
+        "id": 9,
+        "createDate": "2016-12-08",
+        "teaSaler": {
+          "id": 1,
+          "name": "叶聪聪",
+          "level": 1,
+          "nickname": "ycc",
+          "account": {
+            "id": 1,
+            "tel": "15821527768",
+            "password": "123456",
+            "label": 1,
+            "alive": 1,
+            "headURL": "h1.png",
+            "money": 2535
+          },
+          "address": "上海市 闵行区",
+          "tel": "15821527768",
+          "headUrl": "h1.png",
+          "money": 1000,
+          "licenseUrl": "c1.png",
+          "zip": "435100",
+          "idCard": "420281199311118111",
+          "state": 1,
+          "alive": 1,
+          "createDate": "2016-11-11"
+        },
+        "customer": {
+          "id": 1,
+          "level": 0,
+          "nickname": "孙晏",
+          "account": {
+            "id": 4,
+            "tel": "13918966539",
+            "password": "123456",
+            "label": 2,
+            "alive": 1,
+            "headURL": "h4.png",
+            "money": 3933
+          },
+          "address": "上海 虹口区 虹口足球场",
+          "zip": "446543",
+          "tel": "13918966539",
+          "money": 1000,
+          "headUrl": "h4.png",
+          "alive": 1,
+          "createDate": "2016-11-11"
+        },
+        "crowdFunding": {
+          "id": 6,
+          "product": {
+            "id": 19,
+            "productType": {
+              "id": 4,
+              "name": "乌龙茶",
+              "descript": "乌龙茶（oolong tea），亦称青茶、半发酵茶及全发酵茶，品种较多，是中国几大茶类中，独具鲜明汉族特色的茶叶品类。乌龙茶是经过采摘、萎凋、摇青、炒青、揉捻、烘焙等工序后制出的品质优异的茶类。乌龙茶由宋代贡茶龙团、凤饼演变而来，创制于1725年（清雍正年间）前后。品尝后齿颊留香，回味甘鲜。乌龙茶的药理作用，突出表现在分解脂肪、减肥健美等方面。在日本被称之为“美容茶”、“ 健美茶”。",
+              "url": "41.png",
+              "state": 1,
+              "alive": 1
+            },
+            "remark": "纯天然，手工炒制",
+            "name": "有机古树乌龙茶",
+            "level": 2,
+            "locality": "浙江 温州 瓯海区 龙门路",
+            "stock": 3400,
+            "price": 19,
+            "startNum": 19,
+            "discount": 0.9,
+            "isFree": 1,
+            "postage": 0,
+            "deliverLimit": 26,
+            "createDate": "2016-12-01",
+            "unit": "两",
+            "teaSaler": {
+              "id": 1,
+              "name": "叶聪聪",
+              "level": 1,
+              "nickname": "ycc",
+              "account": {
+                "id": 1,
+                "tel": "15821527768",
+                "password": "123456",
+                "label": 1,
+                "alive": 1,
+                "headURL": "h1.png",
+                "money": 2535
+              },
+              "address": "上海市 闵行区",
+              "tel": "15821527768",
+              "headUrl": "h1.png",
+              "money": 1000,
+              "licenseUrl": "c1.png",
+              "zip": "435100",
+              "idCard": "420281199311118111",
+              "state": 1,
+              "alive": 1,
+              "createDate": "2016-11-11"
+            },
+            "state": 1,
+            "alive": 1,
+            "url": "41.png",
+            "type": 1
+          },
+          "type": 1,
+          "earnest": 20,
+          "unitNum": 10,
+          "unitMoney": 100,
+          "createDate": "2016-12-08 12:48:19",
+          "dealDate": "2016-12-23 12:48:23",
+          "deliverDate": null,
+          "payDate": null,
+          "state": 0,
+          "alive": 1,
+          "totalNum": 200,
+          "remainderNum": 199,
+          "joinNum": 1
+        },
+        "name": "test",
+        "address": "dongchuanlu",
+        "zip": "213000",
+        "tel": "12345678908",
+        "totalPrice": 100,
+        "logistic": 0,
+        "num": 1,
+        "state": 1,
+        "isSend": 0,
+        "SendDate": null,
+        "isConfirm": 0,
+        "confirmDate": null,
+        "score": -1,
+        "customerDelete": 0,
+        "adminDelete": 0,
+        "salerDelete": 0,
+        "alive": 1,
+        "refund_state": 2,
+        "sendDate": null
+      }
+    }
+  </pre>
+
+ #### 众筹订单更新(确认发货)
+   * URL:/api/crowdFundOrder/update
+   * Method: PUT
+   * 参数：
+   <pre>
+    {
+        "orderId":9,
+        "isConfirm":-1,
+        "isSend":1
+    }
+   </pre>    
+   * 输出:    
+   <pre> 
+   {
+     "code": 200,
+     "data": {
+       "id": 9,
+       "createDate": "2016-12-08",
+       "teaSaler": {
+         "id": 1,
+         "name": "叶聪聪",
+         "level": 1,
+         "nickname": "ycc",
+         "account": {
+           "id": 1,
+           "tel": "15821527768",
+           "password": "123456",
+           "label": 1,
+           "alive": 1,
+           "headURL": "h1.png",
+           "money": 2535
+         },
+         "address": "上海市 闵行区",
+         "tel": "15821527768",
+         "headUrl": "h1.png",
+         "money": 1000,
+         "licenseUrl": "c1.png",
+         "zip": "435100",
+         "idCard": "420281199311118111",
+         "state": 1,
+         "alive": 1,
+         "createDate": "2016-11-11"
+       },
+       "customer": {
+         "id": 1,
+         "level": 0,
+         "nickname": "孙晏",
+         "account": {
+           "id": 4,
+           "tel": "13918966539",
+           "password": "123456",
+           "label": 2,
+           "alive": 1,
+           "headURL": "h4.png",
+           "money": 3913
+         },
+         "address": "上海 虹口区 虹口足球场",
+         "zip": "446543",
+         "tel": "13918966539",
+         "money": 1000,
+         "headUrl": "h4.png",
+         "alive": 1,
+         "createDate": "2016-11-11"
+       },
+       "crowdFunding": {
+         "id": 6,
+         "product": {
+           "id": 19,
+           "productType": {
+             "id": 4,
+             "name": "乌龙茶",
+             "descript": "乌龙茶（oolong tea），亦称青茶、半发酵茶及全发酵茶，品种较多，是中国几大茶类中，独具鲜明汉族特色的茶叶品类。乌龙茶是经过采摘、萎凋、摇青、炒青、揉捻、烘焙等工序后制出的品质优异的茶类。乌龙茶由宋代贡茶龙团、凤饼演变而来，创制于1725年（清雍正年间）前后。品尝后齿颊留香，回味甘鲜。乌龙茶的药理作用，突出表现在分解脂肪、减肥健美等方面。在日本被称之为“美容茶”、“ 健美茶”。",
+             "url": "41.png",
+             "state": 1,
+             "alive": 1
+           },
+           "remark": "纯天然，手工炒制",
+           "name": "有机古树乌龙茶",
+           "level": 2,
+           "locality": "浙江 温州 瓯海区 龙门路",
+           "stock": 3400,
+           "price": 19,
+           "startNum": 19,
+           "discount": 0.9,
+           "isFree": 1,
+           "postage": 0,
+           "deliverLimit": 26,
+           "createDate": "2016-12-01",
+           "unit": "两",
+           "teaSaler": {
+             "id": 1,
+             "name": "叶聪聪",
+             "level": 1,
+             "nickname": "ycc",
+             "account": {
+               "id": 1,
+               "tel": "15821527768",
+               "password": "123456",
+               "label": 1,
+               "alive": 1,
+               "headURL": "h1.png",
+               "money": 2535
+             },
+             "address": "上海市 闵行区",
+             "tel": "15821527768",
+             "headUrl": "h1.png",
+             "money": 1000,
+             "licenseUrl": "c1.png",
+             "zip": "435100",
+             "idCard": "420281199311118111",
+             "state": 1,
+             "alive": 1,
+             "createDate": "2016-11-11"
+           },
+           "state": 1,
+           "alive": 1,
+           "url": "41.png",
+           "type": 1
+         },
+         "type": 1,
+         "earnest": 20,
+         "unitNum": 10,
+         "unitMoney": 100,
+         "createDate": "2016-12-08 12:48:19",
+         "dealDate": "2016-12-23 12:48:23",
+         "deliverDate": null,
+         "payDate": null,
+         "state": 0,
+         "alive": 1,
+         "totalNum": 200,
+         "remainderNum": 199,
+         "joinNum": 1
+       },
+       "name": "test",
+       "address": "dongchuanlu",
+       "zip": "213000",
+       "tel": "12345678908",
+       "totalPrice": 100,
+       "logistic": 0,
+       "num": 1,
+       "state": 1,
+       "isSend": 1,
+       "SendDate": "2016-12-08",
+       "isConfirm": 0,
+       "confirmDate": null,
+       "score": -1,
+       "customerDelete": 0,
+       "adminDelete": 0,
+       "salerDelete": 0,
+       "alive": 1,
+       "refund_state": 2,
+       "sendDate": 1481177859129
+     }
+   }
+   </pre>
+   
+   #### 众筹订单更新(确认收货)
+   * URL:/api/crowdFundOrder/update
+   * Method: PUT
+   * 参数：
+  <pre>
+   {
+       "orderId":9,
+       "isConfirm":1,
+       "isSend":-1
+   }
+  </pre>    
+  * 输出:    
+  <pre> 
+    {
+      "code": 200,
+      "data": {
+        "id": 9,
+        "createDate": "2016-12-08",
+        "teaSaler": {
+          "id": 1,
+          "name": "叶聪聪",
+          "level": 1,
+          "nickname": "ycc",
+          "account": {
+            "id": 1,
+            "tel": "15821527768",
+            "password": "123456",
+            "label": 1,
+            "alive": 1,
+            "headURL": "h1.png",
+            "money": 2635
+          },
+          "address": "上海市 闵行区",
+          "tel": "15821527768",
+          "headUrl": "h1.png",
+          "money": 1000,
+          "licenseUrl": "c1.png",
+          "zip": "435100",
+          "idCard": "420281199311118111",
+          "state": 1,
+          "alive": 1,
+          "createDate": "2016-11-11"
+        },
+        "customer": {
+          "id": 1,
+          "level": 0,
+          "nickname": "孙晏",
+          "account": {
+            "id": 4,
+            "tel": "13918966539",
+            "password": "123456",
+            "label": 2,
+            "alive": 1,
+            "headURL": "h4.png",
+            "money": 3913
+          },
+          "address": "上海 虹口区 虹口足球场",
+          "zip": "446543",
+          "tel": "13918966539",
+          "money": 1000,
+          "headUrl": "h4.png",
+          "alive": 1,
+          "createDate": "2016-11-11"
+        },
+        "crowdFunding": {
+          "id": 6,
+          "product": {
+            "id": 19,
+            "productType": {
+              "id": 4,
+              "name": "乌龙茶",
+              "descript": "乌龙茶（oolong tea），亦称青茶、半发酵茶及全发酵茶，品种较多，是中国几大茶类中，独具鲜明汉族特色的茶叶品类。乌龙茶是经过采摘、萎凋、摇青、炒青、揉捻、烘焙等工序后制出的品质优异的茶类。乌龙茶由宋代贡茶龙团、凤饼演变而来，创制于1725年（清雍正年间）前后。品尝后齿颊留香，回味甘鲜。乌龙茶的药理作用，突出表现在分解脂肪、减肥健美等方面。在日本被称之为“美容茶”、“ 健美茶”。",
+              "url": "41.png",
+              "state": 1,
+              "alive": 1
+            },
+            "remark": "纯天然，手工炒制",
+            "name": "有机古树乌龙茶",
+            "level": 2,
+            "locality": "浙江 温州 瓯海区 龙门路",
+            "stock": 3400,
+            "price": 19,
+            "startNum": 19,
+            "discount": 0.9,
+            "isFree": 1,
+            "postage": 0,
+            "deliverLimit": 26,
+            "createDate": "2016-12-01",
+            "unit": "两",
+            "teaSaler": {
+              "id": 1,
+              "name": "叶聪聪",
+              "level": 1,
+              "nickname": "ycc",
+              "account": {
+                "id": 1,
+                "tel": "15821527768",
+                "password": "123456",
+                "label": 1,
+                "alive": 1,
+                "headURL": "h1.png",
+                "money": 2635
+              },
+              "address": "上海市 闵行区",
+              "tel": "15821527768",
+              "headUrl": "h1.png",
+              "money": 1000,
+              "licenseUrl": "c1.png",
+              "zip": "435100",
+              "idCard": "420281199311118111",
+              "state": 1,
+              "alive": 1,
+              "createDate": "2016-11-11"
+            },
+            "state": 1,
+            "alive": 1,
+            "url": "41.png",
+            "type": 1
+          },
+          "type": 1,
+          "earnest": 20,
+          "unitNum": 10,
+          "unitMoney": 100,
+          "createDate": "2016-12-08 12:48:19",
+          "dealDate": "2016-12-23 12:48:23",
+          "deliverDate": null,
+          "payDate": null,
+          "state": 0,
+          "alive": 1,
+          "totalNum": 200,
+          "remainderNum": 199,
+          "joinNum": 1
+        },
+        "name": "test",
+        "address": "dongchuanlu",
+        "zip": "213000",
+        "tel": "12345678908",
+        "totalPrice": 100,
+        "logistic": 0,
+        "num": 1,
+        "state": 1,
+        "isSend": 1,
+        "SendDate": "2016-12-08",
+        "isConfirm": 1,
+        "confirmDate": "2016-12-08",
+        "score": -1,
+        "customerDelete": 0,
+        "adminDelete": 0,
+        "salerDelete": 0,
+        "alive": 1,
+        "refund_state": 2,
+        "sendDate": 1481177859000
+      }
+    }
   </pre>

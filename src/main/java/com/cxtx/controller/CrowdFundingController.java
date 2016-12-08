@@ -102,6 +102,11 @@ public class CrowdFundingController extends ApiController{
         return ServiceResult.success(cd);
     }
 
+    /**
+     * 确认众筹成功
+     * @param idModel
+     * @return
+     */
     @RequestMapping(value = "/crowdFund/confirm", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult confirmCrowdFund(@RequestBody IdModel idModel ){
