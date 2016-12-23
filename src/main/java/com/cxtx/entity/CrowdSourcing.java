@@ -22,7 +22,6 @@ public class CrowdSourcing {
      deliverDate（开始发货时间）
      state
      */
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -60,10 +59,32 @@ public class CrowdSourcing {
     private  Date deliverDate;
 
     @Column
-    private int state;
+    private int state=0;
 
     @Column
-    private int alive;
+    private int alive=1;
+    @Column
+    private double totalNum;
+
+    public double getTotalNum() {
+        return totalNum;
+    }
+
+    public void setTotalNum(double totalNum) {
+        this.totalNum = totalNum;
+    }
+
+    public double getRemainderNum() {
+        return remainderNum;
+    }
+
+    public void setRemainderNum(double remainderNum) {
+        this.remainderNum = remainderNum;
+    }
+
+    @Column
+
+    private double remainderNum;
 
     public Long getId() {
         return id;
