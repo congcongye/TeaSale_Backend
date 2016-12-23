@@ -58,6 +58,7 @@ public class CrowdSourcingController extends ApiController{
         cd.setState(crowdSourcingModel.state);
         cd.setTotalNum(crowdSourcingModel.totalNum);
         cd.setRemainderNum(crowdSourcingModel.totalNum);
+        cd.setDeliverDate(crowdSourcingModel.deliverDate);
         CrowdSourcing result = crowdSourcingImpl.newCrowdSourcing(cd);
         return ServiceResult.success(result);
     }
@@ -68,6 +69,8 @@ public class CrowdSourcingController extends ApiController{
      * @param model
      * @return
      */
+    @RequestMapping(value = "/crowdSourcing/update", method = RequestMethod.PUT)
+    @ResponseBody
     public ServiceResult updateCrowdSourcing(@RequestParam (value = "id",defaultValue = "-1")Long id,@RequestBody CrowdSourcingModel model){
         CrowdSourcing cd =crowdSourcingDao.findByIdAndAlive(id,1);
         if (cd== null ) {
@@ -81,6 +84,7 @@ public class CrowdSourcingController extends ApiController{
         cd.setUnitNum(model.unitNum);
         cd.setCreateDate(model.createDate);
         cd.setDealDate(model.dealDate);
+        cd.setDeliverDate(model.deliverDate);
         cd.setState(model.state);
         cd.setTotalNum(model.totalNum);
         cd.setRemainderNum(model.totalNum);
@@ -92,8 +96,11 @@ public class CrowdSourcingController extends ApiController{
      * 众包的查询
      * @return
      */
+    @RequestMapping(value = "/crowdSourcing/search", method = RequestMethod.GET)
+    @ResponseBody
     public ServiceResult search(@RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id,@RequestParam(value = "productName",defaultValue = "")String productName,
-                                @RequestParam(value = "productType_id",defaultValue = "-1")Long productType_id,@RequestParam(value="state",defaultValue ="0")int state, @RequestParam(value="pageIndex", defaultValue="0") int pageIndex,
+                                @RequestParam(value = "productType_id",defaultValue = "-1")Long productType_id,@RequestParam(value="state",defaultValue ="0")int state,
+                                @RequestParam(value="pageIndex", defaultValue="0") int pageIndex,
                                 @RequestParam(value="pageSize", defaultValue="10") int pageSize,
                                 @RequestParam(value="sortField", defaultValue="id") String sortField,
                                 @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
@@ -106,14 +113,19 @@ public class CrowdSourcingController extends ApiController{
      * @param id
      * @return
      */
+    @RequestMapping(value = "/crowdSourcing/delete", method = RequestMethod.DELETE)
+    @ResponseBody
     public ServiceResult delete(@RequestParam(value = "id",defaultValue = "-1") Long id){
         CrowdSourcing cs =crowdSourcingDao.findByIdAndAlive(id,1);
+        if (cs == null ) {
+            return ServiceResult.fail(500, "no crowdSourcing record !");
+        }
         if(crowdSourcingImpl.isWorking(cs)){
             return ServiceResult.fail(500, "crowdSourcing order have generated!");
         }
         cs.setAlive(0);
         CrowdSourcing result = crowdSourcingDao.save(cs);
-        return ServiceResult.success(result);
+        return ServiceResult.success("all succeed");
     }
 
 }

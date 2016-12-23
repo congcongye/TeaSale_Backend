@@ -12,10 +12,13 @@ public class CrowdSourcingModel {
     public double unitNum;
     public double unitMoney;
     public int joinNum;
+
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     public Date createDate;
+
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     public Date dealDate;
+
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss", timezone="GMT+8")
     public Date deliverDate;
     /**
