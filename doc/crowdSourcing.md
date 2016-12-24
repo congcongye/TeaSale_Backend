@@ -380,8 +380,6 @@ id:众包id
     "price":56,
     "startNum":1.0,
     "discount":0.8,
-    "isFree":0,
-    "postage":5.0,
     "deliverLimit":10,
     "unit":"斤" 
 }
