@@ -128,4 +128,15 @@ public class CrowdSourcingController extends ApiController{
         return ServiceResult.success("all succeed");
     }
 
+    /**
+     * 按id查众包
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/crowdSourcing/getById", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult getById(@RequestParam(value = "id",defaultValue = "-1")Long id){
+        CrowdSourcing cs = crowdSourcingDao.findByIdAndAlive(id,1);
+        return  ServiceResult.success(cs);
+    }
 }

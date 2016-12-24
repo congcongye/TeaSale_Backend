@@ -354,3 +354,15 @@ sortOrder:排序顺序
   }
 }
 </pre>
+#### 众包的根据Id查
+* URL:http://localhost:7000/api/crowdSourcing/getById?id=1
+* Method:GET
+* 输入:
+id:众包id
+* 输出:
+<pre>
+{
+  "code": 200,
+  "data": null
+}
+</pre>
