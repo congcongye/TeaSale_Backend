@@ -366,3 +366,58 @@ id:众包id
   "data": null
 }
 </pre>
+#### 众包产品的新增
+* URL:http://localhost:7000/api/crowdSourcing/newProduct?productType_id=1
+* Method:POST
+* 输入:
+ <pre>
+{
+    "remark":"红茶好喝有营养",
+    "name":"顶级红茶",
+    "level":3,
+    "locality":"浙江杭州",
+    "stock":100,
+    "price":56,
+    "startNum":1.0,
+    "discount":0.8,
+    "isFree":0,
+    "postage":5.0,
+    "deliverLimit":10,
+    "unit":"斤" 
+}
+</pre>
+* 输出:
+ <pre>
+{
+  "code": 200,
+  "data": {
+    "id": 22,
+    "productType": {
+      "id": 1,
+      "name": "红茶",
+      "descript": "红茶属全发酵茶，是以适宜的茶树新牙叶为原料，经萎凋、揉捻（切）、发酵、干燥等一系列工艺过程精制而成的茶。萎凋是红茶初制的重要工艺，红茶在初制时称为“乌茶”。红茶因其干茶冲泡后的茶汤和叶底色呈红色而得名。",
+      "url": "11.png",
+      "state": 0,
+      "alive": 1
+    },
+    "remark": "红茶好喝有营养",
+    "name": "顶级红茶",
+    "level": 3,
+    "locality": "浙江杭州",
+    "stock": 100,
+    "price": 56,
+    "startNum": 1,
+    "discount": 0.8,
+    "isFree": 0,
+    "postage": 5,
+    "deliverLimit": 10,
+    "createDate": null,
+    "unit": "斤",
+    "teaSaler": null,
+    "state": 0,
+    "alive": 1,
+    "url": "11.png",
+    "type": 0
+  }
+}
+</pre>

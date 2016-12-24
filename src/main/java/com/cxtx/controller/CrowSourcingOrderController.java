@@ -73,7 +73,7 @@ public class CrowSourcingOrderController extends ApiController{
      * 搜索众包订单
      * @param customerId
      * @param teaSalerId
-     * @param crowdFundingId
+     * @param crowdSourcingId
      * @param teaSalerName
      * @param state
      * @param isSend

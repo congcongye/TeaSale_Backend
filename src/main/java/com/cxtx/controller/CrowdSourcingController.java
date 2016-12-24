@@ -1,14 +1,10 @@
 package com.cxtx.controller;
 
-import com.cxtx.dao.AccountDao;
-import com.cxtx.dao.CrowdSourcingDao;
-import com.cxtx.dao.CustomerDao;
-import com.cxtx.dao.ProductDao;
-import com.cxtx.entity.CrowdSourcing;
-import com.cxtx.entity.Customer;
-import com.cxtx.entity.Product;
+import com.cxtx.dao.*;
+import com.cxtx.entity.*;
 import com.cxtx.model.CrowdSourcingModel;
 import com.cxtx.model.ServiceResult;
+import com.cxtx.service.ProductService;
 import com.cxtx.service.impl.CrowdSourcingImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -30,6 +26,10 @@ public class CrowdSourcingController extends ApiController{
     private CrowdSourcingDao crowdSourcingDao;
     @Autowired
     private AccountDao accountDao;
+    @Autowired
+    private ProductTypeDao productTypeDao;
+    @Autowired
+    private ProductService productService;
 
     /**
      * 众包的新增
@@ -150,5 +150,26 @@ public class CrowdSourcingController extends ApiController{
     public ServiceResult getById(@RequestParam(value = "id",defaultValue = "-1")Long id){
         CrowdSourcing cs = crowdSourcingDao.findByIdAndAlive(id,1);
         return  ServiceResult.success(cs);
+    }
+
+    /**
+     * 茶产品的新增,product对象中必须传入的数据应该由前台来限制
+     * @param product
+     * @param productType_id
+     * @return
+     */
+    @RequestMapping(value = "/crowdSourcing/newProduct", method = RequestMethod.POST)
+    @ResponseBody
+    public ServiceResult newProduct(@RequestBody Product product, @RequestParam (value="productType_id",defaultValue = "-1")Long productType_id){
+        checkParameter(product!=null,"product is empty");
+        ProductType pt =productTypeDao.findByIdAndAlive(productType_id,1);
+        checkParameter(pt!=null,"productType doesn't exist");
+        Product result=null;
+        product.setProductType(pt);
+        product.setUrl(pt.url);
+        product.setAlive(1);//存在
+        product.setState(0);//未上架
+        result = productService.newProduct(product);
+        return ServiceResult.success(result);
     }
 }
