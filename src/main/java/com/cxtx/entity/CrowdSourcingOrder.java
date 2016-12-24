@@ -31,8 +31,8 @@ public class CrowdSourcingOrder {
     private Customer customer ;//消费者
 
     @ManyToOne
-    @JoinColumn(name = "crowdFunding_id")
-    private CrowdFunding crowdFunding;
+    @JoinColumn(name = "crowdSourcing_id")
+    private CrowdSourcing crowdSourcing;
 
     @Column
     private String name;// 收件人名字
@@ -79,10 +79,195 @@ public class CrowdSourcingOrder {
     private double score = 0;// 分数
 
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    public TeaSaler getTeaSaler() {
+        return teaSaler;
+    }
+
+    public void setTeaSaler(TeaSaler teaSaler) {
+        this.teaSaler = teaSaler;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public CrowdSourcing getCrowdSourcing() {
+        return crowdSourcing;
+    }
+
+    public void setCrowdSourcing(CrowdSourcing crowdSourcing) {
+        this.crowdSourcing = crowdSourcing;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getZip() {
+        return zip;
+    }
+
+    public void setZip(String zip) {
+        this.zip = zip;
+    }
+
+    public String getTel() {
+        return tel;
+    }
+
+    public void setTel(String tel) {
+        this.tel = tel;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public double getLogistic() {
+        return logistic;
+    }
+
+    public void setLogistic(double logistic) {
+        this.logistic = logistic;
+    }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public int getIsSend() {
+        return isSend;
+    }
+
+    public void setIsSend(int isSend) {
+        this.isSend = isSend;
+    }
+
+    public Date getSendDate() {
+        return SendDate;
+    }
+
+    public void setSendDate(Date sendDate) {
+        SendDate = sendDate;
+    }
+
+    public int getIsConfirm() {
+        return isConfirm;
+    }
+
+    public void setIsConfirm(int isConfirm) {
+        this.isConfirm = isConfirm;
+    }
+
+    public Date getConfirmDate() {
+        return confirmDate;
+    }
+
+    public void setConfirmDate(Date confirmDate) {
+        this.confirmDate = confirmDate;
+    }
+
+    public double getScore() {
+        return score;
+    }
+
+    public void setScore(double score) {
+        this.score = score;
+    }
+
+    public int getRefund_state() {
+        return Refund_state;
+    }
+
+    public void setRefund_state(int refund_state) {
+        Refund_state = refund_state;
+    }
+
+    public int getCustomerDelete() {
+        return customerDelete;
+    }
+
+    public void setCustomerDelete(int customerDelete) {
+        this.customerDelete = customerDelete;
+    }
+
+    public int getAdminDelete() {
+        return adminDelete;
+    }
+
+    public void setAdminDelete(int adminDelete) {
+        this.adminDelete = adminDelete;
+    }
+
+    public int getSalerDelete() {
+        return salerDelete;
+    }
+
+    public void setSalerDelete(int salerDelete) {
+        this.salerDelete = salerDelete;
+    }
+
+    public int getAlive() {
+        return alive;
+    }
+
+    public void setAlive(int alive) {
+        this.alive = alive;
+    }
+
     /**
      * (未支付，全支付，部分支付)(0, 1, 2)
      */
     @Column
+
     private int Refund_state;
 
     @Column

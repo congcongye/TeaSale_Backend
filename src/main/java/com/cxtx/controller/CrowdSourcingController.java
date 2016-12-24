@@ -1,5 +1,6 @@
 package com.cxtx.controller;
 
+import com.cxtx.dao.AccountDao;
 import com.cxtx.dao.CrowdSourcingDao;
 import com.cxtx.dao.CustomerDao;
 import com.cxtx.dao.ProductDao;
@@ -27,6 +28,8 @@ public class CrowdSourcingController extends ApiController{
     private CustomerDao customerDao;
     @Autowired
     private CrowdSourcingDao crowdSourcingDao;
+    @Autowired
+    private AccountDao accountDao;
 
     /**
      * 众包的新增
@@ -47,6 +50,13 @@ public class CrowdSourcingController extends ApiController{
         if(customer == null){
             return ServiceResult.fail(500, "no customer record !");
         }
+        /**
+         * 消费者用户的钱小于发起众包所需要的所有钱
+         */
+        double totalMoney=crowdSourcingModel.totalNum*crowdSourcingModel.unitMoney;
+        if(customer.getAccount().getMoney() < totalMoney){
+            return ServiceResult.fail(500, "you don't have enough money !");
+        }
         CrowdSourcing cd = new CrowdSourcing();
         cd.setProduct(product);
         cd.setCustomer(customer);
@@ -60,6 +70,8 @@ public class CrowdSourcingController extends ApiController{
         cd.setRemainderNum(crowdSourcingModel.totalNum);
         cd.setDeliverDate(crowdSourcingModel.deliverDate);
         CrowdSourcing result = crowdSourcingImpl.newCrowdSourcing(cd);
+        customer.getAccount().setMoney(totalMoney+customer.getAccount().getMoney());
+        accountDao.save(customer.getAccount());//扣除相应金额
         return ServiceResult.success(result);
     }
 
