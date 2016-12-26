@@ -127,10 +127,14 @@ public class CrowdSourcingOrderImpl {
         if (order == null || order.getAlive() == 0){
             return  ServiceResult.fail(500, "no crowdfund order record");
         }
-        if (order.getIsSend() == 1){
+        if (order.getCrowdSourcing().getState() == 1){ //众包成功之后,不能取消
             return ServiceResult.fail(500,"crodfunding has sended , can be canceled!");
         }
         order.setState(3);
+        CrowdSourcing cs =order.getCrowdSourcing();
+        cs.setRemainderNum(cs.getRemainderNum()+order.getNum());
+        cs.setJoinNum(cs.getJoinNum() - 1);
+        crowdSourcingDao.save(cs);
         order = crowdSourcingOrderDao.save(order);
         return ServiceResult.success(order);
     }
