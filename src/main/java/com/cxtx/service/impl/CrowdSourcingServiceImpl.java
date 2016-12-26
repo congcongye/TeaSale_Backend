@@ -2,6 +2,7 @@ package com.cxtx.service.impl;
 
 import com.cxtx.dao.*;
 import com.cxtx.entity.*;
+import com.cxtx.service.CrowdSourcingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +22,7 @@ import java.util.List;
  * Created by ycc on 16/12/22.
  */
 @Service("CrowdSourcingImpl")
-public class CrowdSourcingImpl {
+public class CrowdSourcingServiceImpl implements CrowdSourcingService{
 
     @Autowired
     private CrowdSourcingDao crowdSourcingDao;

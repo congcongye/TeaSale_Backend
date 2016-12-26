@@ -15,6 +15,8 @@ import java.util.Date;
 public class ScheduledTasks {
     @Autowired
     private CrowdFundingService crowdFundingService;
+    @Autowired
+    //private Crowds
 
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
