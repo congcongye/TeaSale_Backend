@@ -70,8 +70,10 @@ public class CrowdSourcingController extends ApiController{
         cd.setTotalNum(crowdSourcingModel.totalNum);
         cd.setRemainderNum(crowdSourcingModel.totalNum);
         cd.setDeliverDate(crowdSourcingModel.deliverDate);
+
         CrowdSourcing result = crowdSourcingService.newCrowdSourcing(cd);
-        customer.getAccount().setMoney(totalMoney+customer.getAccount().getMoney());
+        customer.getAccount().setMoney(customer.getAccount().getMoney()-totalMoney);
+
         accountDao.save(customer.getAccount());//扣除相应金额
         return ServiceResult.success(result);
     }
@@ -92,6 +94,7 @@ public class CrowdSourcingController extends ApiController{
         if(crowdSourcingService.isWorking(cd)){
             return ServiceResult.fail(500, "crowdSourcing order have generated!");
         }
+        double oldTotalMoney=cd.getUnitMoney()*cd.getTotalNum();
         cd.setEarnest(model.earnest);
         cd.setUnitMoney(model.unitMoney);
         cd.setUnitNum(model.unitNum);
@@ -101,6 +104,11 @@ public class CrowdSourcingController extends ApiController{
         cd.setState(model.state);
         cd.setTotalNum(model.totalNum);
         cd.setRemainderNum(model.totalNum);
+        double totalMoney=model.unitMoney*model.totalNum;
+        Customer customer=cd.getCustomer();
+        Account account=customer.getAccount();
+        account.setMoney(account.getMoney()+oldTotalMoney-totalMoney);
+        accountDao.save(account);
         CrowdSourcing result = crowdSourcingDao.save(cd);
         return ServiceResult.success(result);
     }
