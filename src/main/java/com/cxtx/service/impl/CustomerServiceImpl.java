@@ -80,6 +80,10 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer updateCustomer(CreateCustomerModel createCustomerModel) {
         Account account = accountDao.findByTelAndAlive(createCustomerModel.getTel(),1);
         if (account != null){
+            if (createCustomerModel.getPassword() != null){
+                account.setPassword(createCustomerModel.getPassword());
+                accountDao.save(account);
+            }
             Customer customer = customerDao.findByAccountAndAlive(account,1);
             if (customer != null){
                 customer.setNickname(createCustomerModel.getNickname());

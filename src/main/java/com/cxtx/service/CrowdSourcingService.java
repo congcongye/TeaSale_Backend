@@ -19,4 +19,6 @@ public interface CrowdSourcingService {
     boolean isWorking(CrowdSourcing cd);
 
     Page<CrowdSourcing> searchCrowdSourcing(Long customer_id, String productName, Long productType_id, int state, int pageIndex, int pageSize, String sortField, String sortOrder);
+
+    void checkNum();
 }

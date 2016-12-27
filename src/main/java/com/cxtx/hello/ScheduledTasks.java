@@ -1,6 +1,7 @@
 package com.cxtx.hello;
 
 import com.cxtx.service.CrowdFundingService;
+import com.cxtx.service.CrowdSourcingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -16,10 +17,11 @@ public class ScheduledTasks {
     @Autowired
     private CrowdFundingService crowdFundingService;
     @Autowired
-    //private Crowds
+    private CrowdSourcingService crowdSourcingService;
 
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
         crowdFundingService.checkNum();
+        crowdSourcingService.checkNum();
     }
 }

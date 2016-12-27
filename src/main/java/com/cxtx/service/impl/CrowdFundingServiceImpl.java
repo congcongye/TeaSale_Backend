@@ -238,7 +238,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         for (CrowdFunding crowdFunding : oldcrowdFundingList){
             Date dealDate = crowdFunding.getDealDate();
             Date now = new Date();
-            if (now.after(dealDate)){
+            if (now.after(dealDate) && crowdFunding.getState() != 0){
                 if (crowdFunding.getRemainderNum() <= 0){
                     crowdFunding.setState(1);
                 }else{

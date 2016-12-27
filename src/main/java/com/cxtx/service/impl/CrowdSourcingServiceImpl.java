@@ -15,6 +15,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -94,6 +95,25 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
         Specification<CrowdSourcing> specification = this.buildSpecifications(customer_id, productName, productType_id, state);
         return  crowdSourcingDao.findAll(Specifications.where(specification), new PageRequest(pageIndex, pageSize, sort));
 
+    }
+
+    @Override
+    public void checkNum() {
+        List<CrowdSourcing> oldCrowdSourcingList = crowdSourcingDao.findByAlive(1);
+        List<CrowdSourcing> newCrowdSourcingList = new ArrayList<CrowdSourcing>();
+        for (CrowdSourcing crowdSourcing : oldCrowdSourcingList){
+            Date dealDate = crowdSourcing.getDealDate();
+            Date now = new Date();
+            if (now.after(dealDate)&&crowdSourcing.getState() != 1){
+                if (crowdSourcing.getRemainderNum() <= 0){
+                    crowdSourcing.setState(1);
+                }else{
+                    crowdSourcing.setState(2);
+                }
+            }
+            newCrowdSourcingList.add(crowdSourcing);
+        }
+        crowdSourcingDao.save(newCrowdSourcingList);
     }
 
     private Specification<CrowdSourcing> buildSpecifications(Long customer_id,String productName,Long productType_id,int state) {
