@@ -269,7 +269,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         List<CrowdFundOrder> crowdFundOrders = crowdFundOrderDao.findByAlive(1);
         for (CrowdFundOrder crowdFundOrder: crowdFundOrders){
             CrowdFunding crowdFunding = crowdFundOrder.getCrowdFunding();
-            if (crowdFunding != null && crowdFunding.getAlive() == 1){
+            if (crowdFunding != null && crowdFunding.getAlive() == 1 && crowdFundings.contains(crowdFunding)){
                 double num = saleNum.get(crowdFunding);
                 num += crowdFundOrder.getNum();
                 saleNum.put(crowdFunding,num);
