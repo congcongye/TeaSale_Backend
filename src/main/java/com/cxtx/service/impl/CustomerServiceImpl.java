@@ -113,15 +113,13 @@ public class CustomerServiceImpl implements CustomerService {
             return ServiceResult.fail(500,"没有记录");
         }
         String verificationCode = Constant.vCodes.get(tel);
-        if (verificationCode == null || !verificationCode.equals(vCode)){
+        if (verificationCode != null && verificationCode.equals(vCode)){
             account.setPassword(password);
             accountDao.save(account);
             return ServiceResult.success("修改成功");
         }else {
             return ServiceResult.fail(500,"验证码不正确");
         }
-
-
     }
 
     private Specification<Customer> buildSpecification(final String name, final int level, final String tel){
