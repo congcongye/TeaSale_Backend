@@ -181,7 +181,8 @@ customerId:PathVariable
     "nickname":"123",
     "address":"闵行东川路",
     "zip":"12344567",
-    "tel":13918966539
+    "tel":13918966539,
+    "password":123456
 }
 ```
 * 返回:
@@ -224,4 +225,21 @@ customerId:PathVariable
   "code": 500,
   "data": "修改失败"
 }
+```
+
+### 修改密码
+* URL /api/customer/updatePassword
+* Method: PUT
+* 参数: RequestBody
+```
+{
+    "verificationCode":"123",
+    "tel":13918966539,
+    "password":123456
+}
+```
+* 返回:
+```
+成功:更新之后的customer
+
 ```
