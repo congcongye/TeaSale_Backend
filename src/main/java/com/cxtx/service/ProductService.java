@@ -1,6 +1,7 @@
 package com.cxtx.service;
 
 import com.cxtx.entity.Product;
+import com.cxtx.model.CommentModel;
 import com.cxtx.model.CreateProductModel;
 import com.cxtx.model.StartSellProductModel;
 import org.springframework.data.domain.Page;
@@ -18,4 +19,6 @@ public interface ProductService {
      Boolean isUnique(Product p);
 
     List<Product> commend();
+
+    CommentModel getComment(Long id);
 }

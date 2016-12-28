@@ -6,10 +6,7 @@ import com.cxtx.dao.TeaSalerDao;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSaler;
-import com.cxtx.model.CreateProductModel;
-import com.cxtx.model.DeleteImageModel;
-import com.cxtx.model.ServiceResult;
-import com.cxtx.model.StartSellProductModel;
+import com.cxtx.model.*;
 import com.cxtx.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -202,6 +199,22 @@ public class ProductController extends ApiController {
             return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(list.size()-succCount));
         }
         return ServiceResult.success("all succeed");
+    }
+
+    /**
+     * 某一商品的评分与评价
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/products/comment/getById", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult findCommentById(@RequestParam(value = "id",defaultValue = "-1")Long id){
+        checkParameter(id > 0,"invalid id");
+        CommentModel commentModel = productService.getComment(id);
+        if (commentModel == null){
+            return ServiceResult.fail(500, "fail to find comment");
+        }
+        return ServiceResult.success(commentModel);
     }
 
 }

@@ -2,6 +2,7 @@ package com.cxtx.service.impl;
 
 import com.cxtx.dao.*;
 import com.cxtx.entity.*;
+import com.cxtx.model.CommentModel;
 import com.cxtx.model.CreateProductModel;
 import com.cxtx.model.StartSellProductModel;
 import com.cxtx.service.ProductService;
@@ -37,6 +38,8 @@ public class ProductServiceImpl implements ProductService{
     private OrderEnDao orderEnDao;
     @Autowired
     private OrderItemDao orderItemDao;
+    @Autowired
+    private CommentDao commentDao;
 
 
     /**
@@ -142,6 +145,26 @@ public class ProductServiceImpl implements ProductService{
         }
 
         return products;
+    }
+
+    @Override
+    public CommentModel getComment(Long id) {
+        Product product = productDao.findByIdAndAlive(id, 1);
+        if (product == null){
+            return  null;
+        }
+        CommentModel commentModel = new CommentModel();
+        commentModel.product = product;
+        commentModel.averageScore = 0;
+        commentModel.numOfComment = 1;
+        List<Comment> comments = commentDao.findByProductAndAlive(product, 1);
+        for (Comment comment : comments){
+            double totalScore = commentModel.averageScore * commentModel.numOfComment;
+            totalScore += comment.getScore();
+            commentModel.numOfComment++;
+            commentModel.averageScore = totalScore / commentModel.numOfComment;
+        }
+        return commentModel;
     }
 
     /**
