@@ -16,4 +16,6 @@ public interface ProductService {
      Page<Product> findByConditions(Long productType_id, String remark, String name, int level, String locality, double stock, double lowPrice,double highPrice,
                                     double startNum, double discount, int isFree, String teaSeller_name, int state,Long teaSaler_id, int pageIndex, int pageSize, String sortField, String sortOrder);
      Boolean isUnique(Product p);
+
+    List<Product> commend();
 }

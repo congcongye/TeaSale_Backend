@@ -16,4 +16,5 @@ public interface ProductDao extends JpaRepository<Product, Long>, JpaSpecificati
    Product findByIdAndAlive(Long id,int alive);
    List<Product> findByTeaSalerAndStateAndAliveAndType(TeaSaler teaSaler,int state,int alive,int type);
    List<Product> findByTeaSalerAndAliveAndType(TeaSaler teaSaler,int alive,int type);
+   List<Product> findByAlive(int alive);
 }

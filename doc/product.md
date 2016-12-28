@@ -309,3 +309,47 @@ teaSaler_id:茶农id
   ]
 }
 </pre>
+
+### 根据销量推荐商品
+* URL /api/products/commend/rankBySalesVolume
+* Method:GET 
+* 参数: 无
+
+* 返回:
+```
+{
+  "code": 200,
+  "data": [
+    {
+      "id": 4,
+      "productType": {
+        。。。
+      },
+      "remark": "好喝不贵",
+      "name": "龙井",
+      "level": 2,
+      "locality": "浙江 湖州 长兴县",
+      "stock": 22821,
+      "price": 12,
+      "startNum": 10,
+      "discount": 1,
+      "isFree": 1,
+      "postage": 0,
+      "deliverLimit": 12,
+      "createDate": "2016-11-18",
+      "unit": "两",
+      "teaSaler": {
+        。。。
+      },
+      "state": 1,
+      "alive": 1,
+      "url": "21.png",
+      "type": 0
+    },{
+    "id": 5,
+    。。。
+    }
+  ]
+}
+
+```

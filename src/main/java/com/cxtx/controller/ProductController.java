@@ -131,6 +131,20 @@ public class ProductController extends ApiController {
     }
 
     /**
+     * 根据销量推荐商品
+     * @return
+     */
+    @RequestMapping(value = "/products/commend/rankBySalesVolume", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult commendBySalesVolume(){
+        List<Product> products = productService.commend();
+        if (products != null && products.size() != 0){
+            return ServiceResult.success(products);
+        }
+        return ServiceResult.fail(500,"fail");
+    }
+
+    /**
      * 根据id查产品
      * @param id
      * @return

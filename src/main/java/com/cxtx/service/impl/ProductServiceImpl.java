@@ -1,14 +1,11 @@
 package com.cxtx.service.impl;
 
-import com.cxtx.dao.ProductDao;
-import com.cxtx.dao.ProductTypeDao;
-import com.cxtx.dao.TeaSalerDao;
-import com.cxtx.entity.Product;
-import com.cxtx.entity.ProductType;
-import com.cxtx.entity.TeaSaler;
+import com.cxtx.dao.*;
+import com.cxtx.entity.*;
 import com.cxtx.model.CreateProductModel;
 import com.cxtx.model.StartSellProductModel;
 import com.cxtx.service.ProductService;
+import com.cxtx.utils.MapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,9 +18,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ycc on 16/10/24.
@@ -38,6 +33,10 @@ public class ProductServiceImpl implements ProductService{
     private ProductTypeDao productTypeDao;
     @Autowired
     private TeaSalerDao teaSalerDao;
+    @Autowired
+    private OrderEnDao orderEnDao;
+    @Autowired
+    private OrderItemDao orderItemDao;
 
 
     /**
@@ -117,6 +116,34 @@ public class ProductServiceImpl implements ProductService{
         }
         return flag;
     }
+
+    @Override
+    public List<Product> commend() {
+        List<Product> products = productDao.findByAlive(1);
+        Map<Product, Double> saleNum = new HashMap<Product, Double>();
+        for (Product product : products) {//init
+            saleNum.put(product,0d);
+        }
+        List<OrderItem> orderItems = orderItemDao.findByAlive(1);
+        for (OrderItem orderItem: orderItems){
+            Product product = orderItem.getProduct();
+            if (product != null && product.getAlive() == 1){
+                double num = saleNum.get(product);
+                num += orderItem.getNum();
+                saleNum.put(product,num);
+            }
+
+        }
+        products = new ArrayList<Product>();
+        Map<Product, Double> result = MapUtil.sortByValueDESC(saleNum);
+        for (Product product : result.keySet()){
+            System.out.println("name:" +product.getName() +" id:"+product.getId()+ " num:"+result.get(product));
+            products.add(product);
+        }
+
+        return products;
+    }
+
     /**
      * 茶产品的批量上架
      * @param products
@@ -232,4 +259,7 @@ public class ProductServiceImpl implements ProductService{
         };
         return specification;
     }
+
+
+
 }
