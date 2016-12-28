@@ -232,12 +232,12 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
      */
     @Override
     public void checkNum() {
-        List<CrowdFunding> oldcrowdFundingList = crowdFundingDao.findByAlive(1);
+        List<CrowdFunding> oldcrowdFundingList = crowdFundingDao.findByStateAndAlive(0,1);
         List<CrowdFunding> newCrowdFundingList = new ArrayList<CrowdFunding>();
         for (CrowdFunding crowdFunding : oldcrowdFundingList){
             Date dealDate = crowdFunding.getDealDate();
             Date now = new Date();
-            if (now.after(dealDate) && crowdFunding.getState() != 0){
+            if (now.after(dealDate)){
                 if (crowdFunding.getRemainderNum() <= 0){
                     crowdFunding.setState(1);
                 }else{
@@ -261,7 +261,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
 
     @Override
     public List<CrowdFunding> commend() {
-        List<CrowdFunding> crowdFundings = crowdFundingDao.findByAlive(1);
+        List<CrowdFunding> crowdFundings = crowdFundingDao.findByStateAndAlive(0, 1);
         Map<CrowdFunding, Double> saleNum = new HashMap<CrowdFunding, Double>();
         for (CrowdFunding crowdFunding : crowdFundings) {//init
             saleNum.put(crowdFunding,0d);
