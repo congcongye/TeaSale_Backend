@@ -353,3 +353,73 @@ teaSaler_id:茶农id
 }
 
 ```
+
+### 某一商品的评分与评价
+* URL /api/products/comment/getById?id=4
+* Method:GET 
+* 参数: 无
+
+* 返回:
+```
+{
+  "code": 200,
+  "data": {
+    "product": {
+      "id": 4,
+      "productType": {
+        "id": 1,
+        "name": "红茶",
+        "descript": "红茶属全发酵茶，是以适宜的茶树新牙叶为原料，经萎凋、揉捻（切）、发酵、干燥等一系列工艺过程精制而成的茶。萎凋是红茶初制的重要工艺，红茶在初制时称为“乌茶”。红茶因其干茶冲泡后的茶汤和叶底色呈红色而得名。",
+        "url": "11.png",
+        "state": 1,
+        "alive": 1
+      },
+      "remark": "好喝不贵",
+      "name": "龙井",
+      "level": 2,
+      "locality": "浙江 湖州 长兴县",
+      "stock": 22813,
+      "price": 12,
+      "startNum": 10,
+      "discount": 1,
+      "isFree": 1,
+      "postage": 0,
+      "deliverLimit": 12,
+      "createDate": "2016-11-18",
+      "unit": "两",
+      "teaSaler": {
+        "id": 1,
+        "name": "叶聪聪",
+        "level": 1,
+        "nickname": "ycc",
+        "account": {
+          "id": 1,
+          "tel": "15821527768",
+          "password": "123456",
+          "label": 1,
+          "alive": 1,
+          "headURL": "h1.png",
+          "money": 2857.1
+        },
+        "address": "上海市 闵行区",
+        "tel": "15821527768",
+        "headUrl": "h1.png",
+        "money": 1000,
+        "licenseUrl": "c1.png",
+        "zip": "435100",
+        "idCard": "420281199311118111",
+        "state": 1,
+        "alive": 1,
+        "createDate": "2016-11-11"
+      },
+      "state": 1,
+      "alive": 1,
+      "url": "21.png",
+      "type": 0
+    },
+    "averageScore": 50,
+    "numOfComment": 2
+  }
+}
+
+```
