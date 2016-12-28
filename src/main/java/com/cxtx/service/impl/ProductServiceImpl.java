@@ -156,7 +156,7 @@ public class ProductServiceImpl implements ProductService{
         CommentModel commentModel = new CommentModel();
         commentModel.product = product;
         commentModel.averageScore = 0;
-        commentModel.numOfComment = 1;
+        commentModel.numOfComment = 0;
         List<Comment> comments = commentDao.findByProductAndAlive(product, 1);
         for (Comment comment : comments){
             double totalScore = commentModel.averageScore * commentModel.numOfComment;
