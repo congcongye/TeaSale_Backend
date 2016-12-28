@@ -118,6 +118,18 @@ public class CrowdFundingController extends ApiController{
         return ServiceResult.success(crowdFunding);
     }
 
-
+    /**
+     * 根据销量推荐商品
+     * @return
+     */
+    @RequestMapping(value = "/crowdFunds/commend/rankBySalesVolume", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult commendBySalesVolume(){
+        List<CrowdFunding> crowdFundings = crowdFundingService.commend();
+        if (crowdFundings != null && crowdFundings.size() != 0){
+            return ServiceResult.success(crowdFundings);
+        }
+        return ServiceResult.fail(500,"fail");
+    }
 
 }
