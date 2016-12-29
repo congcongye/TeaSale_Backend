@@ -117,7 +117,7 @@ public class CrowdSourcingController extends ApiController{
     @RequestMapping(value = "/crowdSourcing/search", method = RequestMethod.GET)
     @ResponseBody
     public ServiceResult search(@RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id,@RequestParam(value = "productName",defaultValue = "")String productName,
-                                @RequestParam(value = "productType_id",defaultValue = "-1")Long productType_id,@RequestParam(value="state",defaultValue ="0")int state,
+                                @RequestParam(value = "productType_id",defaultValue = "-1")Long productType_id,@RequestParam(value="state",defaultValue ="-1")int state,
                                 @RequestParam(value="pageIndex", defaultValue="0") int pageIndex,
                                 @RequestParam(value="pageSize", defaultValue="10") int pageSize,
                                 @RequestParam(value="sortField", defaultValue="id") String sortField,
