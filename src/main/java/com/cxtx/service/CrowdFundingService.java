@@ -20,4 +20,6 @@ public interface CrowdFundingService {
     void checkNum();
 
     CrowdFunding confirmCrowdFunding(Long id);
+
+    List<CrowdFunding> commend();
 }

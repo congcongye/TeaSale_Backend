@@ -5,6 +5,7 @@ import com.cxtx.entity.Account;
 import com.cxtx.entity.Customer;
 import com.cxtx.model.CreateCustomerModel;
 import com.cxtx.model.ServiceResult;
+import com.cxtx.model.UpdatePasswordModel;
 import com.cxtx.service.AccountService;
 import com.cxtx.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +110,7 @@ public class CustomerController extends ApiController{
      */
     @RequestMapping(value = "/customer/update", method = RequestMethod.PUT)
     @ResponseBody
-    public ServiceResult PUT(@RequestBody CreateCustomerModel createCustomerModel) throws Exception{
+    public ServiceResult update(@RequestBody CreateCustomerModel createCustomerModel) throws Exception{
         checkParameter(createCustomerModel !=null,"customer cannot be empty!");
         Customer customer = customerService.updateCustomer(createCustomerModel);
         Account account = accountDao.findByTelAndAlive(createCustomerModel.getTel(),1);
@@ -120,6 +121,20 @@ public class CustomerController extends ApiController{
             return ServiceResult.fail(500, "修改失败");
         }
         return ServiceResult.success(customer);
+    }
+
+    /**
+     * 修改密码
+     * @param updatePasswordModel
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/customer/updatePassword", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult updatePassword(@RequestBody UpdatePasswordModel updatePasswordModel) throws Exception{
+        checkParameter(updatePasswordModel !=null,"cannot be empty!");
+        ServiceResult result = customerService.updatePassword(updatePasswordModel);
+        return result;
     }
 
 }

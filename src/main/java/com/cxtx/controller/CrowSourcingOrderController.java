@@ -1,12 +1,12 @@
 package com.cxtx.controller;
 
-import com.cxtx.entity.CrowdFundOrder;
 import com.cxtx.entity.CrowdSourcingOrder;
 import com.cxtx.model.IdModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.UpdateOrderModel;
 import com.cxtx.model.newCrowdSourcingOrderModel;
-import com.cxtx.service.impl.CrowdSourcingOrderImpl;
+import com.cxtx.service.CrowdSourcingOrderService;
+import com.cxtx.service.impl.CrowdSourcingOrderServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ public class CrowSourcingOrderController extends ApiController{
 
 
     @Autowired
-    private CrowdSourcingOrderImpl crowdSourcingOrderImpl;
+    private CrowdSourcingOrderService crowdSourcingOrderServiceImpl;
 
     /**
      * 众包订单的生成
@@ -30,7 +30,7 @@ public class CrowSourcingOrderController extends ApiController{
     @RequestMapping(value = "/crowdSourcingOder/new", method = RequestMethod.POST)
     @ResponseBody
     public ServiceResult insertOrder(@RequestBody newCrowdSourcingOrderModel model){
-        ServiceResult result=crowdSourcingOrderImpl.insert(model);
+        ServiceResult result= crowdSourcingOrderServiceImpl.insert(model);
         return result;
     }
 
@@ -45,10 +45,10 @@ public class CrowSourcingOrderController extends ApiController{
         checkParameter(updateOrderModel.orderId > 0,"invalid order!");
         CrowdSourcingOrder order = null;
         if (updateOrderModel.isConfirm == 1){
-            order = crowdSourcingOrderImpl.confirmOrder(updateOrderModel);//把钱加到茶农的账户中
+            order = crowdSourcingOrderServiceImpl.confirmOrder(updateOrderModel);//把钱加到茶农的账户中
         }
         if (updateOrderModel.isSend == 1){
-            order = crowdSourcingOrderImpl.sendOrder(updateOrderModel);
+            order = crowdSourcingOrderServiceImpl.sendOrder(updateOrderModel);
         }
         if (order == null ){
             return  ServiceResult.fail(500, "update fail");
@@ -65,7 +65,7 @@ public class CrowSourcingOrderController extends ApiController{
     @ResponseBody
     public ServiceResult cancelOrder(@RequestBody IdModel idModel) {
         checkParameter(idModel.id > 0, "invalid order!");
-        ServiceResult result = crowdSourcingOrderImpl.cancelOrder(idModel.id);
+        ServiceResult result = crowdSourcingOrderServiceImpl.cancelOrder(idModel.id);
         return result;
     }
 
@@ -115,7 +115,7 @@ public class CrowSourcingOrderController extends ApiController{
                                      @RequestParam(value="pageSize", defaultValue="10") int pageSize,
                                      @RequestParam(value="sortField", defaultValue="id") String sortField,
                                      @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
-        Page<CrowdSourcingOrder> crowdFundOrders = crowdSourcingOrderImpl.search(customerId, teaSalerId, crowdSourcingId, teaSalerName,state, isSend, isConfirm, customerDelete, adminDelete,
+        Page<CrowdSourcingOrder> crowdFundOrders = crowdSourcingOrderServiceImpl.search(customerId, teaSalerId, crowdSourcingId, teaSalerName,state, isSend, isConfirm, customerDelete, adminDelete,
                 salerDelete, Refund_state, name, address, tel, beginDateStr,endDateStr,pageIndex, pageSize, sortField, sortOrder);
         return ServiceResult.success(crowdFundOrders);
     }

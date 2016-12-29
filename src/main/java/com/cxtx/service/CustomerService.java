@@ -5,6 +5,8 @@ import com.cxtx.entity.Customer;
 import com.cxtx.entity.Manager;
 import com.cxtx.model.CreateCustomerModel;
 import com.cxtx.model.CreateManagerModel;
+import com.cxtx.model.ServiceResult;
+import com.cxtx.model.UpdatePasswordModel;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -22,4 +24,6 @@ public interface CustomerService {
     Customer findById(long customerId);
 
     Customer updateCustomer(CreateCustomerModel createCustomerModel);
+
+    ServiceResult updatePassword(UpdatePasswordModel updatePasswordModel);
 }

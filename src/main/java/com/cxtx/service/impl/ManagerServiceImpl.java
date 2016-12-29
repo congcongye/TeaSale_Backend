@@ -52,8 +52,10 @@ public class ManagerServiceImpl implements ManagerService {
         }
         Account account = accountDao.findByTelAndAlive(createManagerModel.getTel(),1);
         if (account!= null){
-            account.setPassword(createManagerModel.getPassword());
-            accountDao.save(account);
+            if (createManagerModel.getPassword() != null && !"".equals(createManagerModel.getPassword())){
+                account.setPassword(createManagerModel.getPassword());
+                accountDao.save(account);
+            }
             manager = managerDao.findByAccountAndAlive(account, 1);
             manager.setName(createManagerModel.getName());
             manager = managerDao.save(manager);

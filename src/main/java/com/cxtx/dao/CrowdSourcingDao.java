@@ -12,6 +12,8 @@ import java.util.List;
  * Created by ycc on 16/12/22.
  */
 public interface CrowdSourcingDao extends JpaRepository<CrowdSourcing, Long>, JpaSpecificationExecutor<CrowdSourcing> {
-       CrowdSourcing findByIdAndAlive(Long id,int alive);
-       List<CrowdSourcing> findByProductAndAlive(Product p, int alive);
+    CrowdSourcing findByIdAndAlive(Long id,int alive);
+    List<CrowdSourcing> findByProductAndAlive(Product p, int alive);
+
+    List<CrowdSourcing> findByAlive(int alive);
 }

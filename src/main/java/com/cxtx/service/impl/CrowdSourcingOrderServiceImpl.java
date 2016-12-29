@@ -5,6 +5,8 @@ import com.cxtx.entity.*;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.UpdateOrderModel;
 import com.cxtx.model.newCrowdSourcingOrderModel;
+import com.cxtx.service.CrowdSourcingOrderService;
+import com.cxtx.service.CrowdSourcingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +27,7 @@ import java.util.List;
  * Created by ycc on 16/12/24.
  */
 @Service("CROWDSOURCINGORDERIMPL")
-public class CrowdSourcingOrderImpl {
+public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
 
     @Autowired
     private CrowdSourcingDao crowdSourcingDao;

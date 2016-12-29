@@ -5,6 +5,7 @@ import com.cxtx.entity.*;
 import com.cxtx.model.IdModel;
 import com.cxtx.model.UpdateCrowdFundingModel;
 import com.cxtx.service.CrowdFundingService;
+import com.cxtx.utils.MapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,11 +19,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ycc on 16/11/26.
@@ -40,6 +37,8 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
     private TeaSalerDao teaSalerDao;
     @Autowired
     private ProductTypeDao productTypeDao;
+    @Autowired
+    private  CrowdFundOrderDao crowdFundOrderDao;
 
     /**
      * 发起众筹,点击发起众筹前,先需要更商品类型和状态
@@ -233,7 +232,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
      */
     @Override
     public void checkNum() {
-        List<CrowdFunding> oldcrowdFundingList = crowdFundingDao.findByAlive(1);
+        List<CrowdFunding> oldcrowdFundingList = crowdFundingDao.findByStateAndAlive(0,1);
         List<CrowdFunding> newCrowdFundingList = new ArrayList<CrowdFunding>();
         for (CrowdFunding crowdFunding : oldcrowdFundingList){
             Date dealDate = crowdFunding.getDealDate();
@@ -258,6 +257,33 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         }
         crowdFunding.setState(1);//成功
         return  crowdFundingDao.save(crowdFunding);
+    }
+
+    @Override
+    public List<CrowdFunding> commend() {
+        List<CrowdFunding> crowdFundings = crowdFundingDao.findByStateAndAlive(0, 1);
+        Map<CrowdFunding, Double> saleNum = new HashMap<CrowdFunding, Double>();
+        for (CrowdFunding crowdFunding : crowdFundings) {//init
+            saleNum.put(crowdFunding,0d);
+        }
+        List<CrowdFundOrder> crowdFundOrders = crowdFundOrderDao.findByAlive(1);
+        for (CrowdFundOrder crowdFundOrder: crowdFundOrders){
+            CrowdFunding crowdFunding = crowdFundOrder.getCrowdFunding();
+            if (crowdFunding != null && crowdFunding.getAlive() == 1 && crowdFundings.contains(crowdFunding)){
+                double num = saleNum.get(crowdFunding);
+                num += crowdFundOrder.getNum();
+                saleNum.put(crowdFunding,num);
+            }
+
+        }
+        crowdFundings = new ArrayList<CrowdFunding>();
+        Map<CrowdFunding, Double> result = MapUtil.sortByValueDESC(saleNum);
+        for (CrowdFunding crowdFunding : result.keySet()){
+            System.out.println("name:" +crowdFunding.getId()+ " num:"+result.get(crowdFunding));
+            crowdFundings.add(crowdFunding);
+        }
+
+        return crowdFundings;
     }
 
 }

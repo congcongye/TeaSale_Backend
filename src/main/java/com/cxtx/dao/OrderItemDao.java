@@ -14,4 +14,5 @@ public interface OrderItemDao extends JpaRepository<OrderItem,Long> {
     List<OrderItem> findByOrderenAndAlive(OrderEn orderen, int alive);
     OrderItem findByIdAndAlive(Long id,int alive);
     List<OrderItem> findByProductAndAlive(Product product, int alive);
+    List<OrderItem> findByAlive(int alive);
 }

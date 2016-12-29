@@ -58,6 +58,12 @@ public class CrowdSourcing {
     @Column
     private  Date deliverDate;
 
+    /**
+     * 0  创建
+     * 1  成功(关闭)
+     * 2  未完成(关闭)
+     * 3  成功(未完成,需通知茶农发货)
+     */
     @Column
     private int state=0;
 

@@ -4,8 +4,9 @@ import com.cxtx.dao.*;
 import com.cxtx.entity.*;
 import com.cxtx.model.CrowdSourcingModel;
 import com.cxtx.model.ServiceResult;
+import com.cxtx.service.CrowdSourcingService;
 import com.cxtx.service.ProductService;
-import com.cxtx.service.impl.CrowdSourcingImpl;
+import com.cxtx.service.impl.CrowdSourcingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class CrowdSourcingController extends ApiController{
     @Autowired
-    private CrowdSourcingImpl crowdSourcingImpl;
+    private CrowdSourcingService crowdSourcingService;
     @Autowired
     private ProductDao productDao;
     @Autowired
@@ -69,8 +70,10 @@ public class CrowdSourcingController extends ApiController{
         cd.setTotalNum(crowdSourcingModel.totalNum);
         cd.setRemainderNum(crowdSourcingModel.totalNum);
         cd.setDeliverDate(crowdSourcingModel.deliverDate);
-        CrowdSourcing result = crowdSourcingImpl.newCrowdSourcing(cd);
+
+        CrowdSourcing result = crowdSourcingService.newCrowdSourcing(cd);
         customer.getAccount().setMoney(customer.getAccount().getMoney()-totalMoney);
+
         accountDao.save(customer.getAccount());//扣除相应金额
         return ServiceResult.success(result);
     }
@@ -88,7 +91,7 @@ public class CrowdSourcingController extends ApiController{
         if (cd== null ) {
             return ServiceResult.fail(500, "no crowdSourcing record !");
         }
-        if(crowdSourcingImpl.isWorking(cd)){
+        if(crowdSourcingService.isWorking(cd)){
             return ServiceResult.fail(500, "crowdSourcing order have generated!");
         }
         double oldTotalMoney=cd.getUnitMoney()*cd.getTotalNum();
@@ -122,7 +125,7 @@ public class CrowdSourcingController extends ApiController{
                                 @RequestParam(value="pageSize", defaultValue="10") int pageSize,
                                 @RequestParam(value="sortField", defaultValue="id") String sortField,
                                 @RequestParam(value="sortOrder", defaultValue="ASC") String sortOrder){
-        Page<CrowdSourcing> result = crowdSourcingImpl.searchCrowdSourcing(customer_id,productName,productType_id,state,pageIndex,pageSize,sortField,sortOrder);
+        Page<CrowdSourcing> result = crowdSourcingService.searchCrowdSourcing(customer_id,productName,productType_id,state,pageIndex,pageSize,sortField,sortOrder);
         return ServiceResult.success(result);
     }
 
@@ -138,7 +141,7 @@ public class CrowdSourcingController extends ApiController{
         if (cs == null ) {
             return ServiceResult.fail(500, "no crowdSourcing record !");
         }
-        if(crowdSourcingImpl.isWorking(cs)){
+        if(crowdSourcingService.isWorking(cs)){
             return ServiceResult.fail(500, "crowdSourcing order have generated!");
         }
         cs.setAlive(0);

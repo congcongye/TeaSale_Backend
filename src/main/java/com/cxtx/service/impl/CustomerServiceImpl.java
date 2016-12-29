@@ -5,7 +5,10 @@ import com.cxtx.dao.CustomerDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Customer;
 import com.cxtx.model.CreateCustomerModel;
+import com.cxtx.model.ServiceResult;
+import com.cxtx.model.UpdatePasswordModel;
 import com.cxtx.service.CustomerService;
+import com.cxtx.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -80,6 +83,10 @@ public class CustomerServiceImpl implements CustomerService {
     public Customer updateCustomer(CreateCustomerModel createCustomerModel) {
         Account account = accountDao.findByTelAndAlive(createCustomerModel.getTel(),1);
         if (account != null){
+            if (createCustomerModel.getPassword() != null){
+                account.setPassword(createCustomerModel.getPassword());
+                accountDao.save(account);
+            }
             Customer customer = customerDao.findByAccountAndAlive(account,1);
             if (customer != null){
                 customer.setNickname(createCustomerModel.getNickname());
@@ -89,6 +96,30 @@ public class CustomerServiceImpl implements CustomerService {
             }
         }
         return null;
+    }
+
+    /**
+     * 修改密码增加验证码
+     * @param updatePasswordModel
+     * @return
+     */
+    @Override
+    public ServiceResult updatePassword(UpdatePasswordModel updatePasswordModel) {
+        String tel = updatePasswordModel.tel;
+        String vCode = updatePasswordModel.verificationCode;
+        String password = updatePasswordModel.password;
+        Account account = accountDao.findByTelAndAlive(tel,1);
+        if (account == null || account.getAlive() == 0){
+            return ServiceResult.fail(500,"没有记录");
+        }
+        String verificationCode = Constant.vCodes.get(tel);
+        if (verificationCode != null && verificationCode.equals(vCode)){
+            account.setPassword(password);
+            accountDao.save(account);
+            return ServiceResult.success("修改成功");
+        }else {
+            return ServiceResult.fail(500,"验证码不正确");
+        }
     }
 
     private Specification<Customer> buildSpecification(final String name, final int level, final String tel){

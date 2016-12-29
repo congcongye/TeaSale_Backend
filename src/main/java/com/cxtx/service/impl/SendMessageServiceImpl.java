@@ -1,5 +1,6 @@
 package com.cxtx.service.impl;
 
+import com.cxtx.utils.Constant;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.NameValuePair;
@@ -60,6 +61,7 @@ public class SendMessageServiceImpl {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("phone",telephone);
                 map.put("code",mobile_code);
+                Constant.vCodes.put(telephone, mobile_code);
                 return map;
             }
         } catch (HttpException e) {
