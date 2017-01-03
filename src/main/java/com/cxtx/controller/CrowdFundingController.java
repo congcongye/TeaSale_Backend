@@ -171,9 +171,9 @@ public class CrowdFundingController extends ApiController{
      * @param crowdFundingId
      * @return
      */
-    @RequestMapping(value = "/crowdFund/participant", method = RequestMethod.GET)
+    @RequestMapping(value = "/crowdFund/participant/{crowdFundingId}", method = RequestMethod.GET)
     @ResponseBody
-    public ServiceResult getParticipants(@RequestParam(value = "crowdFundingId", defaultValue = "-1")long crowdFundingId){
+    public ServiceResult getParticipants(@PathVariable(value = "crowdFundingId")long crowdFundingId){
         checkParameter(crowdFundingId > 0, "crowdFunding id is invalid!");
         List<Customer> customers = crowdFundingService.findParticipants(crowdFundingId);
         if (customers == null ){

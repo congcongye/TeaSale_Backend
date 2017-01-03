@@ -15,4 +15,7 @@ public interface CrowdSourcingOrderDao extends JpaRepository<CrowdSourcingOrder,
     CrowdSourcingOrder findByIdAndAlive(Long id,int alive);
 
     List<CrowdSourcingOrder> findByTeaSalerAndAlive(TeaSaler teaSaler, int alive);
+
+    List<CrowdSourcingOrder> findByCrowdSourcingAndAlive(CrowdSourcing crowdSourcing, int alive);
+
 }

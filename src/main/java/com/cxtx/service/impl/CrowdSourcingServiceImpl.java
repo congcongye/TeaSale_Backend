@@ -35,6 +35,8 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
     private OrderItemDao orderItemDao;
     @Autowired
     private ProductDao productDao;
+    @Autowired
+    private CrowdSourcingOrderDao crowdSourcingOrderDao;
 
     /**
      * 众包的新增和修改
@@ -97,6 +99,9 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
 
     }
 
+    /**
+     * 众包定时检查是否到dd,众包成功
+     */
     @Override
     public void checkNum() {
         List<CrowdSourcing> oldCrowdSourcingList = crowdSourcingDao.findByAlive(1);
@@ -114,6 +119,23 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
             newCrowdSourcingList.add(crowdSourcing);
         }
         crowdSourcingDao.save(newCrowdSourcingList);
+    }
+
+    @Override
+    public List<TeaSaler> findParticipants(long crowdSourcingId) {
+        CrowdSourcing crowdSourcing = crowdSourcingDao.findByIdAndAlive(crowdSourcingId,1);
+        if (crowdSourcing == null){
+            return null;
+        }
+        List<CrowdSourcingOrder> crowdSourcingOrders = crowdSourcingOrderDao.findByCrowdSourcingAndAlive(crowdSourcing,1);
+        List<TeaSaler> teaSalers = new ArrayList<TeaSaler>();
+        for (CrowdSourcingOrder crowdSourcingOrder : crowdSourcingOrders){
+            TeaSaler t = crowdSourcingOrder.getTeaSaler();
+            if (t != null || t.getAlive() == 1) {
+                teaSalers.add(t);
+            }
+        }
+        return teaSalers;
     }
 
     private Specification<CrowdSourcing> buildSpecifications(Long customer_id,String productName,Long productType_id,int state) {

@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Created by ycc on 16/12/22.
  */
@@ -180,5 +182,21 @@ public class CrowdSourcingController extends ApiController{
         product.setState(0);//未上架
         result = productService.newProduct(product);
         return ServiceResult.success(result);
+    }
+
+    /**
+     * 获得众包的参与者(茶农)
+     * @param crowdSourcingId
+     * @return
+     */
+    @RequestMapping(value = "/crowdSourcing/participant/{crowdSourcingId}", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult getParticipants(@PathVariable(value = "crowdSourcingId")long crowdSourcingId){
+        checkParameter(crowdSourcingId > 0, "crowdSourcing id is invalid!");
+        List<TeaSaler> teaSalers = crowdSourcingService.findParticipants(crowdSourcingId);
+        if (teaSalers == null ){
+            return ServiceResult.fail(500,"no such crowdFunding!");
+        }
+        return ServiceResult.success(teaSalers);
     }
 }
