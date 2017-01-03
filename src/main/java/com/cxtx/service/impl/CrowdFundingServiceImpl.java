@@ -4,6 +4,7 @@ import com.cxtx.dao.*;
 import com.cxtx.entity.*;
 import com.cxtx.model.IdModel;
 import com.cxtx.model.UpdateCrowdFundingModel;
+import com.cxtx.service.CrowdFundOrderService;
 import com.cxtx.service.CrowdFundingService;
 import com.cxtx.utils.MapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +40,9 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
     private ProductTypeDao productTypeDao;
     @Autowired
     private  CrowdFundOrderDao crowdFundOrderDao;
+    @Autowired
+    private CrowdFundOrderServiceImpl crowdFundOrderService;
+
 
     /**
      * 发起众筹,点击发起众筹前,先需要更商品类型和状态
@@ -204,12 +208,17 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
     }
 
 
+    /**
+     * 判断当前众筹是否产生了订单
+     * @param crowdFunding
+     * @return
+     */
     private boolean isWorking(CrowdFunding crowdFunding){
         boolean flag=false;
-        List<OrderItem> list =orderItemDao.findByProductAndAlive(crowdFunding.getProduct(),1);
+        List<CrowdFundOrder> list =crowdFundOrderDao.findByCrowdFundingAndAlive(crowdFunding,1);
         if(list!=null){
-           for(OrderItem orderItem:list) {
-               if(orderItem!=null&&orderItem.getOrderen()!=null){
+           for(CrowdFundOrder crowdFundOrder:list) {
+               if(crowdFundOrder != null && crowdFundOrder.getAlive() == 1){
                    flag =true;
                    return flag;
                }
@@ -242,6 +251,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
                     crowdFunding.setState(1);
                 }else{
                     crowdFunding.setState(2);
+                    crowdFundOrderService.cancelOrdersByCrowdFund(crowdFunding);
                 }
             }
             newCrowdFundingList.add(crowdFunding);
@@ -249,6 +259,11 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         crowdFundingDao.save(newCrowdFundingList);
     }
 
+    /**
+     * 确认订单
+     * @param id
+     * @return
+     */
     @Override
     public CrowdFunding confirmCrowdFunding(Long id) {
         CrowdFunding crowdFunding = crowdFundingDao.findByIdAndAlive(id, 1);
@@ -258,6 +273,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         crowdFunding.setState(1);//成功
         return  crowdFundingDao.save(crowdFunding);
     }
+
 
     @Override
     public List<CrowdFunding> commend() {

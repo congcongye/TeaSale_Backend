@@ -98,12 +98,16 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
             }
         }
         if (totalMoney > 0){
+            if (account.getMoney() - needPay < 0){
+                return ServiceResult.fail(500,"金额不足");
+            }
             account.setMoney(account.getMoney() - needPay);
             accountDao.save(account);
             crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - createCrowdFundOrderModel.num);
             crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
             crowdFundingDao.save(crowdFunding);
-            crowdFundOrder.setState(2);
+            crowdFundOrder.setState(needPay==totalMoney?1:3);
+            crowdFundOrder.setHasPay(needPay);
             crowdFundOrder.setTotalPrice(totalMoney);
             crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
 
@@ -164,7 +168,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         if (account == null || account.getAlive() == 0){
             return ServiceResult.fail(500, "no account record");
         }
-        double needPay = crowdFundOrder.getNum() * (crowdFunding.getUnitMoney() - crowdFunding.getEarnest()) + product.getIsFree()== 1?0:product.getPostage();
+        double needPay = crowdFundOrder.getTotalPrice() - crowdFundOrder.getHasPay();
         if (account .getMoney() >= needPay){
             account.setMoney(account.getMoney()-needPay);
             accountDao.save(account);
@@ -176,6 +180,11 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         return ServiceResult.fail(500, "Sorry, your credit is running low");
     }
 
+    /**
+     * 确认收货
+     * @param updateOrderModel
+     * @return
+     */
     @Override
     public CrowdFundOrder confirmOrder(UpdateOrderModel updateOrderModel) {
         CrowdFundOrder crowdFundOrder = crowdFundOrderDao.findOne(updateOrderModel.orderId);
@@ -190,6 +199,11 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         return null;
     }
 
+    /**
+     * 确认发货
+     * @param updateOrderModel
+     * @return
+     */
     @Override
     public CrowdFundOrder sendOrder(UpdateOrderModel updateOrderModel) {
         CrowdFundOrder crowdFundOrder = crowdFundOrderDao.findOne(updateOrderModel.orderId);
@@ -201,6 +215,11 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         return null;
     }
 
+    /**
+     * 取消订单
+     * @param id
+     * @return
+     */
     @Override
     public ServiceResult cancelOrder(Long id) {
         CrowdFundOrder crowdFundOrder = crowdFundOrderDao.findOne(id);
@@ -208,20 +227,37 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
             return  ServiceResult.fail(500, "no crowdfund order record");
         }
         if (crowdFundOrder.getIsSend() == 1){
-            return ServiceResult.fail(500,"crodfunding has sended , can be canceled!");
+            return ServiceResult.fail(500,"crowdfund order has been send , can be canceled!");
         }
+        crowdFundOrder = cancelCrowdFundOrder(crowdFundOrder);
+        return ServiceResult.success(crowdFundOrder);
+    }
+
+    private CrowdFundOrder cancelCrowdFundOrder(CrowdFundOrder crowdFundOrder) {
         Account account = crowdFundOrder.getCustomer().getAccount();
         if (crowdFundOrder.getRefund_state() == 1){
-            account.setMoney(account.getMoney() + crowdFundOrder.getTotalPrice());
+            account.setMoney(account.getMoney() + crowdFundOrder.getHasPay());
         }
         if (crowdFundOrder.getRefund_state() == 2){
-            double havePay = crowdFundOrder.getNum() * crowdFundOrder.getCrowdFunding().getEarnest();
-            account.setMoney(account.getMoney() + havePay);
+            //double havePay = crowdFundOrder.getNum() * crowdFundOrder.getCrowdFunding().getEarnest();
+            account.setMoney(account.getMoney() + crowdFundOrder.getHasPay());
         }
         accountDao.save(account);
         crowdFundOrder.setState(3);
         crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
-        return ServiceResult.success(crowdFundOrder);
+        return crowdFundOrder;
+    }
+
+
+    /**
+     * 取消一个众筹包括的所有订单
+     * @param crowdFunding
+     */
+    public void cancelOrdersByCrowdFund(CrowdFunding crowdFunding) {
+        List<CrowdFundOrder> lists = crowdFundOrderDao.findByCrowdFundingAndAlive(crowdFunding,1);
+        for (CrowdFundOrder crowdFundOrder : lists){
+            cancelCrowdFundOrder(crowdFundOrder);
+        }
     }
 
     private Specification<CrowdFundOrder> buildSpecification(final long customerId, //
@@ -309,4 +345,6 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         return  specification;
 
     }
+
+
 }

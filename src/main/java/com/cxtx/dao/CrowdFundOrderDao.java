@@ -15,4 +15,6 @@ import java.util.List;
 public interface CrowdFundOrderDao extends JpaRepository<CrowdFundOrder, Long>, JpaSpecificationExecutor<CrowdFundOrder> {
 
     List<CrowdFundOrder> findByAlive(int alive);
+
+    List<CrowdFundOrder> findByCrowdFundingAndAlive(CrowdFunding crowdFunding, int alive);
 }

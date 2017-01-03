@@ -56,7 +56,7 @@ public class CrowdFundOrder {
     private int num;//份数
 
     /**
-     * 订单状态 0 未完成, 1已付款,2已完成
+     * 订单状态 0 未完成, 1已付款,2已完成,3部分付款
      */
     @Column
     private int state = 0;
@@ -96,6 +96,17 @@ public class CrowdFundOrder {
 
     @Column
     private int  alive ;//是否删除
+
+    @Column
+    private double hasPay;//已付金额
+
+    public double getHasPay() {
+        return hasPay;
+    }
+
+    public void setHasPay(double hasPay) {
+        this.hasPay = hasPay;
+    }
 
     public Long getId() {
         return id;
