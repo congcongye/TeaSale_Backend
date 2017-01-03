@@ -302,4 +302,21 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         return crowdFundings;
     }
 
+    @Override
+    public List<Customer> findParticipants(long crowdFundingId) {
+        CrowdFunding crowdFunding = crowdFundingDao.findByIdAndAlive(crowdFundingId,1);
+        if (crowdFunding == null){
+            return null;
+        }
+        List<CrowdFundOrder> crowdFundOrders = crowdFundOrderDao.findByCrowdFundingAndAlive(crowdFunding, 1);
+        List<Customer> customers = new ArrayList<Customer>();
+        for (CrowdFundOrder crowdFundOrder : crowdFundOrders){
+            Customer c = crowdFundOrder.getCustomer();
+            if (c != null || c.getAlive() == 1) {
+                customers.add(c);
+            }
+        }
+        return customers;
+    }
+
 }

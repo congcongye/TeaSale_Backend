@@ -407,3 +407,21 @@ teaSaler:
   }
 }
 ```
+### 茶农删除
+* URL /api/delete/{teaSalerId}
+* Method: PUT
+
+* 返回:成功:
+```
+{
+  "code": 200,
+  "data": "删除成功"
+}
+```
+失败:
+```
+{
+  "code": 500,
+  "data": "存在未完成的订单,无法删除"
+}
+```

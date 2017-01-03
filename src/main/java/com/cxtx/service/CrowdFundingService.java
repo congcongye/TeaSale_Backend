@@ -1,6 +1,7 @@
 package com.cxtx.service;
 
 import com.cxtx.entity.CrowdFunding;
+import com.cxtx.entity.Customer;
 import com.cxtx.model.IdModel;
 import com.cxtx.model.UpdateCrowdFundingModel;
 import org.springframework.data.domain.Page;
@@ -22,4 +23,6 @@ public interface CrowdFundingService {
     CrowdFunding confirmCrowdFunding(Long id);
 
     List<CrowdFunding> commend();
+
+    List<Customer> findParticipants(long crowdFundingId);
 }

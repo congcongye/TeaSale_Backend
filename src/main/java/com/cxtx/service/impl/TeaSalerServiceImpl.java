@@ -122,7 +122,7 @@ public class TeaSalerServiceImpl implements TeaSalerService{
         if (result){
             return ServiceResult.fail(500, "存在未完成的订单,无法删除");
         }
-        teaSaler.setAlive(0);
+        teaSaler.setState(2);
         teaSaler = teaSalerDao.save(teaSaler);
         return ServiceResult.success("删除成功");
     }

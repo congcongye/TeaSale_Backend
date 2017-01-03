@@ -815,3 +815,57 @@
     ]
   }
   ```
+  #### 发获得众筹的参与者(消费者)
+  * URL:/api/crowdFund/participant
+  * Method: GET
+  * 输入：crowdFundingId
+  * 输出
+  ```
+  {
+    "code": 200,
+    "data": [
+      {
+        "id": 1,
+        "level": 0,
+        "nickname": "孙晏",
+        "account": {
+          "id": 4,
+          "tel": "13918966539",
+          "password": "123456",
+          "label": 2,
+          "alive": 1,
+          "headURL": "h4.png",
+          "money": 36211.2
+        },
+        "address": "上海 杨浦区 仁德路",
+        "zip": "446543",
+        "tel": "13918966539",
+        "money": 1000,
+        "headUrl": "h4.png",
+        "alive": 1,
+        "createDate": "2016-11-11"
+      },
+      {
+        "id": 1,
+        "level": 0,
+        "nickname": "孙晏",
+        "account": {
+          "id": 4,
+          "tel": "13918966539",
+          "password": "123456",
+          "label": 2,
+          "alive": 1,
+          "headURL": "h4.png",
+          "money": 36211.2
+        },
+        "address": "上海 杨浦区 仁德路",
+        "zip": "446543",
+        "tel": "13918966539",
+        "money": 1000,
+        "headUrl": "h4.png",
+        "alive": 1,
+        "createDate": "2016-11-11"
+      }
+    ]
+  }
+  ```

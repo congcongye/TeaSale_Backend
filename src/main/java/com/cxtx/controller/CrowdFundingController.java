@@ -4,6 +4,7 @@ import com.cxtx.dao.CrowdFundingDao;
 import com.cxtx.dao.ProductDao;
 import com.cxtx.entity.CrowdFundOrder;
 import com.cxtx.entity.CrowdFunding;
+import com.cxtx.entity.Customer;
 import com.cxtx.entity.Product;
 import com.cxtx.model.CreateCrowdFundOrderModel;
 import com.cxtx.model.IdModel;
@@ -54,6 +55,11 @@ public class CrowdFundingController extends ApiController{
          return  ServiceResult.success(result);
     }
 
+    /**
+     * 更新众筹
+     * @param updateCrowdFundingModel
+     * @return
+     */
     @RequestMapping(value = "/crowdFund/update", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult updateCrowdFund(@RequestBody UpdateCrowdFundingModel updateCrowdFundingModel){
@@ -72,6 +78,11 @@ public class CrowdFundingController extends ApiController{
         return  ServiceResult.success(result);
     }
 
+    /**
+     * 删除众筹
+     * @param list
+     * @return
+     */
     @RequestMapping(value = "/crowdFund/delete", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult updateCrowdFund(@RequestBody List<IdModel> list){
@@ -84,6 +95,29 @@ public class CrowdFundingController extends ApiController{
         return ServiceResult.success("all succeed!");
     }
 
+    /**
+     * 搜索众筹
+     * @param product_id
+     * @param teaSaler_id
+     * @param type
+     * @param lowEarnest
+     * @param highEarnest
+     * @param lowUnitNum
+     * @param highUnitNum
+     * @param lowUnitMoney
+     * @param highUnitMoney
+     * @param state
+     * @param lowRemainderNum
+     * @param highRemainderNum
+     * @param productType_name
+     * @param product_name
+     * @param productType_id
+     * @param pageIndex
+     * @param pageSize
+     * @param sortField
+     * @param sortOrder
+     * @return
+     */
     @RequestMapping(value = "/crowdFund/search", method = RequestMethod.GET)
     @ResponseBody
     public ServiceResult searchCrowdFunding(@RequestParam(value = "product_id",defaultValue = "-1")Long product_id,@RequestParam(value = "teaSaler_id",defaultValue = "-1")Long teaSaler_id,@RequestParam(value = "type",defaultValue = "-1")int type,@RequestParam(value = "lowEarnest",defaultValue ="-1")double lowEarnest,
@@ -132,4 +166,19 @@ public class CrowdFundingController extends ApiController{
         return ServiceResult.fail(500,"fail");
     }
 
+    /**
+     * 获得众筹的参与者(消费者)
+     * @param crowdFundingId
+     * @return
+     */
+    @RequestMapping(value = "/crowdFund/participant", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult getParticipants(@RequestParam(value = "crowdFundingId", defaultValue = "-1")long crowdFundingId){
+        checkParameter(crowdFundingId > 0, "crowdFunding id is invalid!");
+        List<Customer> customers = crowdFundingService.findParticipants(crowdFundingId);
+        if (customers == null ){
+            return ServiceResult.fail(500,"no such crowdFunding!");
+        }
+        return ServiceResult.success(customers);
+    }
 }
