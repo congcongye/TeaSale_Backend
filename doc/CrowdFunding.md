@@ -816,7 +816,7 @@
   }
   ```
   #### 发获得众筹的参与者(消费者)
-  * URL:/api/crowdFund/participant
+  * URL:/api/crowdFund/participant/{crowdFundingId}
   * Method: GET
   * 输入：crowdFundingId
   * 输出

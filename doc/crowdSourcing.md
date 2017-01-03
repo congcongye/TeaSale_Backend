@@ -123,7 +123,7 @@
 }
 </pre>
 * 输入  
-  <pre>
+<pre>
 {
   "code": 200,
   "data": {
@@ -419,3 +419,65 @@ id:众包id
   }
 }
 </pre>
+#### 获得众包的参与者(茶农)
+  * URL:/api/crowdSourcing/participant/{crowdSourcingId}
+  * Method: GET
+  * 输入：
+  * 输出
+  ```
+  {
+    "code": 200,
+    "data": [
+      {
+        "id": 1,
+        "name": "叶聪聪",
+        "level": 1,
+        "nickname": "ycc",
+        "account": {
+          "id": 1,
+          "tel": "15821527768",
+          "password": "123456",
+          "label": 1,
+          "alive": 1,
+          "headURL": "h1.png",
+          "money": 2857.1
+        },
+        "address": "上海 虹口区 虹口足球场",
+        "tel": "15821527768",
+        "headUrl": "h1.png",
+        "money": 1000,
+        "licenseUrl": "c1.png",
+        "zip": "200000",
+        "idCard": "420281199311118111",
+        "state": 1,
+        "alive": 1,
+        "createDate": "2016-11-11"
+      },
+      {
+        "id": 1,
+        "name": "叶聪聪",
+        "level": 1,
+        "nickname": "ycc",
+        "account": {
+          "id": 1,
+          "tel": "15821527768",
+          "password": "123456",
+          "label": 1,
+          "alive": 1,
+          "headURL": "h1.png",
+          "money": 2857.1
+        },
+        "address": "上海 虹口区 虹口足球场",
+        "tel": "15821527768",
+        "headUrl": "h1.png",
+        "money": 1000,
+        "licenseUrl": "c1.png",
+        "zip": "200000",
+        "idCard": "420281199311118111",
+        "state": 1,
+        "alive": 1,
+        "createDate": "2016-11-11"
+      }
+    ]
+  }
+  ```
