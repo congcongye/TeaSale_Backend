@@ -25,7 +25,7 @@ public class TeaSalerController extends ApiController{
     private AccountService accountService;
 
     /**
-     *
+     * 茶农登陆
      * @param account
      * @return
      * @throws Exception
@@ -48,7 +48,7 @@ public class TeaSalerController extends ApiController{
     }
 
     /**
-     *
+     * 茶农注册
      * @param createTeaSalerModel
      * @return
      * @throws Exception
@@ -67,7 +67,7 @@ public class TeaSalerController extends ApiController{
 
 
     /**
-     *
+     * 搜索茶农
      * @param name
      * @param level
      * @param tel
@@ -91,6 +91,11 @@ public class TeaSalerController extends ApiController{
         return  ServiceResult.success(result);
     }
 
+    /**
+     * 搜索单个茶农
+     * @param teaSalerId
+     * @return
+     */
     @RequestMapping(value = "/teaSaler/{teaSalerId}", method = RequestMethod.GET)
     @ResponseBody
     public ServiceResult singularDetial(@PathVariable(value = "teaSalerId") long teaSalerId){
@@ -102,6 +107,11 @@ public class TeaSalerController extends ApiController{
         return ServiceResult.success(teaSaler);
     }
 
+    /**
+     * 茶农审核
+     * @param teaSalers
+     * @return
+     */
     @RequestMapping(value = "/teaSalers/approve", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult approveTeasaler(@RequestBody List<TeaSaler> teaSalers){
@@ -129,5 +139,12 @@ public class TeaSalerController extends ApiController{
             return ServiceResult.fail(500, "update teaSaler fail!");
         }
         return ServiceResult.success(teaSaler);
+    }
+
+    @RequestMapping(value = "/teaSaler/delete/{teaSalerId}", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult deleteTeaSaler(@PathVariable (value = "teaSalerId") long teaSalerId){
+        checkParameter(teaSalerId > 0,"teaSaler is empty");
+        return teaSalerService.deleteTeaSaler(teaSalerId);
     }
 }

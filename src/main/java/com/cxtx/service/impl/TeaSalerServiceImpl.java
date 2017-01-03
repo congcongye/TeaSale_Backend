@@ -1,9 +1,12 @@
 package com.cxtx.service.impl;
 
+import com.cxtx.dao.CrowdFundOrderDao;
+import com.cxtx.dao.CrowdSourcingOrderDao;
+import com.cxtx.dao.OrderEnDao;
 import com.cxtx.dao.TeaSalerDao;
-import com.cxtx.entity.Account;
-import com.cxtx.entity.TeaSaler;
+import com.cxtx.entity.*;
 import com.cxtx.model.CreateTeaSalerModel;
+import com.cxtx.model.ServiceResult;
 import com.cxtx.service.TeaSalerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -26,6 +29,12 @@ import java.util.List;
 public class TeaSalerServiceImpl implements TeaSalerService{
     @Autowired
     private TeaSalerDao teaSalerDao;
+    @Autowired
+    private OrderEnDao orderEnDao;
+    @Autowired
+    private CrowdFundOrderDao crowdFundOrderDao;
+    @Autowired
+    private CrowdSourcingOrderDao crowdSourcingOrderDao;
 
     @Override
     public TeaSaler findByAccountAndAlive(Account account) {
@@ -103,14 +112,52 @@ public class TeaSalerServiceImpl implements TeaSalerService{
         return teaSalerDao.save(teaSaler1);
     }
 
+    @Override
+    public ServiceResult deleteTeaSaler(long teaSalerId) {
+        TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
+        if (teaSaler == null || teaSaler.getAlive() == 0){
+            return ServiceResult.fail(500, "no teaSaler record");
+        }
+        boolean result = isRemaindOrder(teaSaler);
+        if (result){
+            return ServiceResult.fail(500, "存在未完成的订单,无法删除");
+        }
+        teaSaler.setAlive(0);
+        teaSaler = teaSalerDao.save(teaSaler);
+        return ServiceResult.success("删除成功");
+    }
+
+    private boolean isRemaindOrder(TeaSaler teaSaler) {
+        List<OrderEn> orders = orderEnDao.findByTeaSalerAndAlive(teaSaler,1);
+        List<CrowdFundOrder> crowdFundOrders = crowdFundOrderDao.findByTeaSalerAndAlive(teaSaler,1);
+        List<CrowdSourcingOrder> crowdSourcingOrders = crowdSourcingOrderDao.findByTeaSalerAndAlive(teaSaler,1);
+        //boolean result = false;
+        for (OrderEn orderEn : orders){
+            if (orderEn.getState() == 0 || orderEn.getState() == 1){
+                return true;
+            }
+        }
+        for (CrowdFundOrder crowdFundOrder : crowdFundOrders){
+            if (crowdFundOrder.getState()!=2){
+                return true;
+            }
+        }
+        for (CrowdSourcingOrder crowdSourcingOrder : crowdSourcingOrders){
+            if (crowdSourcingOrder.getState() != 2){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     private Specification<TeaSaler> buildSpecification(final String name, final int level, final String tel, final int state){
         Specification<TeaSaler> specification = new Specification<TeaSaler>() {
             @Override
             public Predicate toPredicate(Root<TeaSaler> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
                 Predicate predicate = criteriaBuilder.conjunction();
-                predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("name"),"%"+name+"%"));
-                predicate.getExpressions().add(criteriaBuilder.like(root.<String>get("tel"),"%" + tel + "%"));
+                predicate.getExpressions().add(criteriaBuilder.like(root.get("name"),"%"+name+"%"));
+                predicate.getExpressions().add(criteriaBuilder.like(root.get("tel"),"%" + tel + "%"));
                 if (level != -1) {
                     predicate.getExpressions().add(criteriaBuilder.equal(root.<Integer>get("level"), level));
                 }

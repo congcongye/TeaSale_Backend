@@ -3,6 +3,7 @@ package com.cxtx.service;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.CreateTeaSalerModel;
+import com.cxtx.model.ServiceResult;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface TeaSalerService {
     int approveTeaSalers(List<TeaSaler> teaSalers);
 
     TeaSaler updateTeaSaler(long teaSalerId, TeaSaler teaSaler);
+
+    ServiceResult deleteTeaSaler(long teaSalerId);
 }
