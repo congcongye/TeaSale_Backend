@@ -4,7 +4,10 @@ import com.cxtx.entity.OrderEn;
 import com.cxtx.entity.OrderItem;
 import com.cxtx.entity.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -15,4 +18,7 @@ public interface OrderItemDao extends JpaRepository<OrderItem,Long> {
     OrderItem findByIdAndAlive(Long id,int alive);
     List<OrderItem> findByProductAndAlive(Product product, int alive);
     List<OrderItem> findByAlive(int alive);
+
+    @Query("select p from OrderItem p where p.product.id = :id and p.alive = :alive and p.orderen.createDate between :start and :end")
+    List<OrderItem> findByProductAndAliveAndCreateDate(@Param("id")Long id,@Param("alive") int alive,@Param("start") Date start,@Param("end") Date end);
 }
