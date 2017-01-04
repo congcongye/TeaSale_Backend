@@ -408,7 +408,7 @@ teaSaler:
 }
 ```
 ### 茶农删除
-* URL /api/delete/{teaSalerId}
+* URL /api/teaSaler/delete/{teaSalerId}
 * Method: PUT
 
 * 返回:成功:
