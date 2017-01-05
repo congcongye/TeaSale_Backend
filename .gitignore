@@ -24,7 +24,7 @@ nbdist/
 .nb-gradle/
 
 # Package Files #
-*.jar
+
 *.war
 *.ear
 

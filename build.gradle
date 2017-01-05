@@ -89,6 +89,8 @@ dependencies {
 	compile("org.json:json:20160212")
 	compile("commons-httpclient:commons-httpclient:3.1")
 	compile("redis.clients:jedis:2.8.1")
+	compile("net.sourceforge.jexcelapi:jxl:2.6")
+	compile fileTree(dir:'lib',include:['*.jar'])
 	// end::actuator[]
 	testCompile("junit:junit")
 

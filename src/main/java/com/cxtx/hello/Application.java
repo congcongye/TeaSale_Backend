@@ -16,6 +16,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @ComponentScan(
 		basePackages = {
 				"com.cxtx.controller",
+				"com.cxtx.predictor",
 				"com.cxtx.service",
 				"com.cxtx.aop",
 				"com.cxtx.filter",
