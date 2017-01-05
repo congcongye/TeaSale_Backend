@@ -21,4 +21,6 @@ public interface OrderItemDao extends JpaRepository<OrderItem,Long> {
 
     @Query("select p from OrderItem p where p.product.id = :id and p.alive = :alive and p.orderen.createDate between :start and :end")
     List<OrderItem> findByProductAndAliveAndCreateDate(@Param("id")Long id,@Param("alive") int alive,@Param("start") Date start,@Param("end") Date end);
+
+
 }

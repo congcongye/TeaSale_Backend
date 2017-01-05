@@ -6,8 +6,10 @@ import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.ServiceResult;
+import com.cxtx.model.StatisticsAllProductTypes;
 import com.cxtx.service.impl.StatisticsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -54,7 +57,8 @@ public class StatisticsController extends ApiController{
 
     @RequestMapping(value = "/statistics/addressSearch", method = RequestMethod.GET)
     @ResponseBody
-    public ServiceResult AddressSearch(@RequestParam(value = "productType_id",defaultValue = "-1")Long productType_id, @RequestParam(value = "startDate",defaultValue ="")String start,@RequestParam(value = "endDate",defaultValue ="")String end){
+    public ServiceResult AddressSearch(@RequestParam(value = "productType_id",defaultValue = "-1")Long productType_id,
+                                                     @RequestParam(value = "startDate",defaultValue ="")String start,@RequestParam(value = "endDate",defaultValue ="")String end){
         ProductType productType=productTypeDao.findByIdAndAlive(productType_id,1);
         if(productType==null){
             return ServiceResult.fail(500, "productType don't exist");
@@ -69,6 +73,38 @@ public class StatisticsController extends ApiController{
             return ServiceResult.fail(500, "time is error");
         }
         Map<String,Object> result=statisticsService.CountByProductType(productType,startDate,endDate);
+        return ServiceResult.success(result);
+    }
+
+    @RequestMapping(value = "/statistics/searchAllProducts", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult AddressSearch(@RequestParam(value = "startDate",defaultValue ="")String start,@RequestParam(value = "endDate",defaultValue ="")String end){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate=null;
+        try {
+            startDate = sdf.parse(start);
+            endDate = sdf.parse(end);
+        } catch (ParseException e) {
+            return ServiceResult.fail(500, "time is error");
+        }
+        Map<String,HashMap<Long,Object>> result =statisticsService.CountByAllProductAndAddress(startDate,endDate);
+        return ServiceResult.success(result);
+    }
+
+    @RequestMapping(value = "/statistics/allproductTypes", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult AllProductTypes(@RequestParam(value = "startDate",defaultValue ="")String start,@RequestParam(value = "endDate",defaultValue ="")String end){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate=null;
+        try {
+            startDate = sdf.parse(start);
+            endDate = sdf.parse(end);
+        } catch (ParseException e) {
+            return ServiceResult.fail(500, "time is error");
+        }
+        Map<Long,StatisticsAllProductTypes> result =statisticsService.countAllProduct(startDate,endDate);
         return ServiceResult.success(result);
     }
 
