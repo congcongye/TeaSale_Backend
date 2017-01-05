@@ -75,8 +75,9 @@ public class StatisticsServiceImpl {
                     model=(StatisticsProductModel)result.get(address_sheng);
                     model.number=model.number+orderItem.getNum();
                 }else{
-                    model.productName=orderItem.getProduct().getName();
-                    model.number=orderItem.getNum();
+                        model=new StatisticsProductModel();
+                        model.productName=product.getName();
+                        model.number=orderItem.getNum();
                 }
                 result.put(address_sheng,model);
             }
