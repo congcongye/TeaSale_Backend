@@ -184,4 +184,29 @@ public class StatisticsServiceImpl {
         }
         return result;
     }
+
+    public Map<Long,Object> countTeaSalerAllProductType(TeaSaler teaSaler, Date start, Date end){
+        Map<Long,Object> result =new HashMap<Long,Object>();
+        List<OrderEn> list = orderEnDao.findByTeaSalerAndAliveAndCreateDate(teaSaler.getId(),1,start,end);
+        for(OrderEn order:list){
+            List<OrderItem> orderItems =orderItemDao.findByOrderenAndAlive(order,1);
+            for(OrderItem orderItem:orderItems){
+                if(orderItem.getOrderen().getState()==2){ //订单成功才统计
+                    Product product=orderItem.getProduct();
+                    StatisticsProductModel model =null;
+                    Long productType_id =product.getProductType().id;
+                    if(result.containsKey(productType_id)){
+                        model=(StatisticsProductModel)result.get(productType_id);
+                        model.number=model.number+orderItem.getNum();
+                    }else{
+                        model =new StatisticsProductModel();
+                        model.number=orderItem.getNum();
+                        model.productName=orderItem.getProduct().getProductType().name;
+                    }
+                    result.put(productType_id,model);
+                }
+            }
+        }
+        return result;
+    }
 }

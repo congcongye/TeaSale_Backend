@@ -108,5 +108,24 @@ public class StatisticsController extends ApiController{
         return ServiceResult.success(result);
     }
 
+    @RequestMapping(value = "/statistics/teaSalerAllProductTypes", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult TeaSalerAllProductTypes(@RequestParam(value = "teaSaler_id",defaultValue = "-1")Long teaSaler_id, @RequestParam(value = "startDate",defaultValue ="")String start,@RequestParam(value = "endDate",defaultValue ="")String end){
+        TeaSaler teaSaler =teaSalerDao.findByIdAndStateAndAlive(teaSaler_id,1,1);
+        if(teaSaler==null){
+            return ServiceResult.fail(500, "TeaSaler is Illegal");
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = null;
+        Date endDate=null;
+        try {
+            startDate = sdf.parse(start);
+            endDate = sdf.parse(end);
+        } catch (ParseException e) {
+            return ServiceResult.fail(500, "time is error");
+        }
+        Map<Long,Object> result =statisticsService.countTeaSalerAllProductType(teaSaler,startDate,endDate);
+        return ServiceResult.success(result);
+    }
 
 }
