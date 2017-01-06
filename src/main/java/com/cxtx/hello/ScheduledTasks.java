@@ -26,6 +26,6 @@ public class ScheduledTasks {
     public void reportCurrentTime() {
         crowdFundingService.checkNum();
         crowdSourcingService.checkNum();
-        recommend.deleteFile();
+//        recommend.deleteFile();
     }
 }
