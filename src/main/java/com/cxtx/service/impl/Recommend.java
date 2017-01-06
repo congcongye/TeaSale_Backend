@@ -4,6 +4,7 @@ import com.cxtx.dao.CustomerDao;
 import com.cxtx.dao.OrderItemDao;
 import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.entity.*;
+import com.cxtx.model.ProductNumModel;
 import org.apache.commons.io.IOUtils;
 import org.aspectj.weaver.ast.Or;
 import org.json.JSONObject;
@@ -85,8 +86,8 @@ public class Recommend {
     public HashSet<Product> getProducts(List<Map.Entry<Long,Double>> list){
         List<Customer> simCustomers =new ArrayList<Customer>();
         HashSet<Product> result =new HashSet<Product>();
-        System.out.println("相似度高的5个用户  ");
-        for(int i=0;i<list.size()&&i<5;i++){
+        System.out.println("相似度高的3个用户  ");
+        for(int i=0;i<list.size()&&i<3;i++){
             Long id =list.get(i).getKey();
             Customer customer =customerDao.findByIdAndAlive(id,1);
             simCustomers.add(customer);
@@ -163,7 +164,8 @@ public class Recommend {
            for(Customer c:customers){
                List<Map.Entry<Long,Double>> list =this.getMaxSimilarity(c);
                HashSet<Product> result =getProducts(list);
-               temp.put(c.getId(),result);
+               List<Product> list1=sortProduct(result);
+               temp.put(c.getId(),list1);
            }
                JSONObject object=new JSONObject(temp);
                bufferedWriter.write(object.toString());
@@ -179,6 +181,45 @@ public class Recommend {
         map.put("msg","获取成功");
         map.put("content",content);
         return map;
+    }
+
+    /**
+     * 将获得的推荐商品按照销量进行排序,从高到低
+     * @param hashSet
+     * @return
+     */
+    public  List<Product> sortProduct(HashSet<Product> hashSet){
+        Map<Long,ProductNumModel> map=new HashMap<Long,ProductNumModel>();
+        for(Product product:hashSet){
+            double total=0;
+            List<OrderItem> list =orderItemDao.findByProductAndAlive(product,1);
+            for(OrderItem orderItem:list){
+                total=total+orderItem.getNum();
+            }
+            ProductNumModel model=new ProductNumModel();
+            model.num=total;
+            model.product=product;
+            map.put(product.getId(),model);
+        }
+        List<Map.Entry<Long,ProductNumModel>> list = new LinkedList<Map.Entry<Long,ProductNumModel>>( map.entrySet() );
+        Collections.sort( list, new Comparator<Map.Entry<Long,ProductNumModel>>(){
+            public int compare( Map.Entry<Long,ProductNumModel> o1, Map.Entry<Long,ProductNumModel> o2 )
+            {
+                if(o1.getValue().num<o2.getValue().num){
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }
+        } );
+         List<Product> products = new ArrayList<Product>();
+        for (Map.Entry<Long,ProductNumModel> entry : list)
+        {
+            products.add(entry.getValue().product);
+            System.out.println("productNum: "+entry.getKey()+"  "+entry.getValue().num);
+        }
+
+      return products;
     }
 
     public void deleteFile(){
