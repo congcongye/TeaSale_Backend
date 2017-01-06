@@ -174,7 +174,8 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Page<OrderEn> search(long customerId, long teaSalerId, String teaSalerName, int state, int isSend, int isConfirm, int isComment,  int customerDelete, int adminDelete, int salerDelete, int refund_state, String name, String address, String tel, String beginDateStr, String endDateStr, int pageIndex, int pageSize, String sortField, String sortOrder) {
+    public Page<OrderEn> search(long customerId, long teaSalerId, String teaSalerName, int state, int isSend, int isConfirm, int isComment,  int customerDelete, int adminDelete, int salerDelete,
+                                int refund_state, String name, String address, String tel, String beginDateStr, String endDateStr, int pageIndex, int pageSize, String sortField, String sortOrder) {
         Sort.Direction direction = Sort.Direction.DESC;
         if (sortOrder.toUpperCase().equals("ASC")) {
             direction = Sort.Direction.ASC;
@@ -206,7 +207,7 @@ public class OrderServiceImpl implements OrderService {
                                                       final String endDateStr) {//
         final  Customer customer = customerDao.findOne(customerId);
         final TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
-        final List<TeaSaler> teaSalers = teaSalerDao.findByNameAndAlive(teaSalerName, 1);
+        //final List<TeaSaler> teaSalers = teaSalerDao.findByNameAndAlive(teaSalerName, 1);
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Specification<OrderEn> specification = new Specification<OrderEn>() {
             @Override
@@ -220,9 +221,6 @@ public class OrderServiceImpl implements OrderService {
                 }
                 if (teaSaler !=null && teaSaler.getAlive() ==1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.<TeaSaler>get("teaSaler"),teaSaler));
-                }else if(teaSalers != null && teaSalers.size() >0){
-                    //predicate.getExpressions().add(root.<FileType>get("fileType").in(fileTypeList1));
-                    predicate.getExpressions().add(root.<TeaSaler>get("teaSaler").in(teaSalers));
                 }
                 if (state != -1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("state"),state));
@@ -266,6 +264,7 @@ public class OrderServiceImpl implements OrderService {
                     }
                     predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("createDate"),endDate));
                 }
+                predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSaler>get("teaSaler").get("name"),teaSalerName));
                 return predicate;
             }
         };
