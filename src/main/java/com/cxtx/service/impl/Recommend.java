@@ -4,6 +4,7 @@ import com.cxtx.dao.CustomerDao;
 import com.cxtx.dao.OrderItemDao;
 import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.entity.*;
+import com.cxtx.model.ProductNumModel;
 import org.apache.commons.io.IOUtils;
 import org.aspectj.weaver.ast.Or;
 import org.json.JSONObject;
@@ -62,16 +63,15 @@ public class Recommend {
             if(entry.getKey()!=customer.getId()){
                 double [] temp =(double[])entry.getValue();
                 double similarity =countSimilarity(temp,vector);
-                System.out.println("test: "+entry.getKey()+"  "+similarity+"   ");
+                System.out.println("test: "+customer.getId()+"   "+entry.getKey()+"  "+similarity+"   ");
                 result.put(entry.getKey(),similarity);
             }
         }
         List<Map.Entry<Long,Double>> list = new LinkedList<Map.Entry<Long,Double>>( result.entrySet() );
-        Collections.sort( list, new Comparator<Map.Entry<Long,Double>>()
-        {
+        Collections.sort( list, new Comparator<Map.Entry<Long,Double>>(){
             public int compare( Map.Entry<Long,Double> o1, Map.Entry<Long,Double> o2 )
             {
-                return (o1.getValue()).compareTo( o2.getValue() );
+                return (o2.getValue()).compareTo( o1.getValue() );
             }
         } );
 //        System.out.println("totalNum "+list.size());
@@ -86,20 +86,19 @@ public class Recommend {
     public HashSet<Product> getProducts(List<Map.Entry<Long,Double>> list){
         List<Customer> simCustomers =new ArrayList<Customer>();
         HashSet<Product> result =new HashSet<Product>();
-        System.out.println("相似度高的5个用户  ");
-        for(int i=0;i<list.size()&&i<5;i++){
+        System.out.println("相似度高的3个用户  ");
+        for(int i=0;i<list.size()&&i<3;i++){
             Long id =list.get(i).getKey();
             Customer customer =customerDao.findByIdAndAlive(id,1);
             simCustomers.add(customer);
         }
         for(Customer customer:simCustomers){
             HashSet<Product> hashSet =getCustomerProduct(customer);
-            System.out.println(customer.getId()+"  "+ hashSet.size());
             result.addAll(hashSet);
         }
-//        for(Map.Entry<Long,Double> entry:list){
-//            System.out.println(entry.getKey()+"   "+entry.getValue());
-//        }
+        for(Map.Entry<Long,Double> entry:list){
+            System.out.println("getProducts:  "+entry.getKey()+"   "+entry.getValue());
+        }
         return result;
     }
 
@@ -123,6 +122,14 @@ public class Recommend {
      */
     public Map<String,Object> getAllSimilarity(Customer customer) throws IOException {
         changeCustomerToVector();
+        for(Map.Entry<Long,Object> entry:users.entrySet()){
+            double [] temp=(double [])entry.getValue();
+            System.out.print("用户向量矩阵: "+entry.getKey()+" ");
+            for(int i=0;i<temp.length;i++){
+                System.out.print(temp[i]+"  ");
+            }
+            System.out.println();
+        }
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
         Properties p = new Properties();
         try {
@@ -133,12 +140,13 @@ public class Recommend {
         String folderPath = p.getProperty("recommendFile");
         File file=new File(folderPath);
         if(!file.exists()){
+//            System.out.println("文件不存在");
             file.createNewFile();
         }
         FileInputStream fileInputStream=new FileInputStream(file);
         Map<String,Object> map =new HashMap<String,Object>();
         com.alibaba.fastjson.JSONObject jsonObject = null;
-        System.out.println("inputs"+fileInputStream);
+//        System.out.println("inputs"+fileInputStream);
         try {
             if(fileInputStream!=null){
                 jsonObject = com.alibaba.fastjson.JSON.parseObject(IOUtils.toString(fileInputStream, "UTF-8"));
@@ -149,20 +157,19 @@ public class Recommend {
             return map;
         }
          Object content=null;
-//        System.out.println(jsonObject);
         if(jsonObject==null){ //如果文件中没有,则计算每个用户的推荐产品
             FileWriter fileWriter=new FileWriter(file,true);
             BufferedWriter bufferedWriter=new BufferedWriter(fileWriter);
-           Map<Long,Object> temp =new HashMap<Long,Object>();
+            Map<Long,Object> temp =new HashMap<Long,Object>();
            for(Customer c:customers){
                List<Map.Entry<Long,Double>> list =this.getMaxSimilarity(c);
                HashSet<Product> result =getProducts(list);
-               temp.put(c.getId(),result);
+               List<Product> list1=sortProduct(result);
+               temp.put(c.getId(),list1);
            }
                JSONObject object=new JSONObject(temp);
                bufferedWriter.write(object.toString());
                bufferedWriter.flush();
-
             if(object!=null){
                 content= object.get(customer.getId()+"");
             }
@@ -174,6 +181,45 @@ public class Recommend {
         map.put("msg","获取成功");
         map.put("content",content);
         return map;
+    }
+
+    /**
+     * 将获得的推荐商品按照销量进行排序,从高到低
+     * @param hashSet
+     * @return
+     */
+    public  List<Product> sortProduct(HashSet<Product> hashSet){
+        Map<Long,ProductNumModel> map=new HashMap<Long,ProductNumModel>();
+        for(Product product:hashSet){
+            double total=0;
+            List<OrderItem> list =orderItemDao.findByProductAndAlive(product,1);
+            for(OrderItem orderItem:list){
+                total=total+orderItem.getNum();
+            }
+            ProductNumModel model=new ProductNumModel();
+            model.num=total;
+            model.product=product;
+            map.put(product.getId(),model);
+        }
+        List<Map.Entry<Long,ProductNumModel>> list = new LinkedList<Map.Entry<Long,ProductNumModel>>( map.entrySet() );
+        Collections.sort( list, new Comparator<Map.Entry<Long,ProductNumModel>>(){
+            public int compare( Map.Entry<Long,ProductNumModel> o1, Map.Entry<Long,ProductNumModel> o2 )
+            {
+                if(o1.getValue().num<o2.getValue().num){
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }
+        } );
+         List<Product> products = new ArrayList<Product>();
+        for (Map.Entry<Long,ProductNumModel> entry : list)
+        {
+            products.add(entry.getValue().product);
+            System.out.println("productNum: "+entry.getKey()+"  "+entry.getValue().num);
+        }
+
+      return products;
     }
 
     public void deleteFile(){
@@ -227,16 +273,22 @@ public class Recommend {
     public double[] getNumByCustomer(Customer customer){
         List<OrderItem> list =orderItemDao.findByCustomerAndAliveAndState(customer.getId(),1,2);
         double [] vectore =new double[totalNum];
+        int index=0;
         for(ProductType type:productTypes){
-            int index=0;
             for(OrderItem orderItem:list){
                 if(orderItem.getProduct().getProductType().id==type.id){
                     vectore[index]=vectore[index]+orderItem.getNum();
                 }
             }
-            vectore[index]=vectore[index];
+//            System.out.println("productType: "+type.id+"  "+type.name+"  "+vectore[index]);
+//            vectore[index]=vectore[index];
             index++;
         }
+//        System.out.println("vector   :");
+//        for(int i=0;i<vectore.length;i++){
+//            System.out.print(vectore[i]+" ");
+//        }
+//        System.out.println();
         return vectore;
     }
 
