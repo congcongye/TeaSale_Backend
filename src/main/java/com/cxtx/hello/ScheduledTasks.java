@@ -12,12 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * Created by jinchuyang on 16/12/6.
@@ -55,6 +58,16 @@ public class ScheduledTasks {
             result.put(type, Double.parseDouble(df.format(price)));
         }
         String json = com.alibaba.fastjson.JSON.toJSONString(result,true);
-
+        File file = new File("src/main/resources/price.properties");
+        if (!file.exists()){
+            file.createNewFile();
+        }
+        //System.out.println(file.exists());
+        FileOutputStream oFile = new FileOutputStream(file);
+        Properties properties = new Properties();
+        properties.setProperty("price",json);
+        properties.store(oFile,"predicate price");
+        //oFile.flush();
+        oFile.close();
     }
 }

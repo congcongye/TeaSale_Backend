@@ -16,11 +16,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ycc on 16/10/30.
@@ -226,14 +224,11 @@ public class ProductController extends ApiController {
     @RequestMapping(value = "/products/price/predicte", method = RequestMethod.GET)
     @ResponseBody
     public ServiceResult getPrediction () throws IOException, BiffException {
-        DecimalFormat df   = new DecimalFormat("######0.00");
-        String[] types ={"West Lake Longjing","Tieguanyin","Biluochun"};
-        Map<String, Double> result = new HashMap<String, Double>();
-        Predictor predictor = new Predictor();
-        for (String type : types) {
-            double price = predictor.Predicte(type);
-            result.put(type, Double.parseDouble(df.format(price)));
-        }
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("price.properties");
+        Properties pros = new Properties();
+        pros.load(is);
+        String json = (String) pros.get("price");
+        Map<String, Double> result  = com.alibaba.fastjson.JSON.parseObject(json, Map.class);
         return ServiceResult.success(result);
     }
 

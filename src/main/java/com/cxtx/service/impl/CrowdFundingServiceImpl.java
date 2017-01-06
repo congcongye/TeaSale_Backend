@@ -8,6 +8,7 @@ import com.cxtx.service.CrowdFundOrderService;
 import com.cxtx.service.CrowdFundingService;
 import com.cxtx.utils.MapUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.SmartLifecycle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -25,8 +26,8 @@ import java.util.*;
 /**
  * Created by ycc on 16/11/26.
  */
-@Service("CrowdFundingServiceImpl")
-public class CrowdFundingServiceImpl implements CrowdFundingService {
+@Service("CrowdFundingService")
+public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecycle{
 
     @Autowired
     private CrowdFundingDao crowdFundingDao;
@@ -319,4 +320,33 @@ public class CrowdFundingServiceImpl implements CrowdFundingService {
         return customers;
     }
 
+    @Override
+    public boolean isAutoStartup() {
+        return false;
+    }
+
+    @Override
+    public void stop(Runnable callback) {
+
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void stop() {
+
+    }
+
+    @Override
+    public boolean isRunning() {
+        return false;
+    }
+
+    @Override
+    public int getPhase() {
+        return Integer.MAX_VALUE;
+    }
 }
