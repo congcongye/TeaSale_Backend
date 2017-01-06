@@ -93,6 +93,7 @@ dependencies {
 	compile fileTree(dir:'lib',include:['*.jar'])
 	// end::actuator[]
 	testCompile("junit:junit")
+	compile("com.alibaba:fastjson:1.2.7")
 
 }
 

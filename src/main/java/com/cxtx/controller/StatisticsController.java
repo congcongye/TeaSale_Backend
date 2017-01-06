@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -148,4 +149,21 @@ public class StatisticsController extends ApiController{
         HashSet<Product> result =recommend.getSimilarity(customer);
         return ServiceResult.success(result);
     }
+
+    @RequestMapping(value = "/statistics/newrecommend", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult newRecommendProducts(@RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id){
+        Customer customer =customerDao.findByIdAndAlive(customer_id,1);
+        if(customer==null){
+            return ServiceResult.fail(500,"该消费者不存在");
+        }
+        Map<String,Object> result= null;
+        try {
+            result = recommend.getAllSimilarity(customer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ServiceResult.success(result);
+    }
+
 }

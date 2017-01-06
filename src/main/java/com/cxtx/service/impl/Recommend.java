@@ -4,13 +4,18 @@ import com.cxtx.dao.CustomerDao;
 import com.cxtx.dao.OrderItemDao;
 import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.entity.*;
+import org.apache.commons.io.IOUtils;
 import org.aspectj.weaver.ast.Or;
+import org.json.JSONObject;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
+import java.io.*;
 import java.util.*;
+
+import static com.jayway.restassured.parsing.Parser.JSON;
 
 /**
  * Created by ycc on 17/1/5.
@@ -105,16 +110,70 @@ public class Recommend {
      */
     public HashSet<Product> getSimilarity(Customer customer){
         changeCustomerToVector();
-//        for(Map.Entry<Long,Object>user: users.entrySet()){
-//            double []temp =(double[]) user.getValue();
-//            for(int i=0;i<temp.length;i++){
-//                System.out.print(temp[i]+"  ");
-//            }
-//             System.out.println("   ; "+user.getKey()+"  " + temp.toString());
-//        }
         List<Map.Entry<Long,Double>> list =this.getMaxSimilarity(customer);
         HashSet<Product> result =getProducts(list);
         return result;
+    }
+
+    /**
+     * 预先计算所有用户,存入文件,以后每次读取文件
+     * @param customer
+     * @return
+     * @throws IOException
+     */
+    public Map<String,Object> getAllSimilarity(Customer customer) throws IOException {
+        changeCustomerToVector();
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("recommendFile");
+        File file=new File(folderPath);
+        if(!file.exists()){
+            file.createNewFile();
+        }
+        FileInputStream fileInputStream=new FileInputStream(file);
+        Map<String,Object> map =new HashMap<String,Object>();
+        com.alibaba.fastjson.JSONObject jsonObject = null;
+        System.out.println("inputs"+fileInputStream);
+        try {
+            if(fileInputStream!=null){
+                jsonObject = com.alibaba.fastjson.JSON.parseObject(IOUtils.toString(fileInputStream, "UTF-8"));
+            }
+        } catch (IOException e) {
+            map.put("msg","JSON 格式不正确");
+            map.put("content","");
+            return map;
+        }
+         Object content=null;
+//        System.out.println(jsonObject);
+        if(jsonObject==null){ //如果文件中没有,则计算每个用户的推荐产品
+            FileWriter fileWriter=new FileWriter(file,true);
+            BufferedWriter bufferedWriter=new BufferedWriter(fileWriter);
+           Map<Long,Object> temp =new HashMap<Long,Object>();
+           for(Customer c:customers){
+               List<Map.Entry<Long,Double>> list =this.getMaxSimilarity(c);
+               HashSet<Product> result =getProducts(list);
+               temp.put(c.getId(),result);
+           }
+               JSONObject object=new JSONObject(temp);
+               bufferedWriter.write(object.toString());
+               bufferedWriter.flush();
+
+            if(object!=null){
+                content= object.get(customer.getId()+"");
+            }
+        }else{
+            if(null!=jsonObject.get(customer.getId()+"")){
+                content=jsonObject.get(customer.getId()+"");
+            }
+        }
+        map.put("msg","获取成功");
+        map.put("content",content);
+        return map;
     }
 
     /**
