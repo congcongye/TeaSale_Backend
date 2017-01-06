@@ -70,7 +70,7 @@ public class Recommend {
         Collections.sort( list, new Comparator<Map.Entry<Long,Double>>(){
             public int compare( Map.Entry<Long,Double> o1, Map.Entry<Long,Double> o2 )
             {
-                return (o1.getValue()).compareTo( o2.getValue() );
+                return (o2.getValue()).compareTo( o1.getValue() );
             }
         } );
 //        System.out.println("totalNum "+list.size());
@@ -85,7 +85,7 @@ public class Recommend {
     public HashSet<Product> getProducts(List<Map.Entry<Long,Double>> list){
         List<Customer> simCustomers =new ArrayList<Customer>();
         HashSet<Product> result =new HashSet<Product>();
-//        System.out.println("相似度高的5个用户  ");
+        System.out.println("相似度高的5个用户  ");
         for(int i=0;i<list.size()&&i<5;i++){
             Long id =list.get(i).getKey();
             Customer customer =customerDao.findByIdAndAlive(id,1);
@@ -95,9 +95,9 @@ public class Recommend {
             HashSet<Product> hashSet =getCustomerProduct(customer);
             result.addAll(hashSet);
         }
-//        for(Map.Entry<Long,Double> entry:list){
-//            System.out.println("getProducts:  "+entry.getKey()+"   "+entry.getValue());
-//        }
+        for(Map.Entry<Long,Double> entry:list){
+            System.out.println("getProducts:  "+entry.getKey()+"   "+entry.getValue());
+        }
         return result;
     }
 
