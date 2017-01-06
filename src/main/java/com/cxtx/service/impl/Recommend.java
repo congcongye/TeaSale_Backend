@@ -337,7 +337,8 @@ public class Recommend {
         for(OrderItem orderItem:list){
             ProductNumModel model=null;
             if(map.containsKey(orderItem.getProduct().getId())){
-                  model.num=model.num+orderItem.getNum();
+                model=map.get(orderItem.getProduct().getId());
+                model.num=model.num+orderItem.getNum();
             }else{
                 model=new ProductNumModel();
                 model.num=orderItem.getNum();
