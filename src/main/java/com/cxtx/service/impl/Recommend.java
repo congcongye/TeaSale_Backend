@@ -62,13 +62,12 @@ public class Recommend {
             if(entry.getKey()!=customer.getId()){
                 double [] temp =(double[])entry.getValue();
                 double similarity =countSimilarity(temp,vector);
-                System.out.println("test: "+entry.getKey()+"  "+similarity+"   ");
+                System.out.println("test: "+customer.getId()+"   "+entry.getKey()+"  "+similarity+"   ");
                 result.put(entry.getKey(),similarity);
             }
         }
         List<Map.Entry<Long,Double>> list = new LinkedList<Map.Entry<Long,Double>>( result.entrySet() );
-        Collections.sort( list, new Comparator<Map.Entry<Long,Double>>()
-        {
+        Collections.sort( list, new Comparator<Map.Entry<Long,Double>>(){
             public int compare( Map.Entry<Long,Double> o1, Map.Entry<Long,Double> o2 )
             {
                 return (o1.getValue()).compareTo( o2.getValue() );
@@ -86,7 +85,7 @@ public class Recommend {
     public HashSet<Product> getProducts(List<Map.Entry<Long,Double>> list){
         List<Customer> simCustomers =new ArrayList<Customer>();
         HashSet<Product> result =new HashSet<Product>();
-        System.out.println("相似度高的5个用户  ");
+//        System.out.println("相似度高的5个用户  ");
         for(int i=0;i<list.size()&&i<5;i++){
             Long id =list.get(i).getKey();
             Customer customer =customerDao.findByIdAndAlive(id,1);
@@ -94,11 +93,10 @@ public class Recommend {
         }
         for(Customer customer:simCustomers){
             HashSet<Product> hashSet =getCustomerProduct(customer);
-            System.out.println(customer.getId()+"  "+ hashSet.size());
             result.addAll(hashSet);
         }
 //        for(Map.Entry<Long,Double> entry:list){
-//            System.out.println(entry.getKey()+"   "+entry.getValue());
+//            System.out.println("getProducts:  "+entry.getKey()+"   "+entry.getValue());
 //        }
         return result;
     }
@@ -123,6 +121,14 @@ public class Recommend {
      */
     public Map<String,Object> getAllSimilarity(Customer customer) throws IOException {
         changeCustomerToVector();
+        for(Map.Entry<Long,Object> entry:users.entrySet()){
+            double [] temp=(double [])entry.getValue();
+            System.out.print("用户向量矩阵: "+entry.getKey()+" ");
+            for(int i=0;i<temp.length;i++){
+                System.out.print(temp[i]+"  ");
+            }
+            System.out.println();
+        }
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
         Properties p = new Properties();
         try {
@@ -133,12 +139,13 @@ public class Recommend {
         String folderPath = p.getProperty("recommendFile");
         File file=new File(folderPath);
         if(!file.exists()){
+//            System.out.println("文件不存在");
             file.createNewFile();
         }
         FileInputStream fileInputStream=new FileInputStream(file);
         Map<String,Object> map =new HashMap<String,Object>();
         com.alibaba.fastjson.JSONObject jsonObject = null;
-        System.out.println("inputs"+fileInputStream);
+//        System.out.println("inputs"+fileInputStream);
         try {
             if(fileInputStream!=null){
                 jsonObject = com.alibaba.fastjson.JSON.parseObject(IOUtils.toString(fileInputStream, "UTF-8"));
@@ -149,11 +156,10 @@ public class Recommend {
             return map;
         }
          Object content=null;
-//        System.out.println(jsonObject);
         if(jsonObject==null){ //如果文件中没有,则计算每个用户的推荐产品
             FileWriter fileWriter=new FileWriter(file,true);
             BufferedWriter bufferedWriter=new BufferedWriter(fileWriter);
-           Map<Long,Object> temp =new HashMap<Long,Object>();
+            Map<Long,Object> temp =new HashMap<Long,Object>();
            for(Customer c:customers){
                List<Map.Entry<Long,Double>> list =this.getMaxSimilarity(c);
                HashSet<Product> result =getProducts(list);
@@ -162,7 +168,6 @@ public class Recommend {
                JSONObject object=new JSONObject(temp);
                bufferedWriter.write(object.toString());
                bufferedWriter.flush();
-
             if(object!=null){
                 content= object.get(customer.getId()+"");
             }
@@ -227,16 +232,22 @@ public class Recommend {
     public double[] getNumByCustomer(Customer customer){
         List<OrderItem> list =orderItemDao.findByCustomerAndAliveAndState(customer.getId(),1,2);
         double [] vectore =new double[totalNum];
+        int index=0;
         for(ProductType type:productTypes){
-            int index=0;
             for(OrderItem orderItem:list){
                 if(orderItem.getProduct().getProductType().id==type.id){
                     vectore[index]=vectore[index]+orderItem.getNum();
                 }
             }
-            vectore[index]=vectore[index];
+//            System.out.println("productType: "+type.id+"  "+type.name+"  "+vectore[index]);
+//            vectore[index]=vectore[index];
             index++;
         }
+//        System.out.println("vector   :");
+//        for(int i=0;i<vectore.length;i++){
+//            System.out.print(vectore[i]+" ");
+//        }
+//        System.out.println();
         return vectore;
     }
 
