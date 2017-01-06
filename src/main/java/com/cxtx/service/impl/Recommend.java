@@ -176,6 +176,21 @@ public class Recommend {
         return map;
     }
 
+    public void deleteFile(){
+        changeCustomerToVector();
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("recommendFile");
+        File file=new File(folderPath);
+        if(file.exists()){
+            file.delete();
+        }
+    }
     /**
      * 获得所有产品类型的数量
      * @return

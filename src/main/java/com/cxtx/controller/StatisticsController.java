@@ -166,4 +166,11 @@ public class StatisticsController extends ApiController{
         return ServiceResult.success(result);
     }
 
+    @RequestMapping(value = "/statistics/delete", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ServiceResult deleteRecommendFile(){
+        recommend.deleteFile();
+        return ServiceResult.success("all succeed");
+    }
+
 }
