@@ -3,7 +3,11 @@ package com.cxtx.hello;
 import com.cxtx.predictor.Predictor;
 import com.cxtx.service.CrowdFundingService;
 import com.cxtx.service.CrowdSourcingService;
+
 import jxl.read.biff.BiffException;
+
+import com.cxtx.service.impl.Recommend;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -24,11 +28,14 @@ public class ScheduledTasks {
     private CrowdFundingService crowdFundingService;
     @Autowired
     private CrowdSourcingService crowdSourcingService;
+    @Autowired
+    private Recommend recommend;
 
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() {
         crowdFundingService.checkNum();
         crowdSourcingService.checkNum();
+//        recommend.deleteFile();
     }
 
     /**

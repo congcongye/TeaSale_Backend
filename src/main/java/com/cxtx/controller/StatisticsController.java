@@ -1,12 +1,15 @@
 package com.cxtx.controller;
 
+import com.cxtx.dao.CustomerDao;
 import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.dao.TeaSalerDao;
+import com.cxtx.entity.Customer;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.StatisticsAllProductTypes;
+import com.cxtx.service.impl.Recommend;
 import com.cxtx.service.impl.StatisticsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -16,11 +19,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ycc on 17/1/3.
@@ -34,6 +36,10 @@ public class StatisticsController extends ApiController{
     private TeaSalerDao teaSalerDao;
     @Autowired
     private ProductTypeDao productTypeDao;
+    @Autowired
+    private CustomerDao customerDao;
+    @Autowired
+    private Recommend recommend;
 
     @RequestMapping(value = "/statistics/teasalerProduct", method = RequestMethod.GET)
     @ResponseBody
@@ -126,6 +132,45 @@ public class StatisticsController extends ApiController{
         }
         Map<Long,Object> result =statisticsService.countTeaSalerAllProductType(teaSaler,startDate,endDate);
         return ServiceResult.success(result);
+    }
+
+    /**
+     * 协同过滤的商品推荐,先找用户行为相似度高的前5个,然后找他们买的商品,进行推荐
+     * @param customer_id
+     * @return
+     */
+    @RequestMapping(value = "/statistics/recommend", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult RecommendProducts(@RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id){
+        Customer customer =customerDao.findByIdAndAlive(customer_id,1);
+        if(customer==null){
+            return ServiceResult.fail(500,"该消费者不存在");
+        }
+        HashSet<Product> result =recommend.getSimilarity(customer);
+        return ServiceResult.success(result);
+    }
+
+    @RequestMapping(value = "/statistics/newrecommend", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult newRecommendProducts(@RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id){
+        Customer customer =customerDao.findByIdAndAlive(customer_id,1);
+        if(customer==null){
+            return ServiceResult.fail(500,"该消费者不存在");
+        }
+        Map<String,Object> result= null;
+        try {
+            result = recommend.getAllSimilarity(customer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ServiceResult.success(result);
+    }
+
+    @RequestMapping(value = "/statistics/delete", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ServiceResult deleteRecommendFile(){
+        recommend.deleteFile();
+        return ServiceResult.success("all succeed");
     }
 
 }
