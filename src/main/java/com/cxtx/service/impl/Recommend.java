@@ -6,17 +6,11 @@ import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.entity.*;
 import com.cxtx.model.ProductNumModel;
 import org.apache.commons.io.IOUtils;
-import org.aspectj.weaver.ast.Or;
 import org.json.JSONObject;
-import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
-
 import java.io.*;
 import java.util.*;
-
-import static com.jayway.restassured.parsing.Parser.JSON;
 
 /**
  * Created by ycc on 17/1/5.
@@ -83,23 +77,36 @@ public class Recommend {
      * @param list
      * @return
      */
-    public HashSet<Product> getProducts(List<Map.Entry<Long,Double>> list){
+    public Map<Long,ProductNumModel> getProducts(List<Map.Entry<Long,Double>> list){
         List<Customer> simCustomers =new ArrayList<Customer>();
-        HashSet<Product> result =new HashSet<Product>();
+//        HashSet<Product> result =new HashSet<Product>();
         System.out.println("相似度高的3个用户  ");
         for(int i=0;i<list.size()&&i<3;i++){
             Long id =list.get(i).getKey();
             Customer customer =customerDao.findByIdAndAlive(id,1);
             simCustomers.add(customer);
         }
+        Map<Long,ProductNumModel> map =new HashMap<Long,ProductNumModel>();
         for(Customer customer:simCustomers){
-            HashSet<Product> hashSet =getCustomerProduct(customer);
-            result.addAll(hashSet);
+           Map<Long,ProductNumModel> hashSet =getCustomerProduct(customer);
+            for(Map.Entry<Long,ProductNumModel> entry:hashSet.entrySet()){
+                ProductNumModel model=null;
+                if(map.containsKey(entry.getKey())){
+                    model=map.get(entry.getKey());
+                    model.num+=entry.getValue().num;
+                }else{
+                    model=new ProductNumModel();
+                    model.product=entry.getValue().product;
+                    model.num=entry.getValue().num;
+                }
+                map.put(entry.getKey(),model);
+            }
+//            result.addAll(hashSet);
         }
-        for(Map.Entry<Long,Double> entry:list){
-            System.out.println("getProducts:  "+entry.getKey()+"   "+entry.getValue());
-        }
-        return result;
+//        for(Map.Entry<Long,Double> entry:list){
+//            System.out.println("getProducts:  "+entry.getKey()+"   "+entry.getValue());
+//        }
+        return map;
     }
 
     /**
@@ -107,10 +114,10 @@ public class Recommend {
      * @param customer
      * @return
      */
-    public HashSet<Product> getSimilarity(Customer customer){
+    public Map<Long,ProductNumModel> getSimilarity(Customer customer){
         changeCustomerToVector();
         List<Map.Entry<Long,Double>> list =this.getMaxSimilarity(customer);
-        HashSet<Product> result =getProducts(list);
+        Map<Long,ProductNumModel> result =getProducts(list);
         return result;
     }
 
@@ -163,7 +170,7 @@ public class Recommend {
             Map<Long,Object> temp =new HashMap<Long,Object>();
            for(Customer c:customers){
                List<Map.Entry<Long,Double>> list =this.getMaxSimilarity(c);
-               HashSet<Product> result =getProducts(list);
+               Map<Long,ProductNumModel> result =getProducts(list);
                List<Product> list1=sortProduct(result);
                temp.put(c.getId(),list1);
            }
@@ -185,22 +192,22 @@ public class Recommend {
 
     /**
      * 将获得的推荐商品按照销量进行排序,从高到低
-     * @param hashSet
+     * @param map
      * @return
      */
-    public  List<Product> sortProduct(HashSet<Product> hashSet){
-        Map<Long,ProductNumModel> map=new HashMap<Long,ProductNumModel>();
-        for(Product product:hashSet){
-            double total=0;
-            List<OrderItem> list =orderItemDao.findByProductAndAlive(product,1);
-            for(OrderItem orderItem:list){
-                total=total+orderItem.getNum();
-            }
-            ProductNumModel model=new ProductNumModel();
-            model.num=total;
-            model.product=product;
-            map.put(product.getId(),model);
-        }
+    public  List<Product> sortProduct(Map<Long,ProductNumModel>map){
+//        Map<Long,ProductNumModel> map=new HashMap<Long,ProductNumModel>();
+//        for(Product product:hashSet){
+//            double total=0;
+//            List<OrderItem> list =orderItemDao.findByProductAndAlive(product,1);
+//            for(OrderItem orderItem:list){
+//                total=total+orderItem.getNum();
+//            }
+//            ProductNumModel model=new ProductNumModel();
+//            model.num=total;
+//            model.product=product;
+//            map.put(product.getId(),model);
+//        }
         List<Map.Entry<Long,ProductNumModel>> list = new LinkedList<Map.Entry<Long,ProductNumModel>>( map.entrySet() );
         Collections.sort( list, new Comparator<Map.Entry<Long,ProductNumModel>>(){
             public int compare( Map.Entry<Long,ProductNumModel> o1, Map.Entry<Long,ProductNumModel> o2 )
@@ -221,6 +228,9 @@ public class Recommend {
 
       return products;
     }
+
+
+
 
     public void deleteFile(){
         changeCustomerToVector();
@@ -320,13 +330,23 @@ public class Recommend {
      * @param customer
      * @return
      */
-    public HashSet<Product> getCustomerProduct(Customer customer){
+    public Map<Long,ProductNumModel> getCustomerProduct(Customer customer){
         List<OrderItem> list =orderItemDao.findByCustomerAndAliveAndState(customer.getId(),1,2);
         HashSet<Product> result =new HashSet<Product>();
+        Map<Long,ProductNumModel> map=new HashMap <Long,ProductNumModel>();
         for(OrderItem orderItem:list){
+            ProductNumModel model=null;
+            if(map.containsKey(orderItem.getProduct().getId())){
+                  model.num=model.num+orderItem.getNum();
+            }else{
+                model=new ProductNumModel();
+                model.num=orderItem.getNum();
+                model.product=orderItem.getProduct();
+            }
+            map.put(orderItem.getProduct().getId(),model);
             result.add(orderItem.getProduct());
         }
-        return result;
+        return map;
     }
 
 }
