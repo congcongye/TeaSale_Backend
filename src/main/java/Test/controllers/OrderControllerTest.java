@@ -6,7 +6,7 @@ import org.junit.Test;
 /**
  * Created by jinchuyang on 17/1/7.
  */
-public class ProductControllerTest extends RootTest{
+public class OrderControllerTest extends RootTest{
 
     @Test
     public void test(){
