@@ -423,3 +423,23 @@ teaSaler_id:茶农id
 }
 
 ```
+### 茶产品价格预测
+* URL:/api/products/price/predicte
+* Method:GET
+* 注意事项：    
+* 参数：
+ <pre>
+无
+
+</pre>
+* 返回值：
+ <pre>
+{
+  "code": 200,
+  "data": {
+    "West Lake Longjing": 514.16,
+    "Tieguanyin": 506.34,
+    "Biluochun": 476.97
+  }
+}
+</pre>

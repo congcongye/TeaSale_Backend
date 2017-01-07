@@ -137,6 +137,11 @@ public class OrderServiceImpl implements OrderService {
         return orderEns;
     }
 
+    /**
+     * 确定订单
+     * @param updateOrderModel
+     * @return
+     */
     @Override
     public OrderEn confirmOrder(UpdateOrderModel updateOrderModel) {
         OrderEn orderEn = orderEnDao.findOne(updateOrderModel.orderId);
