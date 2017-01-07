@@ -7,6 +7,7 @@ import com.cxtx.entity.Customer;
 import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSaler;
+import com.cxtx.model.ProductNumModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.StatisticsAllProductTypes;
 import com.cxtx.service.impl.Recommend;
@@ -146,7 +147,7 @@ public class StatisticsController extends ApiController{
         if(customer==null){
             return ServiceResult.fail(500,"该消费者不存在");
         }
-        HashSet<Product> result =recommend.getSimilarity(customer);
+        Map<Long,ProductNumModel> result =recommend.getSimilarity(customer);
         return ServiceResult.success(result);
     }
 
