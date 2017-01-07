@@ -41,7 +41,7 @@ public class OrderController extends ApiController{
 //    }
 
     /**
-     *
+     * 新增订单
      * @param createOrderModels
      * @return
      */
@@ -74,7 +74,7 @@ public class OrderController extends ApiController{
 //    }
 
     /**
-     *
+     * 搜索订单
      * @param customerId
      * @param teaSalerId
      * @param state
@@ -142,7 +142,7 @@ public class OrderController extends ApiController{
     }
 
     /**
-     *
+     * 搜索订单项
      * @param customerId
      * @param teaSalerId
      * @param state

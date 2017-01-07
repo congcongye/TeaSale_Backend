@@ -48,6 +48,11 @@ public class OrderServiceImpl implements OrderService {
     private CrowdFundingDao crowdFundingDao;
 
 
+    /**
+     * 新增订单,根据orderModel返回订单列表
+     * @param createOrderModels
+     * @return
+     */
     @Override
     public List<OrderEn> insertOrders(List<CreateOrderModel> createOrderModels) {
         List<OrderEn> orderEns = new ArrayList<OrderEn>();
@@ -56,26 +61,27 @@ public class OrderServiceImpl implements OrderService {
             long teaSalerId = createOrderModel.teaSalerId;
             Customer customer = customerDao.findOne(customerId);
             TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
+            if (customer == null || customer.getAlive() == 0 || teaSaler == null || teaSaler.getAlive() == 0){//无效判断
+                continue;
+            }
+
             OrderEn orderEn = new OrderEn();
             orderEn.setTel(createOrderModel.tel);
             orderEn.setZip(createOrderModel.zip);
             orderEn.setAddress(createOrderModel.address);
             orderEn.setCustomer(customer);
             orderEn.setTeaSaler(teaSaler);
-            //orderEn.setType(createOrderModel.type);
             orderEn.setName(createOrderModel.name);
             orderEn.setCreateDate(new Date());
             orderEn.setAlive(1);
-            orderEn.setState(0);
-            orderEn = orderEnDao.save(orderEn);
+            orderEn.setState(0);//此时订单的状态是刚创建,并没有完成,所以状态取1
+            orderEn = orderEnDao.save(orderEn);//新建一个订单,填入必须项
+
             List<CreateOrderItemModel> createOrderItemModels = createOrderModel.createOrderItemModels;
-            if (customer == null || customer.getAlive() == 0 || teaSaler == null || teaSaler.getAlive() == 0){
-                continue;
-            }
-            List<OrderItem> orderItems = new ArrayList<OrderItem>();
-            List<Product> products =  new ArrayList<Product>();
-            double totalMoney = 0;
-            double logistic = -1;
+            List<OrderItem> orderItems = new ArrayList<OrderItem>();//用于存储这个订单内的订单项,因为存在整个订单价格超过用户账户的钱,所以不能先存入数据库
+            List<Product> products =  new ArrayList<Product>();//用于存储此订单内包含的产品,因为一个订单内产品是会合并的,所以不用担心重复
+            double totalMoney = 0;//此订单总价
+            double logistic = -1;//此订单包含的最高的运费
             for (CreateOrderItemModel createOrderItemModel : createOrderItemModels){
                 long productId = createOrderItemModel.productId;
                 // long orderEnId = createOrderItemModel.orderEnId;
@@ -105,25 +111,28 @@ public class OrderServiceImpl implements OrderService {
                 orderItems.add(orderItem);
             }
             if (orderItems.size()==createOrderItemModels.size() && customer.getAccount().getMoney() >((totalMoney + logistic))){
-                orderItems = orderItemDao.save(orderItems);
+                orderItemDao.save(orderItems);
                 products = productDao.save(products);
                 orderEn.setTotalPrice(totalMoney + logistic);
                 orderEn.setState(1);
                 orderEn = orderEnDao.save(orderEn);
                 customer.getAccount().setMoney(customer.getAccount().getMoney() -((totalMoney + logistic)));
                 //TODO manager account add money
+                //删除购物车
                 for (Product product : products){
                     Cart cart = cartDao.findByProductAndCustomerAndAlive(product, customer, 1);
                     if (cart != null && cart.getAlive() == 1){
                         cart.setAlive(0);
                         cartDao.save(cart);
                     }
-
                 }
+            }else{
+                orderItemDao.save(orderItems);
+                orderEn.setTotalPrice(totalMoney + logistic);
+                orderEn.setState(0);
+                orderEn = orderEnDao.save(orderEn);
             }
-
             orderEns.add(orderEn);
-
         }
         return orderEns;
     }
