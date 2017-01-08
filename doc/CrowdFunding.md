@@ -303,7 +303,7 @@
 }
 </pre>
  
- #### 众筹确认成功(改变状态state->1)
+ #### 确认众筹形成,等待发货(改变状态state->4)
  * URL:/api/crowdFund/confirm
  * Method: POST
  * 输入：
@@ -362,7 +362,7 @@
           "licenseUrl": "c1.png",
           "zip": "435100",
           "idCard": "420281199311118111",
-          "state": 1,
+          "state": 4,
           "alive": 1,
           "createDate": "2016-11-11"
         },

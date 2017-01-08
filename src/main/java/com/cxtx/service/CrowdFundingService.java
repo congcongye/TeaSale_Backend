@@ -25,4 +25,6 @@ public interface CrowdFundingService {
     List<CrowdFunding> commend();
 
     List<Customer> findParticipants(long crowdFundingId);
+
+    void checkIsFinish();
 }

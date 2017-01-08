@@ -34,9 +34,10 @@ public class ScheduledTasks {
     @Autowired
     private Recommend recommend;
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 5000000)
     public void reportCurrentTime() {
         crowdFundingService.checkNum();
+        crowdFundingService.checkIsFinish();
         crowdSourcingService.checkNum();
 //        recommend.deleteFile();
     }
@@ -46,7 +47,7 @@ public class ScheduledTasks {
      * @throws IOException
      * @throws BiffException
      */
-    @Scheduled(cron = "50 27 23 * * ?")
+    @Scheduled(cron = "00 00 24 * * ?")
     public void timerCron() throws IOException, BiffException {
         //System.out.println("current time : "+ sdf.format(new Date()));
         DecimalFormat df   = new DecimalFormat("######0.00");

@@ -194,6 +194,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
             accountDao.save(account);
             crowdFundOrder.setConfirmDate(new Date());
             crowdFundOrder.setIsConfirm(1);
+            crowdFundOrder.setState(2);
             return  crowdFundOrderDao.save(crowdFundOrder);
         }
         return null;

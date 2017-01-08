@@ -249,7 +249,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
             Date now = new Date();
             if (now.after(dealDate)){
                 if (crowdFunding.getRemainderNum() <= 0){
-                    crowdFunding.setState(1);
+                    crowdFunding.setState(4);
                 }else{
                     crowdFunding.setState(2);
                     crowdFundOrderService.cancelOrdersByCrowdFund(crowdFunding);
@@ -261,7 +261,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
     }
 
     /**
-     * 确认订单
+     * 确认众筹形成,等待发货
      * @param id
      * @return
      */
@@ -271,7 +271,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
         if (crowdFunding == null || crowdFunding.getAlive() == 0) {
             return null;
         }
-        crowdFunding.setState(1);//成功
+        crowdFunding.setState(4);//成功
         return  crowdFundingDao.save(crowdFunding);
     }
 
@@ -318,6 +318,25 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
             }
         }
         return customers;
+    }
+
+    @Override
+    public void checkIsFinish() {
+        List<CrowdFunding> oldcrowdFundingList = crowdFundingDao.findByStateAndAlive(0,1);
+        List<CrowdFunding> newCrowdFundingList = new ArrayList<CrowdFunding>();
+        for (CrowdFunding crowdFunding : oldcrowdFundingList){
+            List<CrowdFundOrder> crowdFundOrders = crowdFundOrderDao.findByCrowdFundingAndAlive(crowdFunding,1);
+            boolean flag = true;
+            for (CrowdFundOrder crowdFundOrder : crowdFundOrders){
+                if (crowdFundOrder.getState() != 2){
+                    flag = false;
+                }
+            }
+            if (flag) {
+                newCrowdFundingList.add(crowdFunding);
+            }
+        }
+        crowdFundingDao.save(newCrowdFundingList);
     }
 
     @Override

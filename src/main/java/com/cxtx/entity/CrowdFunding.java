@@ -61,6 +61,7 @@ public class CrowdFunding {
      * 1  成功(关闭)
      * 2  未完成(关闭)
      * 3  成功(未完成,需通知未全额付款用户付款)
+     * 4  成功(确认众筹成功,等待发货)
      */
     @Column
     private int state=0;
