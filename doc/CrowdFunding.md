@@ -98,6 +98,7 @@
 * URL:http://localhost:7000/api/crowdFund/update
 * Method:PUT
 * 输入：
+* 
  <pre>
 {
  
@@ -113,7 +114,9 @@
     "totalNum": 1000
 }
  </pre>
+
 * 输出：
+* 
  <pre>
 {
   "code": 200,
@@ -188,6 +191,7 @@
   }
 }
 </pre>
+
 #### 众筹删除
 * URL:http://localhost:7000/api/crowdFund/delete
 * Method:PUT
@@ -203,11 +207,13 @@
   "data": "all succeed!"
 } 
 </pre>
+
 #### 众筹的查询
 * URL:http://localhost:7000/api/crowdFund/search?product_id=7&teaSaler_id=1&type=0&lowEarnest=1&highEarnest=100&lowUnitNum=1&highUnitNum=100&lowUnitMoney=1&highUnitMoney=1000&state=0&lowRemainderNum=1&highRemainderNum=1000&productType_id=1&productType_name=“ haha”&product_name="haha"
 * Method: GET
 * 输入：url中的参数可以都不填，如果填写的话，不需要该查询条件时，数字写－1，字符串写“”
 * 输出：
+* 
  <pre>
 {
   "code": 200,
@@ -305,7 +311,7 @@
  
  #### 确认众筹形成,等待发货(改变状态state->4)
  * URL:/api/crowdFund/confirm
- * Method: POST
+ * Method: PUT
  * 输入：
   <pre>
  {
@@ -815,6 +821,7 @@
     ]
   }
   ```
+  
   #### 发获得众筹的参与者(消费者)
   * URL:/api/crowdFund/participant/{crowdFundingId}
   * Method: GET
