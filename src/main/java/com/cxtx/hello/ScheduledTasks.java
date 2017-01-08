@@ -47,7 +47,7 @@ public class ScheduledTasks {
      * @throws IOException
      * @throws BiffException
      */
-    @Scheduled(cron = "00 00 24 * * ?")
+    @Scheduled(cron = "00 00 00 * * ?")
     public void timerCron() throws IOException, BiffException {
         //System.out.println("current time : "+ sdf.format(new Date()));
         DecimalFormat df   = new DecimalFormat("######0.00");
