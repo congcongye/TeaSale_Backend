@@ -111,7 +111,7 @@ public class Product {
     private TeaSaler teaSaler;
 
     /**
-     * 商品状态,0未上架  1上架
+     * 商品状态,0未上架  1上架  2下架
      */
     @Column
     private int state=0;

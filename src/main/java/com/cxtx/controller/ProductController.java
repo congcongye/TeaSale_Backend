@@ -235,6 +235,7 @@ public class ProductController extends ApiController {
         return ServiceResult.success(datas);
     }
 
+
     private List<List<TeaModel>> parse(List<TeaModel> teaModels) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         List<List<TeaModel>> datas = new ArrayList<List<TeaModel>>();
@@ -242,8 +243,8 @@ public class ProductController extends ApiController {
         model.name = "";
         model.level = -1;
         List<TeaModel> data = new ArrayList<TeaModel>();
-        for (TeaModel teaModel : teaModels){
-            if (!((teaModel.name.equals(model.name)) && (teaModel.level == model.level))){
+        for (TeaModel teaModel : teaModels) {
+            if (!((teaModel.name.equals(model.name)) && (teaModel.level == model.level))) {
                 datas.add(data);
                 model = teaModel;
                 data = new ArrayList<TeaModel>();
@@ -254,5 +255,18 @@ public class ProductController extends ApiController {
         datas.add(data);
         datas.remove(0);
         return datas;
+    }
+
+
+    @RequestMapping(value = "/products/down", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult downProduct(@RequestParam(value = "product_id",defaultValue = "-1")Long product_id){
+        int result =productService.downProduct(product_id);
+        if(result==0){
+            return ServiceResult.success("商品下架成功");
+        }else {
+            return ServiceResult.fail(500,"普通商品不存在");
+        }
+
     }
 }

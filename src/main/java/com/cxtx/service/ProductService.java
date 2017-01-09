@@ -21,4 +21,5 @@ public interface ProductService {
     List<Product> commend();
 
     CommentModel getComment(Long id);
+    int downProduct(Long productId);
 }
