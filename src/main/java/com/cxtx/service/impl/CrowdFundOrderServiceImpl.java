@@ -58,10 +58,10 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         if (customer == null || customer.getAlive() == 0 || teaSaler == null || teaSaler.getAlive() == 0 || crowdFunding == null || crowdFunding.getAlive() == 0){
             return ServiceResult.fail(500,"no customer, teasaler or crowd funding");
         }
-        if (createCrowdFundOrderModel.num < crowdFunding.getUnitNum()){
-            //TODO
-            return ServiceResult.fail(500,"the num is less the unit num");
-        }
+//        if (createCrowdFundOrderModel.num < crowdFunding.getUnitNum()){
+//            //TODO
+//            return ServiceResult.fail(500,"the num is less the unit num");
+//        }
         Product product = crowdFunding.getProduct();
         Account account = customer.getAccount();
         double totalMoney = 0;
@@ -80,36 +80,34 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         crowdFundOrder.setCrowdFunding(crowdFunding);
         crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
         if (crowdFunding.getType() == 0){//现付
-            if (customer.getAccount().getMoney() >= createCrowdFundOrderModel.num * crowdFunding.getUnitMoney()
-                    && crowdFunding.getRemainderNum() >= createCrowdFundOrderModel.num ){
-                totalMoney += createCrowdFundOrderModel.num * crowdFunding.getUnitMoney();
-                totalMoney += product.getIsFree()==1? 0:product.getPostage();
-                needPay = totalMoney;
-                crowdFundOrder.setRefund_state(1);
-            }
+            totalMoney += createCrowdFundOrderModel.num * crowdFunding.getUnitMoney();
+            totalMoney += product.getIsFree()==1? 0:product.getPostage();
+            needPay = totalMoney;
         }
         if (crowdFunding.getType() == 1){//预付
-            if (crowdFunding.getRemainderNum() >= createCrowdFundOrderModel.num
-                    && customer.getAccount().getMoney() >= createCrowdFundOrderModel.num * crowdFunding.getEarnest()){
-                totalMoney += createCrowdFundOrderModel.num * crowdFunding.getUnitMoney();
-                totalMoney += product.getIsFree()==1? 0:product.getPostage();
-                needPay = createCrowdFundOrderModel.num * crowdFunding.getEarnest();
-                crowdFundOrder.setRefund_state(2);
-            }
+            totalMoney += createCrowdFundOrderModel.num * crowdFunding.getUnitMoney();
+            totalMoney += product.getIsFree()==1? 0:product.getPostage();
+            needPay = createCrowdFundOrderModel.num * crowdFunding.getEarnest();
         }
         if (totalMoney > 0){
             if (account.getMoney() - needPay < 0){
-                return ServiceResult.fail(500,"金额不足");
+                crowdFundOrder.setState(0);
+                crowdFundOrder.setRefund_state(needPay==totalMoney?1:2);
+                crowdFundOrder.setHasPay(needPay);
+                crowdFundOrder.setTotalPrice(totalMoney);
+                crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
+            }else {
+                account.setMoney(account.getMoney() - needPay);
+                accountDao.save(account);
+                crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - createCrowdFundOrderModel.num);
+                crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
+                crowdFundingDao.save(crowdFunding);
+                crowdFundOrder.setState(1);
+                crowdFundOrder.setRefund_state(needPay == totalMoney ? 1 : 2);
+                crowdFundOrder.setHasPay(needPay);
+                crowdFundOrder.setTotalPrice(totalMoney);
+                crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
             }
-            account.setMoney(account.getMoney() - needPay);
-            accountDao.save(account);
-            crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - createCrowdFundOrderModel.num);
-            crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
-            crowdFundingDao.save(crowdFunding);
-            crowdFundOrder.setState(needPay==totalMoney?1:3);
-            crowdFundOrder.setHasPay(needPay);
-            crowdFundOrder.setTotalPrice(totalMoney);
-            crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
 
         }
 
@@ -217,7 +215,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
     }
 
     /**
-     * 取消订单
+     * 取消众筹订单
      * @param id
      * @return
      */
@@ -246,6 +244,10 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         accountDao.save(account);
         crowdFundOrder.setState(3);
         crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
+        CrowdFunding crowdFunding = crowdFundOrder.getCrowdFunding();
+        crowdFunding.setJoinNum(crowdFunding.getJoinNum()-1);
+        crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() + crowdFundOrder.getNum());
+        crowdFundingDao.save(crowdFunding);
         return crowdFundOrder;
     }
 

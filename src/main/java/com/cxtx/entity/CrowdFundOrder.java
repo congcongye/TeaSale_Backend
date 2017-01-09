@@ -56,7 +56,7 @@ public class CrowdFundOrder {
     private int num;//份数
 
     /**
-     * 订单状态 0 未完成, 1已付款,2已完成,3部分付款
+     * 订单状态 0 未完成, 1已付款,2已完成,3取消
      */
     @Column
     private int state = 0;

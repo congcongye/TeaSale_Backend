@@ -279,6 +279,7 @@ public class OrderServiceImpl implements OrderService {
                     predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("createDate"),endDate));
                 }
                 predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSaler>get("teaSaler").get("name"),teaSalerName));
+                predicate.getExpressions().add(criteriaBuilder.equal(root.get("alive"),1));
                 return predicate;
             }
         };
