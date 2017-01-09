@@ -37,7 +37,7 @@ public class ScheduledTasks {
         crowdFundingService.checkNum();
         crowdFundingService.checkIsFinish();
         crowdSourcingService.checkNum();
-//        recommend.deleteFile();
+        crowdSourcingService.checkIsFinish();
     }
 
     /**
