@@ -284,5 +284,18 @@ public class ProductServiceImpl implements ProductService{
     }
 
 
+    public int downProduct(Long productId){
+        Product product =productDao.findByIdAndAlive(productId,1);
+        Product result=null;
+        if(null!=product&&product.getType()==0){
+            product.setState(2);
+            result = productDao.save(product);
+        }
+      if(null!=result){
+        return 0;
+      }else{
+        return 1;
+      }
+    }
 
 }

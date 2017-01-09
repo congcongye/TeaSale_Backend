@@ -232,4 +232,15 @@ public class ProductController extends ApiController {
         return ServiceResult.success(result);
     }
 
+
+    @RequestMapping(value = "/products/down", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult downProduct(@RequestParam(value = "product_id",defaultValue = "-1")Long product_id){
+        int result =productService.downProduct(product_id);
+        if(result==0){
+            return ServiceResult.success("商品下架成功");
+        }else {
+            return ServiceResult.fail(500,"普通商品不存在");
+        }
+    }
 }
