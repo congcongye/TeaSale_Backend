@@ -1,5 +1,6 @@
 package com.cxtx.hello;
 
+import com.cxtx.model.TeaModel;
 import com.cxtx.predictor.Predictor;
 import com.cxtx.service.CrowdFundingService;
 import com.cxtx.service.CrowdSourcingService;
@@ -17,10 +18,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by jinchuyang on 16/12/6.
@@ -50,15 +48,16 @@ public class ScheduledTasks {
     @Scheduled(cron = "00 00 00 * * ?")
     public void timerCron() throws IOException, BiffException {
         //System.out.println("current time : "+ sdf.format(new Date()));
-        DecimalFormat df   = new DecimalFormat("######0.00");
-        String[] types ={"West Lake Longjing","Tieguanyin","Biluochun"};
-        Map<String, Double> result = new HashMap<String, Double>();
+//        DecimalFormat df   = new DecimalFormat("######0.00");
+//        String[] types ={"West Lake Longjing","Tieguanyin","Biluochun"};
+//        Map<String, Double> result = new HashMap<String, Double>();
         Predictor predictor = new Predictor();
-        for (String type : types) {
-            double price = predictor.Predicte(type);
-            result.put(type, Double.parseDouble(df.format(price)));
-        }
-        String json = com.alibaba.fastjson.JSON.toJSONString(result,true);
+//        for (String type : types) {
+//            double price = predictor.Predicte(type);
+//            result.put(type, Double.parseDouble(df.format(price)));
+//        }
+        List<List<TeaModel>> datas = predictor.Predicte();
+        String json = com.alibaba.fastjson.JSON.toJSONString(datas,true);
         File file = new File("src/main/resources/price.properties");
         if (!file.exists()){
             file.createNewFile();

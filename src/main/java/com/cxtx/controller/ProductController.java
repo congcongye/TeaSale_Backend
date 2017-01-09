@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -224,12 +225,34 @@ public class ProductController extends ApiController {
     @RequestMapping(value = "/products/price/predicte", method = RequestMethod.GET)
     @ResponseBody
     public ServiceResult getPrediction () throws IOException, BiffException {
+
         InputStream is = this.getClass().getClassLoader().getResourceAsStream("price.properties");
         Properties pros = new Properties();
         pros.load(is);
         String json = (String) pros.get("price");
-        Map<String, Double> result  = com.alibaba.fastjson.JSON.parseObject(json, Map.class);
-        return ServiceResult.success(result);
+        List<TeaModel> result  = com.alibaba.fastjson.JSON.parseArray(json, TeaModel.class);
+        List<List<TeaModel>> datas = parse(result);
+        return ServiceResult.success(datas);
     }
 
+    private List<List<TeaModel>> parse(List<TeaModel> teaModels) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        List<List<TeaModel>> datas = new ArrayList<List<TeaModel>>();
+        TeaModel model = new TeaModel();
+        model.name = "";
+        model.level = -1;
+        List<TeaModel> data = new ArrayList<TeaModel>();
+        for (TeaModel teaModel : teaModels){
+            if (!((teaModel.name.equals(model.name)) && (teaModel.level == model.level))){
+                datas.add(data);
+                model = teaModel;
+                data = new ArrayList<TeaModel>();
+            }
+            teaModel.dateStr = sdf.format(teaModel.date);
+            data.add(teaModel);
+        }
+        datas.add(data);
+        datas.remove(0);
+        return datas;
+    }
 }

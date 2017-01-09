@@ -6,8 +6,13 @@ package com.cxtx.predictor;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Vector;
+
+import com.cxtx.model.TeaModel;
+import com.cxtx.utils.DateUtils;
 import org.neuroph.core.NeuralNetwork;
 import org.neuroph.core.learning.SupervisedTrainingElement;
 import org.neuroph.core.learning.TrainingElement;
@@ -28,15 +33,57 @@ public class Predictor {
     private int maxIterations;
     private double[] priceData;
 
-    public double Predicte(String name) throws BiffException, IOException {
+    public List<List<TeaModel>> Predicte() throws BiffException, IOException {
 
         neuralNetConfig();
-        double[] data = DataFromXlsFile.GetData("Biluochun", 2016, "whole.xls");
+        double[] data ;
+        List<TeaModel> teaModels = DataFromXlsFile.getTeaModels("whole.xls");
+        List<List<TeaModel>> datas = parse(teaModels);
+        for (List<TeaModel> list : datas){
+            data = getDataFromModel(list);
+            setDataminDatamax(data);
+            neuralNetTraining(data);
+            double nextMonthPrice = neuralNetTesting();
 
-        setDataminDatamax(data);
-        neuralNetTraining(data);
-        return neuralNetTesting();
+            TeaModel teaModel = list.get(list.size()-1);
+            TeaModel t = new TeaModel();
+            t.date = DateUtils.nextMonth(teaModel.date);
+            t.price = nextMonthPrice;
+            t.province = teaModel.province;
+            t.name = teaModel.name;
+            t.level = teaModel.level;
+            t.dateStr = teaModel.dateStr;
+            list.add(t);
+        }
+        return datas;
 
+    }
+
+    private double[] getDataFromModel(List<TeaModel> list) {
+        double[] data = new double[list.size()];
+        for (int i = 0;i < list.size(); i++){
+            data[i] = list.get(i).price;
+        }
+        return data;
+    }
+
+    private List<List<TeaModel>> parse(List<TeaModel> teaModels) {
+        List<List<TeaModel>> datas = new ArrayList<List<TeaModel>>();
+        TeaModel model = new TeaModel();
+        model.name = "";
+        model.level = -1;
+        List<TeaModel> data = new ArrayList<TeaModel>();
+        for (TeaModel teaModel : teaModels){
+            if (!((teaModel.name.equals(model.name)) && (teaModel.level == model.level))){
+                datas.add(data);
+                model = teaModel;
+                data = new ArrayList<TeaModel>();
+            }
+            data.add(teaModel);
+        }
+        datas.add(data);
+        datas.remove(0);
+        return datas;
     }
 
     private  double neuralNetTesting() {
