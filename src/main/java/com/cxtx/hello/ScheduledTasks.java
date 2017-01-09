@@ -35,16 +35,17 @@ public class ScheduledTasks {
         crowdFundingService.checkNum();
         crowdFundingService.checkIsFinish();
         crowdSourcingService.checkNum();
-//        recommend.deleteFile();
+        crowdSourcingService.checkIsFinish();
     }
 
     /**
-     * 每天24点00分00秒时执行
+     * 每天24点00分00秒时执行,商品价格预测
      * @throws IOException
      * @throws BiffException
      */
     @Scheduled(cron = "00 40 19 * * ?")
     public void timerCron() throws IOException, BiffException {
+
         Predictor predictor = new Predictor();
 
         List<List<TeaModel>> datas = predictor.Predicte();
@@ -55,6 +56,7 @@ public class ScheduledTasks {
             }
         }
         String json = com.alibaba.fastjson.JSON.toJSONString(list,true);
+
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
         Properties p = new Properties();
         try {
@@ -64,6 +66,7 @@ public class ScheduledTasks {
         }
         String folderPath = p.getProperty("predicateFile");
         File file=new File(folderPath);
+
         if (!file.exists()){
             file.createNewFile();
         }
@@ -79,5 +82,15 @@ public class ScheduledTasks {
 //        properties.store(oFile,"predicate price");
 //        //oFile.flush();
 //        oFile.close();
+    }
+
+    /**
+     * 凌晨4点的时候,重新进行用户商品的推荐
+     * @throws IOException
+     * @throws BiffException
+     */
+    @Scheduled(cron = "00 00 04 * * ?")//00 00 00 * * ?
+    public void recommendTime() throws IOException, BiffException {
+        recommend.deleteFile();
     }
 }

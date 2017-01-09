@@ -58,30 +58,38 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
         }
         if (csorder.num < crowdSourcing.getUnitNum()){
             //TODO
-            return ServiceResult.fail(500,"the num is less the unit num");
+            return ServiceResult.fail(500,"购买数量少于剩余量");
         }
-        double totalMoney = 0;
         CrowdSourcingOrder crowdSourcingOrder = new CrowdSourcingOrder();
-        crowdSourcingOrder.setTel(csorder.tel);
-        crowdSourcingOrder.setZip(csorder.zip);
-        crowdSourcingOrder.setAddress(csorder.address);
-        crowdSourcingOrder.setCustomer(customer);
-        crowdSourcingOrder.setTeaSaler(teaSaler);
-        crowdSourcingOrder.setName(csorder.name);
-        crowdSourcingOrder.setCreateDate(new Date());
-        crowdSourcingOrder.setAlive(1);
-        crowdSourcingOrder.setState(0);
-        crowdSourcingOrder.setNum(csorder.num);
-        crowdSourcingOrder.setCrowdSourcing(crowdSourcing);
-        crowdSourcingOrder = crowdSourcingOrderDao.save(crowdSourcingOrder);
-        totalMoney += csorder.num * crowdSourcing.getUnitMoney();
-        crowdSourcingOrder.setRefund_state(1);
-        crowdSourcing.setRemainderNum(crowdSourcing.getRemainderNum() - csorder.num);
-        crowdSourcing.setJoinNum(crowdSourcing.getJoinNum() + 1);
-        crowdSourcingDao.save(crowdSourcing);
-        crowdSourcingOrder.setState(2);
-        crowdSourcingOrder.setTotalPrice(totalMoney);
-        crowdSourcingOrder = crowdSourcingOrderDao.save(crowdSourcingOrder);
+        if(crowdSourcing.getState()==0&&crowdSourcing.getRemainderNum()>=csorder.num){
+            double totalMoney = 0;
+            crowdSourcingOrder.setTel(csorder.tel);
+            crowdSourcingOrder.setZip(csorder.zip);
+            crowdSourcingOrder.setAddress(csorder.address);
+            crowdSourcingOrder.setCustomer(customer);
+            crowdSourcingOrder.setTeaSaler(teaSaler);
+            crowdSourcingOrder.setName(csorder.name);
+            crowdSourcingOrder.setCreateDate(new Date());
+            crowdSourcingOrder.setAlive(1);
+            crowdSourcingOrder.setState(0);
+            crowdSourcingOrder.setNum(csorder.num);
+            crowdSourcingOrder.setCrowdSourcing(crowdSourcing);
+            crowdSourcingOrder = crowdSourcingOrderDao.save(crowdSourcingOrder);
+            totalMoney += csorder.num * crowdSourcing.getUnitMoney();
+            crowdSourcingOrder.setRefund_state(1);
+            crowdSourcing.setRemainderNum(crowdSourcing.getRemainderNum() - csorder.num);
+            crowdSourcing.setJoinNum(crowdSourcing.getJoinNum() + 1);
+            crowdSourcingDao.save(crowdSourcing);
+            crowdSourcingOrder.setState(2);
+            crowdSourcingOrder.setTotalPrice(totalMoney);
+            crowdSourcingOrder = crowdSourcingOrderDao.save(crowdSourcingOrder);
+        }else{
+            return ServiceResult.fail(500,"众包已经结束或者购买数量超过剩余量");
+        }
+        if(crowdSourcing.getRemainderNum()==0){
+            crowdSourcing.setState(3);
+            crowdSourcingDao.save(crowdSourcing);
+        }
         return ServiceResult.success(crowdSourcingOrder);
     }
 
