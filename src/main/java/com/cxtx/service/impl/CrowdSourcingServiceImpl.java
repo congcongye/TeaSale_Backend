@@ -121,6 +121,25 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
         crowdSourcingDao.save(newCrowdSourcingList);
     }
 
+//    @Override
+//    public void checkIsFinish() {
+//        List<CrowdSourcing> oldcrowdSourcingList = crowdSourcingDao.findByAliveAndState(1,3);
+//        List<CrowdSourcing> newCrowdSourcingList = new ArrayList<CrowdSourcing>();
+//        for (CrowdSourcing crowdSourcing : oldcrowdSourcingList){
+//            List<CrowdSourcingOrder> crowdSourcingOrders = crowdSourcingOrderDao.findByCrowdSourcingAndAlive(crowdSourcing,1);
+//            boolean flag = true;
+//            for (CrowdSourcingOrder order : crowdSourcingOrders){
+//                if (order.getState() != 2){
+//                    flag = false;
+//                }
+//            }
+//            if (flag) {
+//                newCrowdSourcingList.add(crowdSourcing);
+//            }
+//        }
+//        crowdSourcingDao.save(newCrowdSourcingList);
+//    }
+
     @Override
     public List<TeaSaler> findParticipants(long crowdSourcingId) {
         CrowdSourcing crowdSourcing = crowdSourcingDao.findByIdAndAlive(crowdSourcingId,1);

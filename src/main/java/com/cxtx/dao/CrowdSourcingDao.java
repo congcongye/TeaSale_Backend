@@ -17,5 +17,7 @@ public interface CrowdSourcingDao extends JpaRepository<CrowdSourcing, Long>, Jp
     List<CrowdSourcing> findByProductAndAlive(Product p, int alive);
 
     List<CrowdSourcing> findByAlive(int alive);
+    List<CrowdSourcing> findByAliveAndState(int alive,int state);
+
 
 }

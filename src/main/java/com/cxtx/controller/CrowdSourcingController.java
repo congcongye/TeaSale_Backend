@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -199,4 +200,27 @@ public class CrowdSourcingController extends ApiController{
         }
         return ServiceResult.success(teaSalers);
     }
+
+    /**
+     * 众包的手工确认
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/crowdSourcing/confirm", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult Confirm(@RequestParam(value = "id",defaultValue = "-1")Long id){
+        CrowdSourcing crowdSourcing=crowdSourcingDao.findByIdAndAlive(id,1);
+        if(null==crowdSourcing||crowdSourcing.getState()!=0){
+            return ServiceResult.fail(500,"众包不存在");
+        }else {
+            if(new Date().after(crowdSourcing.getCreateDate())){
+                crowdSourcing.setState(3);
+                CrowdSourcing result =crowdSourcingDao.save(crowdSourcing);
+                return ServiceResult.success(result);
+            }else{
+                return ServiceResult.fail(500,"众包还未开始");
+            }
+        }
+    }
+
 }
