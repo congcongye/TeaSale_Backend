@@ -210,8 +210,6 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
                 }
                 if (teaSaler !=null && teaSaler.getAlive() ==1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.<TeaSaler>get("teaSaler"),teaSaler));
-                }else if(teaSalers != null && teaSalers.size() >0){
-                    predicate.getExpressions().add(root.<TeaSaler>get("teaSaler").in(teaSalers));
                 }
                 if (crowdSourcing != null){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.<CrowdSourcing>get("crowdSourcing"),crowdSourcing));
@@ -255,6 +253,7 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
                     }
                     predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("createDate"),endDate));
                 }
+                predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSaler>get("teaSaler").get("name"),teaSalerName));
                 return predicate;
             }
         };
