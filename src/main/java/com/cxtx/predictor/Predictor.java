@@ -40,6 +40,7 @@ public class Predictor {
         List<TeaModel> teaModels = DataFromXlsFile.getTeaModels("whole.xls");
         List<List<TeaModel>> datas = parse(teaModels);
         for (List<TeaModel> list : datas){
+            neuralNetConfig();
             data = getDataFromModel(list);
             setDataminDatamax(data);
             neuralNetTraining(data);
