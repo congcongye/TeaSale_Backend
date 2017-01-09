@@ -1,6 +1,7 @@
 package com.cxtx.hello;
 
 import com.cxtx.model.TeaModel;
+import com.cxtx.predictor.PredicateUtils;
 import com.cxtx.predictor.Predictor;
 import com.cxtx.service.CrowdFundingService;
 import com.cxtx.service.CrowdSourcingService;
@@ -43,45 +44,11 @@ public class ScheduledTasks {
      * @throws IOException
      * @throws BiffException
      */
-    @Scheduled(cron = "00 40 19 * * ?")
+    @Scheduled(cron = "00 20 20 * * ?")
     public void timerCron() throws IOException, BiffException {
 
-        Predictor predictor = new Predictor();
+        new PredicateUtils().doPredicate();
 
-        List<List<TeaModel>> datas = predictor.Predicte();
-        List<TeaModel> list = new ArrayList<TeaModel>();
-        for (List<TeaModel> teaModelList : datas){
-            for (TeaModel teaModel : teaModelList){
-                list.add(teaModel);
-            }
-        }
-        String json = com.alibaba.fastjson.JSON.toJSONString(list,true);
-
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
-        Properties p = new Properties();
-        try {
-            p.load(inputStream);
-        } catch (IOException e1) {
-            e1.printStackTrace();
-        }
-        String folderPath = p.getProperty("predicateFile");
-        File file=new File(folderPath);
-
-        if (!file.exists()){
-            file.createNewFile();
-        }
-        FileWriter fileWriter = new FileWriter(file);
-        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        bufferedWriter.write(json);
-        bufferedWriter.flush();
-        bufferedWriter.close();
-//        //System.out.println(file.exists());
-//        FileOutputStream oFile = new FileOutputStream(file);
-//        Properties properties = new Properties();
-//        properties.setProperty("price",json);
-//        properties.store(oFile,"predicate price");
-//        //oFile.flush();
-//        oFile.close();
     }
 
     /**

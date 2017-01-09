@@ -8,6 +8,7 @@ import com.cxtx.entity.Product;
 import com.cxtx.entity.ProductType;
 import com.cxtx.entity.TeaSaler;
 import com.cxtx.model.*;
+import com.cxtx.predictor.PredicateUtils;
 import com.cxtx.predictor.Predictor;
 import com.cxtx.service.ProductService;
 import jxl.read.biff.BiffException;
@@ -237,27 +238,22 @@ public class ProductController extends ApiController {
         String folderPath = p.getProperty("predicateFile");
         File file=new File(folderPath);
         if (!file.exists()){
-            //TODO
-            return ServiceResult.success(null);
-        }else {
-            StringBuffer sb = new StringBuffer();
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            String tempString = null;
-
-            // 一次读入一行，直到读入null为文件结束
-            while ((tempString = reader.readLine()) != null) {
-                sb.append(tempString);
-            }
-            reader.close();
-            String json = sb.toString();
-            List<TeaModel> result  = com.alibaba.fastjson.JSON.parseArray(json, TeaModel.class);
-            List<List<TeaModel>> datas = parse(result);
-            return ServiceResult.success(datas);
+            new PredicateUtils().doPredicate();
         }
-//        //String json = (String) pros.get("price");
-//        List<TeaModel> result  = com.alibaba.fastjson.JSON.parseArray(json, TeaModel.class);
-//        List<List<TeaModel>> datas = parse(result);
-//        return ServiceResult.success(datas);
+        StringBuffer sb = new StringBuffer();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String tempString = null;
+
+        // 一次读入一行，直到读入null为文件结束
+        while ((tempString = reader.readLine()) != null) {
+            sb.append(tempString);
+        }
+        reader.close();
+        String json = sb.toString();
+        List<TeaModel> result  = com.alibaba.fastjson.JSON.parseArray(json, TeaModel.class);
+        List<List<TeaModel>> datas = parse(result);
+        return ServiceResult.success(datas);
+
     }
 
 
