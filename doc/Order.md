@@ -160,7 +160,7 @@ endDateStr=2016-12-10 订单创建结束时间
 ```
 说明
 teaSalerName:茶农名字,当不传茶农id时使用该参数
-state:订单状态 0 未完成, 1已付款,2已完成
+state:订单状态 0 未完成, 1已付款,2已完成,3已取消
 isSend:是否发货 0 否, 1是
 isConfirm:是否确认收货 0 否, 1是
 isComment:是否评论 0 否, 1是

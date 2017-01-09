@@ -249,7 +249,11 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
             Date now = new Date();
             if (now.after(dealDate)){
                 if (crowdFunding.getRemainderNum() <= 0){
-                    crowdFunding.setState(4);
+                    if (crowdFunding.getType()==1){
+                        crowdFunding.setState(3);
+                    }else {
+                        crowdFunding.setState(4);
+                    }
                 }else{
                     crowdFunding.setState(2);
                     crowdFundOrderService.cancelOrdersByCrowdFund(crowdFunding);
@@ -271,7 +275,11 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
         if (crowdFunding == null || crowdFunding.getAlive() == 0) {
             return null;
         }
-        crowdFunding.setState(4);//成功
+        if (crowdFunding.getType()==1){
+            crowdFunding.setState(3);
+        }else {
+            crowdFunding.setState(4);
+        }
         return  crowdFundingDao.save(crowdFunding);
     }
 

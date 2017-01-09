@@ -145,7 +145,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderEn confirmOrder(UpdateOrderModel updateOrderModel) {
         OrderEn orderEn = orderEnDao.findOne(updateOrderModel.orderId);
-        if (orderEn != null && orderEn.getAlive() == 1){
+        if (orderEn != null && orderEn.getAlive() == 1 && orderEn.getState() != 1){
             Account account = orderEn.getTeaSaler().getAccount();
             account.setMoney(account.getMoney() + orderEn.getTotalPrice());
             accountDao.save(account);
