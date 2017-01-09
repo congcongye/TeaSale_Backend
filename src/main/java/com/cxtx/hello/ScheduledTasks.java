@@ -41,23 +41,23 @@ public class ScheduledTasks {
     }
 
     /**
-     * 每天24点00分00秒时执行
+     * 每天24点00分00秒时执行,商品价格预测
      * @throws IOException
      * @throws BiffException
      */
     @Scheduled(cron = "00 00 00 * * ?")
     public void timerCron() throws IOException, BiffException {
-        //System.out.println("current time : "+ sdf.format(new Date()));
-//        DecimalFormat df   = new DecimalFormat("######0.00");
-//        String[] types ={"West Lake Longjing","Tieguanyin","Biluochun"};
-//        Map<String, Double> result = new HashMap<String, Double>();
+        System.out.print("定时任务开始");
         Predictor predictor = new Predictor();
-//        for (String type : types) {
-//            double price = predictor.Predicte(type);
-//            result.put(type, Double.parseDouble(df.format(price)));
-//        }
+
         List<List<TeaModel>> datas = predictor.Predicte();
-        String json = com.alibaba.fastjson.JSON.toJSONString(datas,true);
+        List<TeaModel> list = new ArrayList<TeaModel>();
+        for (List<TeaModel> teaModelList : datas){
+            for (TeaModel teaModel : teaModelList){
+                list.add(teaModel);
+            }
+        }
+        String json = com.alibaba.fastjson.JSON.toJSONString(list,true);
         File file = new File("src/main/resources/price.properties");
         if (!file.exists()){
             file.createNewFile();
@@ -69,5 +69,15 @@ public class ScheduledTasks {
         properties.store(oFile,"predicate price");
         //oFile.flush();
         oFile.close();
+    }
+
+    /**
+     * 凌晨4点的时候,重新进行用户商品的推荐
+     * @throws IOException
+     * @throws BiffException
+     */
+    @Scheduled(cron = "00 00 04 * * ?")//00 00 00 * * ?
+    public void recommendTime() throws IOException, BiffException {
+        recommend.deleteFile();
     }
 }
