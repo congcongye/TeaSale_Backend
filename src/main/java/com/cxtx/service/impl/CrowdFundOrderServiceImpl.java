@@ -339,6 +339,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
                         e.printStackTrace();
                     }
                     predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("createDate"),endDate));
+                    predicate.getExpressions().add(criteriaBuilder.equal(root.get("alive"),1));
                 }
                 return predicate;
             }
