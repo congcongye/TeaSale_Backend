@@ -1,5 +1,6 @@
 package com.cxtx.controller;
 
+import com.alibaba.fastjson.util.IOUtils;
 import com.cxtx.dao.ProductDao;
 import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.dao.TeaSalerDao;
@@ -15,8 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -226,13 +226,38 @@ public class ProductController extends ApiController {
     @ResponseBody
     public ServiceResult getPrediction () throws IOException, BiffException {
 
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream("price.properties");
-        Properties pros = new Properties();
-        pros.load(is);
-        String json = (String) pros.get("price");
-        List<TeaModel> result  = com.alibaba.fastjson.JSON.parseArray(json, TeaModel.class);
-        List<List<TeaModel>> datas = parse(result);
-        return ServiceResult.success(datas);
+        //String json = com.alibaba.fastjson.JSON.toJSONString(list,true);
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("predicateFile");
+        File file=new File(folderPath);
+        if (!file.exists()){
+            //TODO
+            return ServiceResult.success(null);
+        }else {
+            StringBuffer sb = new StringBuffer();
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String tempString = null;
+
+            // 一次读入一行，直到读入null为文件结束
+            while ((tempString = reader.readLine()) != null) {
+                sb.append(tempString);
+            }
+            reader.close();
+            String json = sb.toString();
+            List<TeaModel> result  = com.alibaba.fastjson.JSON.parseArray(json, TeaModel.class);
+            List<List<TeaModel>> datas = parse(result);
+            return ServiceResult.success(datas);
+        }
+//        //String json = (String) pros.get("price");
+//        List<TeaModel> result  = com.alibaba.fastjson.JSON.parseArray(json, TeaModel.class);
+//        List<List<TeaModel>> datas = parse(result);
+//        return ServiceResult.success(datas);
     }
 
 

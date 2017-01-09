@@ -13,9 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -32,7 +30,7 @@ public class ScheduledTasks {
     @Autowired
     private Recommend recommend;
 
-    @Scheduled(fixedRate = 5000000)
+    @Scheduled(fixedRate = 6000000)
     public void reportCurrentTime() {
         crowdFundingService.checkNum();
         crowdFundingService.checkIsFinish();
@@ -45,29 +43,41 @@ public class ScheduledTasks {
      * @throws IOException
      * @throws BiffException
      */
-    @Scheduled(cron = "00 00 00 * * ?")
+    @Scheduled(cron = "00 40 19 * * ?")
     public void timerCron() throws IOException, BiffException {
-        //System.out.println("current time : "+ sdf.format(new Date()));
-//        DecimalFormat df   = new DecimalFormat("######0.00");
-//        String[] types ={"West Lake Longjing","Tieguanyin","Biluochun"};
-//        Map<String, Double> result = new HashMap<String, Double>();
         Predictor predictor = new Predictor();
-//        for (String type : types) {
-//            double price = predictor.Predicte(type);
-//            result.put(type, Double.parseDouble(df.format(price)));
-//        }
+
         List<List<TeaModel>> datas = predictor.Predicte();
-        String json = com.alibaba.fastjson.JSON.toJSONString(datas,true);
-        File file = new File("src/main/resources/price.properties");
+        List<TeaModel> list = new ArrayList<TeaModel>();
+        for (List<TeaModel> teaModelList : datas){
+            for (TeaModel teaModel : teaModelList){
+                list.add(teaModel);
+            }
+        }
+        String json = com.alibaba.fastjson.JSON.toJSONString(list,true);
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("predicateFile");
+        File file=new File(folderPath);
         if (!file.exists()){
             file.createNewFile();
         }
-        //System.out.println(file.exists());
-        FileOutputStream oFile = new FileOutputStream(file);
-        Properties properties = new Properties();
-        properties.setProperty("price",json);
-        properties.store(oFile,"predicate price");
-        //oFile.flush();
-        oFile.close();
+        FileWriter fileWriter = new FileWriter(file);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+        bufferedWriter.write(json);
+        bufferedWriter.flush();
+        bufferedWriter.close();
+//        //System.out.println(file.exists());
+//        FileOutputStream oFile = new FileOutputStream(file);
+//        Properties properties = new Properties();
+//        properties.setProperty("price",json);
+//        properties.store(oFile,"predicate price");
+//        //oFile.flush();
+//        oFile.close();
     }
 }
