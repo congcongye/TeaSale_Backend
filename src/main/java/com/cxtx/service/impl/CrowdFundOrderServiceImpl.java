@@ -232,6 +232,34 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         return ServiceResult.success(crowdFundOrder);
     }
 
+    /**
+     * 未完成继续支付
+     * @param id
+     * @return
+     */
+    @Override
+    public ServiceResult payUnFinished(Long id) {
+        CrowdFundOrder crowdFundOrder = crowdFundOrderDao.findOne(id);
+        if (crowdFundOrder.getState() !=0){
+            return ServiceResult.fail(500,"该订单已完成或者已取消,无法继续支付");
+        }
+        Account account = crowdFundOrder.getCustomer().getAccount();
+        CrowdFunding crowdFunding = crowdFundOrder.getCrowdFunding();
+        double needPay = crowdFundOrder.getHasPay();
+        if (account.getMoney() - needPay < 0){
+            return ServiceResult.fail(500,"账户金额不够");
+        }else {
+            account.setMoney(account.getMoney() - needPay);
+            accountDao.save(account);
+            crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - crowdFundOrder.getNum());
+            crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
+            crowdFundingDao.save(crowdFunding);
+            crowdFundOrder.setState(1);
+            crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
+        }
+        return ServiceResult.success(crowdFundOrder);
+    }
+
     private CrowdFundOrder cancelCrowdFundOrder(CrowdFundOrder crowdFundOrder) {
         Account account = crowdFundOrder.getCustomer().getAccount();
         if (crowdFundOrder.getRefund_state() == 1){

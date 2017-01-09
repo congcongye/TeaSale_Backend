@@ -123,6 +123,19 @@ public class OrderController extends ApiController{
         return ServiceResult.success(orderEns);
     }
 
+    /**
+     * 支付未完成的
+     * @param idModel
+     * @return
+     */
+    @RequestMapping(value = "/order/payUnFinished", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult payUnFinished(@RequestBody IdModel idModel){
+        checkParameter(idModel.id > 0,"invalid id");
+        ServiceResult result =  orderService.payUnFinished(idModel.id);
+
+        return result;
+    }
 
     /**
      * 查询某一订单对应的订单项

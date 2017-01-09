@@ -108,6 +108,20 @@ public class CrowdFundOrderController extends ApiController{
     }
 
     /**
+     * 众筹支付未完成的
+     * @param idModel
+     * @return
+     */
+    @RequestMapping(value = "/crowdFundOrder/payUnFinished", method = RequestMethod.PUT)
+    @ResponseBody
+    public ServiceResult payUnFinished(@RequestBody IdModel idModel){
+        checkParameter(idModel.id > 0,"invalid id");
+        ServiceResult result =  crowdFundOrderService.payUnFinished(idModel.id);
+
+        return result;
+    }
+
+    /**
      * 更新订单 确认发货与确认收货
      * @param updateOrderModel
      * @return

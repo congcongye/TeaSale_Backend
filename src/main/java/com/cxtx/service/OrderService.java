@@ -26,4 +26,6 @@ public interface OrderService {
     OrderEn sendOrder(UpdateOrderModel updateOrderModel);
 
     ServiceResult cancelOrder(Long id);
+
+    ServiceResult payUnFinished(Long id);
 }

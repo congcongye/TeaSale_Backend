@@ -47,7 +47,6 @@ endDateStr=2016-12-10 订单创建结束时间
 * Method: POST
 * 参数:
 * 
-
 ```
 [
     {
@@ -699,3 +698,13 @@ endDateStr=2016-12-10 订单创建结束时间
     }
   }
 </pre>
+
+### 支付未完成的
+* URL /api/order/payUnFinished
+* Method: PUT
+* 参数:
+```
+{
+    "id":1
+}
+```

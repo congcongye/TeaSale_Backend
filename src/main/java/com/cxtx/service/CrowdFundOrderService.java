@@ -21,4 +21,6 @@ public interface CrowdFundOrderService {
     CrowdFundOrder sendOrder(UpdateOrderModel updateOrderModel);
 
     ServiceResult cancelOrder(Long id);
+
+    ServiceResult payUnFinished(Long id);
 }

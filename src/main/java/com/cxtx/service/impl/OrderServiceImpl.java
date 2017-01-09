@@ -188,6 +188,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public ServiceResult payUnFinished(Long id) {
+        OrderEn orderEn = orderEnDao.findOne(id);
+        Account account = orderEn.getCustomer().getAccount();
+        if (orderEn == null || orderEn.getAlive()==0 ||account == null || account.getAlive() == 0){
+            return  ServiceResult.fail(500, "存在空的帐号或者空的订单");
+        }
+        if (orderEn.getTotalPrice() > account.getMoney()){
+            return ServiceResult.fail(500, "账户金额不足");
+        }
+        account.setMoney(account.getMoney() - orderEn.getTotalPrice());
+        accountDao.save(account);
+        orderEn.setState(1);
+        orderEn  = orderEnDao.save(orderEn);
+        return ServiceResult.success(orderEn);
+    }
+
+    @Override
     public Page<OrderEn> search(long customerId, long teaSalerId, String teaSalerName, int state, int isSend, int isConfirm, int isComment,  int customerDelete, int adminDelete, int salerDelete,
                                 int refund_state, String name, String address, String tel, String beginDateStr, String endDateStr, int pageIndex, int pageSize, String sortField, String sortOrder) {
         Sort.Direction direction = Sort.Direction.DESC;

@@ -882,3 +882,12 @@
   }
 }
 </pre>
+### 众筹支付未完成的
+* URL /api/crowdFundOrder/payUnFinished
+* Method: PUT
+* 参数:
+```
+{
+    "id":1
+}
+```
