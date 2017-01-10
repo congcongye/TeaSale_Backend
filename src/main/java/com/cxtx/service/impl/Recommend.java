@@ -336,16 +336,18 @@ public class Recommend {
         Map<Long,ProductNumModel> map=new HashMap <Long,ProductNumModel>();
         for(OrderItem orderItem:list){
             ProductNumModel model=null;
-            if(map.containsKey(orderItem.getProduct().getId())){
-                model=map.get(orderItem.getProduct().getId());
-                model.num=model.num+orderItem.getNum();
-            }else{
-                model=new ProductNumModel();
-                model.num=orderItem.getNum();
-                model.product=orderItem.getProduct();
+            if(orderItem.getProduct().getState()==1){
+                if(map.containsKey(orderItem.getProduct().getId())){
+                    model=map.get(orderItem.getProduct().getId());
+                    model.num=model.num+orderItem.getNum();
+                }else{
+                    model=new ProductNumModel();
+                    model.num=orderItem.getNum();
+                    model.product=orderItem.getProduct();
+                }
+                map.put(orderItem.getProduct().getId(),model);
+                result.add(orderItem.getProduct());
             }
-            map.put(orderItem.getProduct().getId(),model);
-            result.add(orderItem.getProduct());
         }
         return map;
     }
