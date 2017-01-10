@@ -44,6 +44,12 @@ public class TeaSalerController extends ApiController{
         if (teaSaler == null ) {
             return ServiceResult.fail(500, "no manager record !");
         }
+        if(teaSaler.getState()==0){
+            return ServiceResult.fail(500, "暂未审核,请等待");
+        }
+        if(teaSaler.getState()==2){
+           return ServiceResult.fail(500, "审核不通过");
+        }
         return ServiceResult.success(teaSaler);
     }
 
@@ -59,7 +65,7 @@ public class TeaSalerController extends ApiController{
         checkParameter(createTeaSalerModel !=null,"manager cannot be empty!");
         Account account = accountService.register(createTeaSalerModel.getTel(), createTeaSalerModel.getPassword(), 1);
         if (account == null){
-            return ServiceResult.fail(500, "register failed, the tel already has account!");
+            return ServiceResult.fail(500, "电话号码已经被注册");
         }
         TeaSaler teaSaler = teaSalerService.addTeaSaler(createTeaSalerModel, account);
         return ServiceResult.success(teaSaler);
