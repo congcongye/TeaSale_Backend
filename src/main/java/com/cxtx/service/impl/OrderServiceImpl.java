@@ -6,6 +6,7 @@ import com.cxtx.model.CreateOrderItemModel;
 import com.cxtx.model.CreateOrderModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.UpdateOrderModel;
+import com.cxtx.service.ManagerService;
 import com.cxtx.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -46,7 +47,8 @@ public class OrderServiceImpl implements OrderService {
     private AccountDao accountDao;
     @Autowired
     private CrowdFundingDao crowdFundingDao;
-
+    @Autowired
+    private ManagerService managerService;
 
     /**
      * 新增订单,根据orderModel返回订单列表
@@ -118,6 +120,8 @@ public class OrderServiceImpl implements OrderService {
                 orderEn = orderEnDao.save(orderEn);
                 customer.getAccount().setMoney(customer.getAccount().getMoney() -((totalMoney + logistic)));
                 //TODO manager account add money
+                Manager manager = managerService.getManager();
+                managerService.changeMoney(manager,orderEn.getTotalPrice(),1);
                 //删除购物车
                 for (Product product : products){
                     Cart cart = cartDao.findByProductAndCustomerAndAlive(product, customer, 1);
@@ -150,6 +154,8 @@ public class OrderServiceImpl implements OrderService {
             account.setMoney(account.getMoney() + orderEn.getTotalPrice());
             accountDao.save(account);
             //TODO manager account reduce money
+            Manager manager = managerService.getManager();
+            managerService.changeMoney(manager,orderEn.getTotalPrice(),1);
             orderEn.setIsConfirm(1);
             orderEn.setConfirmDate(new Date());
             orderEn.setState(2);
@@ -182,6 +188,8 @@ public class OrderServiceImpl implements OrderService {
         Account account = customer.getAccount();
         account.setMoney(account.getMoney() + orderEn.getTotalPrice());
         accountDao.save(account);
+        Manager manager = managerService.getManager();
+        managerService.changeMoney(manager,orderEn.getTotalPrice(),1);
         orderEn.setState(3);
         orderEn = orderEnDao.save(orderEn);
         return ServiceResult.success(orderEn);
@@ -199,6 +207,8 @@ public class OrderServiceImpl implements OrderService {
         }
         account.setMoney(account.getMoney() - orderEn.getTotalPrice());
         accountDao.save(account);
+        Manager manager = managerService.getManager();
+        managerService.changeMoney(manager,orderEn.getTotalPrice(),0);
         orderEn.setState(1);
         orderEn  = orderEnDao.save(orderEn);
         return ServiceResult.success(orderEn);
