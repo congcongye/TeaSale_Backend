@@ -155,6 +155,7 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
                 account.setMoney(account.getMoney()+c.getTotalNum()*c.getUnitMoney());
                 accountDao.save(account);
                 //扣除系统的钱
+                c.setState(5);
             }
             List<CrowdSourcingOrder> orders=new ArrayList<CrowdSourcingOrder>();
             if(c.getState()==1){//成功,则计算金额,把多余的金额退还
@@ -171,8 +172,8 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
                 account.setMoney(addMoney);
                 accountDao.save(account);
                 crowdSourcingOrderDao.save(orders);
+                c.setState(4);
             }
-            c.setState(4);
             crowdSourcingDao.save(c);
         }
     }
