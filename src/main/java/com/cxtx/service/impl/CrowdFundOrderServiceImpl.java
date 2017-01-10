@@ -6,6 +6,7 @@ import com.cxtx.model.CreateCrowdFundOrderModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.UpdateOrderModel;
 import com.cxtx.service.CrowdFundOrderService;
+import com.cxtx.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -40,6 +41,8 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
     private AccountDao accountDao;
     @Autowired
     private CrowdFundOrderDao crowdFundOrderDao;
+    @Autowired
+    private ManagerService managerService;
 
 
     /**
@@ -61,7 +64,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         }
         if (createCrowdFundOrderModel.num > crowdFunding.getRemainderNum()){
             //TODO
-            return ServiceResult.fail(500,"众包份额不够");
+            return ServiceResult.fail(500,"众筹份额不够");
         }
         Product product = crowdFunding.getProduct();
         Account account = customer.getAccount();
@@ -100,6 +103,8 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
             }else {
                 account.setMoney(account.getMoney() - needPay);
                 accountDao.save(account);
+                Manager manager = managerService.getManager();
+                managerService.changeMoney(manager,needPay,0);
                 crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - createCrowdFundOrderModel.num);
                 crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
                 if (crowdFunding.getRemainderNum() <= 0){
@@ -177,6 +182,8 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         double needPay = crowdFundOrder.getTotalPrice() - crowdFundOrder.getHasPay();
         if (account .getMoney() >= needPay){
             account.setMoney(account.getMoney()-needPay);
+            Manager manager = managerService.getManager();
+            managerService.changeMoney(manager,needPay,0);
             accountDao.save(account);
             crowdFundOrder.setRefund_state(1);
             crowdFundOrder.setState(1);
@@ -198,6 +205,8 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
             Account account = crowdFundOrder.getTeaSaler().getAccount();
             account.setMoney(account.getMoney() + crowdFundOrder.getTotalPrice());
             accountDao.save(account);
+            Manager manager = managerService.getManager();
+            managerService.changeMoney(manager,crowdFundOrder.getTotalPrice(),1);
             crowdFundOrder.setConfirmDate(new Date());
             crowdFundOrder.setIsConfirm(1);
             crowdFundOrder.setState(2);
@@ -259,6 +268,8 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         }else {
             account.setMoney(account.getMoney() - needPay);
             accountDao.save(account);
+            Manager manager = managerService.getManager();
+            managerService.changeMoney(manager,needPay,0);
             crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - crowdFundOrder.getNum());
             crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
             crowdFundingDao.save(crowdFunding);
@@ -270,14 +281,10 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
 
     private CrowdFundOrder cancelCrowdFundOrder(CrowdFundOrder crowdFundOrder) {
         Account account = crowdFundOrder.getCustomer().getAccount();
-        if (crowdFundOrder.getRefund_state() == 1){
-            account.setMoney(account.getMoney() + crowdFundOrder.getHasPay());
-        }
-        if (crowdFundOrder.getRefund_state() == 2){
-            //double havePay = crowdFundOrder.getNum() * crowdFundOrder.getCrowdFunding().getEarnest();
-            account.setMoney(account.getMoney() + crowdFundOrder.getHasPay());
-        }
+        account.setMoney(account.getMoney() + crowdFundOrder.getHasPay());
         accountDao.save(account);
+        Manager manager = managerService.getManager();
+        managerService.changeMoney(manager,crowdFundOrder.getHasPay(),1);
         crowdFundOrder.setState(3);
         crowdFundOrder = crowdFundOrderDao.save(crowdFundOrder);
         CrowdFunding crowdFunding = crowdFundOrder.getCrowdFunding();

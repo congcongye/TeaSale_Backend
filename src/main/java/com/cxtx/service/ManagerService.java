@@ -16,4 +16,8 @@ public interface ManagerService {
     Manager addManager(CreateManagerModel createManagerModel, Account account);
 
     Manager update(CreateManagerModel createManagerModel);
+
+    Manager getManager();
+
+    void changeMoney(Manager manager, double money, int type);
 }

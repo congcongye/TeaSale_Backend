@@ -23,6 +23,11 @@ public class ManagerServiceImpl implements ManagerService {
     private AccountDao accountDao;
 
 
+    /**
+     * 获取管理员根据帐号
+     * @param account
+     * @return
+     */
     @Override
     public Manager findByAccountAndAlive(Account account) {
         return managerDao.findByAccountAndAlive(account, 1);
@@ -44,6 +49,11 @@ public class ManagerServiceImpl implements ManagerService {
         return managerDao.save(manager);
     }
 
+    /**
+     * 更新管理员
+     * @param createManagerModel
+     * @return
+     */
     @Override
     public Manager update(CreateManagerModel createManagerModel) {
         Manager manager = null;
@@ -61,5 +71,35 @@ public class ManagerServiceImpl implements ManagerService {
             manager = managerDao.save(manager);
         }
         return manager;
+    }
+
+    /**
+     * 获取管理员
+     * @return
+     */
+    @Override
+    public Manager getManager() {
+        Account account = accountDao.findByTelAndAlive("13212716306",1);
+        if (account != null && account.getAlive() == 1){
+            return findByAccountAndAlive(account);
+        }
+        return null;
+    }
+
+    /**
+     * 金额变动
+     * @param manager
+     * @param money
+     * @param type 0:加钱,扣钱
+     */
+    @Override
+    public void changeMoney(Manager manager, double money, int type) {
+        Account account = manager.getAccount();
+        if (type == 0){
+            account.setMoney(account.getMoney() + money);
+        }
+        if (type == 1){
+            account.setMoney(account.getMoney() - money);
+        }
     }
 }
