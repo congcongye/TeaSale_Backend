@@ -61,7 +61,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         }
         if (createCrowdFundOrderModel.num > crowdFunding.getRemainderNum()){
             //TODO
-            return ServiceResult.fail(500,"众包份额不够");
+            return ServiceResult.fail(500,"众筹份额不够");
         }
         Product product = crowdFunding.getProduct();
         Account account = customer.getAccount();
