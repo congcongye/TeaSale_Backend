@@ -40,6 +40,7 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
     @Autowired
     private AccountDao accountDao;
 
+
     /**
      * 众包的新增和修改
      * @param cs
@@ -112,9 +113,9 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
         for (CrowdSourcing crowdSourcing : oldCrowdSourcingList){
             Date dealDate = crowdSourcing.getDealDate();
             Date now = new Date();
-            if (now.after(dealDate)&&crowdSourcing.getState() != 1){
+            if (now.after(dealDate)&&crowdSourcing.getState()==0){
                 if (crowdSourcing.getRemainderNum() <= 0){
-                    crowdSourcing.setState(1);
+                    crowdSourcing.setState(3);
                 }else{
                     crowdSourcing.setState(2);
                 }
@@ -147,6 +148,7 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
 
     @Override
     public void addCustomerMoney(){
+        System.out.println("执行开始");
         List<CrowdSourcing> crowdSourcings =crowdSourcingDao.findByAlive(1);
         for(CrowdSourcing c:crowdSourcings){
             Customer customer=c.getCustomer();
@@ -154,8 +156,10 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
             if(c.getState()==2){ //未成功,退还消费者全部金额
                 account.setMoney(account.getMoney()+c.getTotalNum()*c.getUnitMoney());
                 accountDao.save(account);
+                System.out.println("退钱: "+c.getId()+" 众包状态: "+c.getState());
                 //扣除系统的钱
                 c.setState(5);
+                crowdSourcingDao.save(c);
             }
             List<CrowdSourcingOrder> orders=new ArrayList<CrowdSourcingOrder>();
             if(c.getState()==1){//成功,则计算金额,把多余的金额退还
@@ -168,13 +172,15 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
                         orders.add(order);
                     }
                 }
+                System.out.println("退部分钱: "+c.getId()+" 众包状态: "+c.getState());
                 double addMoney=c.getTotalNum()*c.getUnitMoney()-totalMoney;
                 account.setMoney(addMoney);
                 accountDao.save(account);
                 crowdSourcingOrderDao.save(orders);
                 c.setState(4);
+                crowdSourcingDao.save(c);
             }
-            crowdSourcingDao.save(c);
+
         }
     }
 
