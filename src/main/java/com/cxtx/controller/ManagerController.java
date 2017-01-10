@@ -1,5 +1,6 @@
 package com.cxtx.controller;
 
+import com.cxtx.dao.ManagerDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Manager;
 import com.cxtx.model.CreateManagerModel;
@@ -25,6 +26,8 @@ public class ManagerController extends ApiController{
 
     @Autowired
     private ImageService imageService;
+    @Autowired
+    private ManagerDao managerDao;
 
     /**
      *
@@ -87,4 +90,17 @@ public class ManagerController extends ApiController{
         }
         return ServiceResult.success(manager);
     }
+
+    @RequestMapping(value = "/manager/{id}", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult singularDetial(@PathVariable(value = "id") long id){
+        checkParameter(id>0,"参数错误" + id);
+        Manager manager  = managerDao.findByIdAndAlive(id,1);
+        if (manager ==null){
+            return ServiceResult.fail(500,"该管理员不存在");
+        }
+        return ServiceResult.success(manager);
+    }
+
+
 }
