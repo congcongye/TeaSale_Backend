@@ -63,6 +63,7 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
         CrowdSourcingOrder crowdSourcingOrder = new CrowdSourcingOrder();
         if(crowdSourcing.getState()==0&&crowdSourcing.getRemainderNum()>=csorder.num){
             double totalMoney = 0;
+            totalMoney = csorder.num * crowdSourcing.getUnitMoney();
             crowdSourcingOrder.setTel(csorder.tel);
             crowdSourcingOrder.setZip(csorder.zip);
             crowdSourcingOrder.setAddress(csorder.address);
@@ -74,13 +75,12 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
             crowdSourcingOrder.setState(0);
             crowdSourcingOrder.setNum(csorder.num);
             crowdSourcingOrder.setCrowdSourcing(crowdSourcing);
-            crowdSourcingOrder = crowdSourcingOrderDao.save(crowdSourcingOrder);
-            totalMoney += csorder.num * crowdSourcing.getUnitMoney();
-            crowdSourcingOrder.setRefund_state(1);
+//            crowdSourcingOrder = crowdSourcingOrderDao.save(crowdSourcingOrder);
+//            crowdSourcingOrder.setRefund_state(1);改为0
             crowdSourcing.setRemainderNum(crowdSourcing.getRemainderNum() - csorder.num);
             crowdSourcing.setJoinNum(crowdSourcing.getJoinNum() + 1);
             crowdSourcingDao.save(crowdSourcing);
-            crowdSourcingOrder.setState(2);
+//            crowdSourcingOrder.setState(2);
             crowdSourcingOrder.setTotalPrice(totalMoney);
             crowdSourcingOrder = crowdSourcingOrderDao.save(crowdSourcingOrder);
         }else{
@@ -95,7 +95,7 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
 
 
     /**
-     * 给茶农加上众包订单的钱
+     * 给茶农加上众包订单的钱,确认收货
      * @param updateOrderModel
      * @return
      */
@@ -107,6 +107,7 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
             accountDao.save(account);
             order.setConfirmDate(new Date());
             order.setIsConfirm(1);
+            order.setState(2);
             return  crowdSourcingOrderDao.save(order);
         }
         return null;
@@ -119,9 +120,10 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
      */
     public CrowdSourcingOrder sendOrder(UpdateOrderModel updateOrderModel) {
         CrowdSourcingOrder order = crowdSourcingOrderDao.findByIdAndAlive(updateOrderModel.orderId,1);
-        if (order != null && order.getAlive() == 1){
+        if (order != null && order.getState() == 0){
             order.setIsSend(1);
             order.setSendDate(new Date());
+            order.setState(1);//改成已发货
             return  crowdSourcingOrderDao.save(order);
         }
         return null;

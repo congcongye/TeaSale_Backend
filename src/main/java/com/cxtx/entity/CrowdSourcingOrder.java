@@ -56,7 +56,7 @@ public class CrowdSourcingOrder {
     private int num;//份数
 
     /**
-     * 订单状态 0 未完成, 1已付款,2已完成
+     * 订单状态 0 未完成, 1已付款,2已完成(确认收货) 3失败(取消)
      */
     @Column
     private int state = 0;

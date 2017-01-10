@@ -37,6 +37,8 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
     private ProductDao productDao;
     @Autowired
     private CrowdSourcingOrderDao crowdSourcingOrderDao;
+    @Autowired
+    private AccountDao accountDao;
 
     /**
      * 众包的新增和修改
@@ -104,6 +106,7 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
      */
     @Override
     public void checkNum() {
+        System.out.print("众包是否成功定时任务");
         List<CrowdSourcing> oldCrowdSourcingList = crowdSourcingDao.findByAlive(1);
         List<CrowdSourcing> newCrowdSourcingList = new ArrayList<CrowdSourcing>();
         for (CrowdSourcing crowdSourcing : oldCrowdSourcingList){
@@ -123,6 +126,7 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
 
     @Override
     public void checkIsFinish() {
+        System.out.print("是否全部发货定时任务");
         List<CrowdSourcing> oldcrowdSourcingList = crowdSourcingDao.findByAliveAndState(1,3);
         List<CrowdSourcing> newCrowdSourcingList = new ArrayList<CrowdSourcing>();
         for (CrowdSourcing crowdSourcing : oldcrowdSourcingList){
@@ -134,10 +138,43 @@ public class CrowdSourcingServiceImpl implements CrowdSourcingService{
                 }
             }
             if (flag) {
-                newCrowdSourcingList.add(crowdSourcing);
+                crowdSourcing.setState(1);
+                crowdSourcingDao.save(crowdSourcing);
             }
         }
-        crowdSourcingDao.save(newCrowdSourcingList);
+
+    }
+
+    @Override
+    public void addCustomerMoney(){
+        List<CrowdSourcing> crowdSourcings =crowdSourcingDao.findByAlive(1);
+        for(CrowdSourcing c:crowdSourcings){
+            Customer customer=c.getCustomer();
+            Account account=customer.getAccount();
+            if(c.getState()==2){ //未成功,退还消费者全部金额
+                account.setMoney(account.getMoney()+c.getTotalNum()*c.getUnitMoney());
+                accountDao.save(account);
+                //扣除系统的钱
+            }
+            List<CrowdSourcingOrder> orders=new ArrayList<CrowdSourcingOrder>();
+            if(c.getState()==1){//成功,则计算金额,把多余的金额退还
+                List<CrowdSourcingOrder> list =crowdSourcingOrderDao.findByCrowdSourcingAndAlive(c,1);
+                double totalMoney=0;
+                for(CrowdSourcingOrder order:list){
+                    if(order.getState()==2){
+                        totalMoney=totalMoney+order.getNum()*order.getCrowdSourcing().getUnitMoney();
+                        order.setState(4);
+                        orders.add(order);
+                    }
+                }
+                double addMoney=c.getTotalNum()*c.getUnitMoney()-totalMoney;
+                account.setMoney(addMoney);
+                accountDao.save(account);
+                crowdSourcingOrderDao.save(orders);
+            }
+            c.setState(4);
+            crowdSourcingDao.save(c);
+        }
     }
 
     @Override

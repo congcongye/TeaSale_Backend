@@ -25,4 +25,5 @@ public interface CrowdSourcingService {
 
     List<TeaSaler> findParticipants(long crowdSourcingId);
     void checkIsFinish();
+    void addCustomerMoney();
 }

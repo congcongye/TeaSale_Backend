@@ -38,6 +38,7 @@ public class ScheduledTasks {
         crowdFundingService.checkIsFinish();
         crowdSourcingService.checkNum();
         crowdSourcingService.checkIsFinish();
+        crowdSourcingService.addCustomerMoney();
     }
 
     /**
