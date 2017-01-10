@@ -226,6 +226,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         if (crowdFundOrder != null && crowdFundOrder.getAlive() == 1){
             crowdFundOrder.setIsSend(1);
             crowdFundOrder.setSendDate(new Date());
+            crowdFundOrder.setWuliu(updateOrderModel.wuliu);
             return  crowdFundOrderDao.save(crowdFundOrder);
         }
         return null;

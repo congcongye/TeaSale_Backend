@@ -100,6 +100,17 @@ public class CrowdFundOrder {
     @Column
     private double hasPay;//已付金额
 
+    public String getWuliu() {
+        return wuliu;
+    }
+
+    public void setWuliu(String wuliu) {
+        this.wuliu = wuliu;
+    }
+
+    @Column
+    private String wuliu="";
+
     public double getHasPay() {
         return hasPay;
     }

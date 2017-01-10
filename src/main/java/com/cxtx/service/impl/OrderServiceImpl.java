@@ -170,6 +170,7 @@ public class OrderServiceImpl implements OrderService {
         if (orderEn != null && orderEn.getAlive() == 1){
             orderEn.setIsSend(1);
             orderEn.setSendDate(new Date());
+            orderEn.setWuliu(updateOrderModel.wuliu);
             return  orderEnDao.save(orderEn);
         }
         return null;

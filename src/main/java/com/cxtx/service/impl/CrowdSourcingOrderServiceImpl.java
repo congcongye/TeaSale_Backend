@@ -129,6 +129,7 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
             order.setIsSend(1);
             order.setSendDate(new Date());
             order.setState(1);//改成已发货
+            order.setWuliu(updateOrderModel.wuliu);
             return  crowdSourcingOrderDao.save(order);
         }
         return null;
