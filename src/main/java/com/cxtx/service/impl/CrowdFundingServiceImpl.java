@@ -163,7 +163,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
                 if(null!=product){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.<Product>get("product"),product));
                 }
-                if(null!=teaSaler){
+                if(null!=teaSaler || teaSaler_id != -1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.<Product>get("product").get("teaSaler"),teaSaler));
                 }
                 if(null!=productType){

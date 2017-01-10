@@ -47,7 +47,7 @@ public class StatisticsController extends ApiController{
     public ServiceResult TeaSalerSearch(@RequestParam(value = "teaSaler_id",defaultValue = "-1")Long teaSaler_id, @RequestParam(value = "startDate",defaultValue ="")String start,@RequestParam(value = "endDate",defaultValue ="")String end){
         TeaSaler teaSaler =teaSalerDao.findByIdAndStateAndAlive(teaSaler_id,1,1);
         if(teaSaler==null){
-            return ServiceResult.fail(500, "TeaSaler is Illegal");
+            return ServiceResult.fail(500, "茶农审核未通过");
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
@@ -56,7 +56,7 @@ public class StatisticsController extends ApiController{
             startDate = sdf.parse(start);
             endDate = sdf.parse(end);
         } catch (ParseException e) {
-            return ServiceResult.fail(500, "time is error");
+            return ServiceResult.fail(500, "日期格式错误");
         }
         Map<Long,Object> result =statisticsService.CountByTeaSalerAndProductAndDate(teaSaler,startDate,endDate);
         return ServiceResult.success(result);
@@ -93,7 +93,7 @@ public class StatisticsController extends ApiController{
             startDate = sdf.parse(start);
             endDate = sdf.parse(end);
         } catch (ParseException e) {
-            return ServiceResult.fail(500, "time is error");
+            return ServiceResult.fail(500, "日期格式错误");
         }
         Map<String,HashMap<Long,Object>> result =statisticsService.CountByAllProductAndAddress(startDate,endDate);
         return ServiceResult.success(result);
@@ -109,7 +109,7 @@ public class StatisticsController extends ApiController{
             startDate = sdf.parse(start);
             endDate = sdf.parse(end);
         } catch (ParseException e) {
-            return ServiceResult.fail(500, "time is error");
+            return ServiceResult.fail(500, "日期格式错误");
         }
         Map<Long,StatisticsAllProductTypes> result =statisticsService.countAllProduct(startDate,endDate);
         return ServiceResult.success(result);
@@ -120,7 +120,7 @@ public class StatisticsController extends ApiController{
     public ServiceResult TeaSalerAllProductTypes(@RequestParam(value = "teaSaler_id",defaultValue = "-1")Long teaSaler_id, @RequestParam(value = "startDate",defaultValue ="")String start,@RequestParam(value = "endDate",defaultValue ="")String end){
         TeaSaler teaSaler =teaSalerDao.findByIdAndStateAndAlive(teaSaler_id,1,1);
         if(teaSaler==null){
-            return ServiceResult.fail(500, "TeaSaler is Illegal");
+            return ServiceResult.fail(500, "茶农未审核通过");
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = null;
@@ -129,7 +129,7 @@ public class StatisticsController extends ApiController{
             startDate = sdf.parse(start);
             endDate = sdf.parse(end);
         } catch (ParseException e) {
-            return ServiceResult.fail(500, "time is error");
+            return ServiceResult.fail(500, "日期格式错误");
         }
         Map<Long,Object> result =statisticsService.countTeaSalerAllProductType(teaSaler,startDate,endDate);
         return ServiceResult.success(result);
@@ -171,7 +171,7 @@ public class StatisticsController extends ApiController{
     @ResponseBody
     public ServiceResult deleteRecommendFile(){
         recommend.deleteFile();
-        return ServiceResult.success("all succeed");
+        return ServiceResult.success("删除成功");
     }
 
 }
