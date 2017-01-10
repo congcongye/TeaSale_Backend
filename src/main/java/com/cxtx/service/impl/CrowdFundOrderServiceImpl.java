@@ -49,6 +49,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
      */
     @Override
     public ServiceResult insertOrder(CreateCrowdFundOrderModel createCrowdFundOrderModel) {
+
         Long customerId = createCrowdFundOrderModel.customerId;
         Long teaSalerId = createCrowdFundOrderModel.teaSalerId;
         Long crowdFundingId = createCrowdFundOrderModel.crowdFundingId;
@@ -58,10 +59,10 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         if (customer == null || customer.getAlive() == 0 || teaSaler == null || teaSaler.getAlive() == 0 || crowdFunding == null || crowdFunding.getAlive() == 0){
             return ServiceResult.fail(500,"no customer, teasaler or crowd funding");
         }
-//        if (createCrowdFundOrderModel.num < crowdFunding.getUnitNum()){
-//            //TODO
-//            return ServiceResult.fail(500,"the num is less the unit num");
-//        }
+        if (createCrowdFundOrderModel.num > crowdFunding.getRemainderNum()){
+            //TODO
+            return ServiceResult.fail(500,"众包份额不够");
+        }
         Product product = crowdFunding.getProduct();
         Account account = customer.getAccount();
         double totalMoney = 0;
@@ -101,6 +102,13 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
                 accountDao.save(account);
                 crowdFunding.setRemainderNum(crowdFunding.getRemainderNum() - createCrowdFundOrderModel.num);
                 crowdFunding.setJoinNum(crowdFunding.getJoinNum() + 1);
+                if (crowdFunding.getRemainderNum() <= 0){
+                    if (crowdFunding.getType()==1){
+                        crowdFunding.setState(3);
+                    }else {
+                        crowdFunding.setState(4);
+                    }
+                }
                 crowdFundingDao.save(crowdFunding);
                 crowdFundOrder.setState(1);
                 crowdFundOrder.setRefund_state(needPay == totalMoney ? 1 : 2);
@@ -114,7 +122,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
         return ServiceResult.success(crowdFundOrder);
     }
 
-    /**
+    /**Z
      * 搜索众筹订单
      * @param customerId
      * @param teaSalerId
@@ -309,7 +317,7 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
                                                       final String endDateStr) {//
         final  Customer customer = customerDao.findOne(customerId);
         final TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
-        final List<TeaSaler> teaSalers = teaSalerDao.findByNameAndAlive(teaSalerName, 1);
+        //final List<TeaSaler> teaSalers = teaSalerDao.findByNameAndAlive(teaSalerName, 1);
         final CrowdFunding crowdFunding = crowdFundingDao.findByIdAndAlive(crowdFundingId, 1);
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Specification<CrowdFundOrder> specification = new Specification<CrowdFundOrder>() {
@@ -324,9 +332,6 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
                 }
                 if (teaSaler !=null && teaSaler.getAlive() ==1){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.<TeaSaler>get("teaSaler"),teaSaler));
-                }else if(teaSalers != null && teaSalers.size() >0){
-                    //predicate.getExpressions().add(root.<FileType>get("fileType").in(fileTypeList1));
-                    predicate.getExpressions().add(root.<TeaSaler>get("teaSaler").in(teaSalers));
                 }
                 if (crowdFunding != null){
                     predicate.getExpressions().add(criteriaBuilder.equal(root.<CrowdFunding>get("crowdFunding"),crowdFunding));
@@ -370,7 +375,9 @@ public class CrowdFundOrderServiceImpl implements CrowdFundOrderService {
                     }
                     predicate.getExpressions().add(criteriaBuilder.greaterThanOrEqualTo(root.<Date>get("createDate"),endDate));
                     predicate.getExpressions().add(criteriaBuilder.equal(root.get("alive"),1));
+
                 }
+                predicate.getExpressions().add(criteriaBuilder.like(root.<TeaSaler>get("teaSaler").get("name"),teaSalerName));
                 return predicate;
             }
         };

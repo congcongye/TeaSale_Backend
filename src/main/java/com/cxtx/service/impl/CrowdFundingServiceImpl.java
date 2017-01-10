@@ -341,6 +341,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
                 }
             }
             if (flag) {
+                crowdFunding.setState(1);
                 newCrowdFundingList.add(crowdFunding);
             }
         }
