@@ -49,9 +49,9 @@ public class CartController extends ApiController{
                                    @RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id){
         Product product=productDao.findByIdAndAlive(product_id,1);
         Customer customer=customerDao.findByIdAndAlive(customer_id,1);
-        checkParameter(product!=null,"product is empty");
-        checkParameter(customer!=null,"customer is empty");
-        checkParameter(num>=0,"the number of product is error");
+        checkParameter(product!=null,"产品为空");
+        checkParameter(customer!=null,"消费者不存在");
+        checkParameter(num>=0,"产品数量有误");
         Cart cart=cartService.addToCart(product,num,customer);
         return ServiceResult.success(cart);
     }
@@ -64,23 +64,23 @@ public class CartController extends ApiController{
     @RequestMapping(value = "/carts/delete", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult delete(@RequestBody List<DeleteImageModel> list){
-        checkParameter(list!=null&&!list.isEmpty(),"cart is empty");
+        checkParameter(list!=null&&!list.isEmpty(),"购物车为空");
         int succCount =0;
         succCount=cartService.delete(list);
         if(succCount!=list.size()){
-            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(list.size()-succCount));
+            return ServiceResult.fail(500, "成功的数量是: "+succCount+" ; 失败的数量是: "+(list.size()-succCount));
         }
-        return ServiceResult.success("all succeed");
+        return ServiceResult.success("全部删除成功");
     }
 
     @RequestMapping(value = "/carts/update", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult update(@RequestBody List<UpdateCartModel> list){
-        checkParameter(list!=null&&!list.isEmpty(),"cart is empty");
+        checkParameter(list!=null&&!list.isEmpty(),"购物车为空");
         List<Cart> result = new ArrayList<Cart>();
         result=cartService.update(list);
         if(result.size()!=list.size()){
-            return ServiceResult.fail(500, "the num of succeed is "+result.size()+" ; the fail number is "+(list.size()-result.size()));
+            return ServiceResult.fail(500, "成功的数量是: "+result.size()+" ; 失败的数量是: "+(list.size()-result.size()));
 
         }
         return ServiceResult.success(result);
@@ -90,7 +90,7 @@ public class CartController extends ApiController{
     @ResponseBody
     public ServiceResult searchAll( @RequestParam(value = "customer_id",defaultValue = "-1")Long customer_id){
         Customer customer =customerDao.findByIdAndAlive(customer_id,1);
-        checkParameter(customer!=null,"customer is empty");
+        checkParameter(customer!=null,"消费者不存在");
         List<SearchCartModel> result =new ArrayList<SearchCartModel>();
         result = cartService.searchAll(customer);
         return ServiceResult.success(result);

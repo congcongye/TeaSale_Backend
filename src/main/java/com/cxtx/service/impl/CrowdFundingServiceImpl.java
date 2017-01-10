@@ -248,6 +248,7 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
             Date dealDate = crowdFunding.getDealDate();
             Date now = new Date();
             if (now.after(dealDate)){
+                System.out.print("现在时间: "+now+" 截止时间:  "+dealDate);
                 if (crowdFunding.getRemainderNum() <= 0){
                     if (crowdFunding.getType()==1){
                         crowdFunding.setState(3);
