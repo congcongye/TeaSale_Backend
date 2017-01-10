@@ -90,7 +90,7 @@ public class ManagerServiceImpl implements ManagerService {
      * 金额变动
      * @param manager
      * @param money
-     * @param type 0:加钱,扣钱
+     * @param type 0:加钱,1 扣钱
      */
     @Override
     public void changeMoney(Manager manager, double money, int type) {
@@ -101,5 +101,6 @@ public class ManagerServiceImpl implements ManagerService {
         if (type == 1){
             account.setMoney(account.getMoney() - money);
         }
+        accountDao.save(account);
     }
 }
