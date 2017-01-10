@@ -9,4 +9,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  */
 public interface ManagerDao extends JpaRepository<Manager,Long>{
     Manager findByAccountAndAlive(Account account, int alive);
+    Manager findByIdAndAlive(Long id,int alive);
 }
