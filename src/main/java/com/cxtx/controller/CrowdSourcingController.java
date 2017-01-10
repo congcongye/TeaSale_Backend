@@ -148,6 +148,9 @@ public class CrowdSourcingController extends ApiController{
             return ServiceResult.fail(500, "crowdSourcing order have generated!");
         }
         cs.setAlive(0);
+        Account account =cs.getCustomer().getAccount();
+        account.setMoney(account.getMoney()+cs.getUnitMoney()*cs.getTotalNum());
+        accountDao.save(account);
         CrowdSourcing result = crowdSourcingDao.save(cs);
         return ServiceResult.success("all succeed");
     }
