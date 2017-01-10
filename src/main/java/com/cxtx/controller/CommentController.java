@@ -32,11 +32,11 @@ public class CommentController extends ApiController {
     @RequestMapping(value = "/comment/new", method = RequestMethod.POST)
     @ResponseBody
     public ServiceResult newProduct(@RequestBody CreateCommentModel createCommentModel){
-        checkParameter(createCommentModel!=null,"data is empty");
+        checkParameter(createCommentModel!=null,"数据为空");
         OrderItem orderItem =orderItemDao.findByIdAndAlive(createCommentModel.orderItem_id,1);
         Customer customer=customerDao.findByIdAndAlive(createCommentModel.customer_id,1);
-        checkParameter(orderItem!=null,"orderItem is empty");
-        checkParameter(customer!=null,"customer is empty");
+        checkParameter(orderItem!=null,"订单项为空");
+        checkParameter(customer!=null,"消费者不存在");
         if(orderItem.getIsComment()==1){
             return ServiceResult.fail(500,"product has been commented");
         }

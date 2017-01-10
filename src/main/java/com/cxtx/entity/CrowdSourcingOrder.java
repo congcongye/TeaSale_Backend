@@ -78,6 +78,17 @@ public class CrowdSourcingOrder {
     @Column
     private double score = 0;// 分数
 
+    public String getWuliu() {
+        return wuliu;
+    }
+
+    public void setWuliu(String wuliu) {
+        this.wuliu = wuliu;
+    }
+
+    @Column
+
+    private String wuliu="";
 
     public Long getId() {
         return id;

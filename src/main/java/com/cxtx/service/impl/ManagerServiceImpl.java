@@ -66,9 +66,13 @@ public class ManagerServiceImpl implements ManagerService {
                 account.setPassword(createManagerModel.getPassword());
                 accountDao.save(account);
             }
-            manager = managerDao.findByAccountAndAlive(account, 1);
-            manager.setName(createManagerModel.getName());
-            manager = managerDao.save(manager);
+            manager = managerDao.findByAccountAndAlive(account,1);
+            if(manager!=null){
+                manager.setName(createManagerModel.getName());
+                manager = managerDao.save(manager);
+            }else{
+                return null;
+            }
         }
         return manager;
     }
@@ -90,7 +94,7 @@ public class ManagerServiceImpl implements ManagerService {
      * 金额变动
      * @param manager
      * @param money
-     * @param type 0:加钱,扣钱
+     * @param type 0:加钱,1 扣钱
      */
     @Override
     public void changeMoney(Manager manager, double money, int type) {
@@ -101,5 +105,6 @@ public class ManagerServiceImpl implements ManagerService {
         if (type == 1){
             account.setMoney(account.getMoney() - money);
         }
+        accountDao.save(account);
     }
 }

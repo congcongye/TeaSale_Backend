@@ -34,15 +34,21 @@ public class TeaSalerController extends ApiController{
     @RequestMapping(value = "/teaSaler/login", method = RequestMethod.POST)
     @ResponseBody
     public ServiceResult login(@RequestBody Account account) throws Exception{
-        checkParameter(account!=null,"manager cannot be empty!");
-        checkParameter(account.getTel()!=null,"tel cannot be empty!");
+        checkParameter(account!=null,"茶农的账号不存在!");
+        checkParameter(account.getTel()!=null,"电话号码为空!");
         Account accountGet = accountService.login(account.getTel(),account.getPassword());
         if (accountGet == null){
-            return ServiceResult.fail(500, "no account record !");
+            return ServiceResult.fail(500, "该账号不存在!");
         }
         TeaSaler teaSaler = teaSalerService.findByAccountAndAlive(accountGet);
         if (teaSaler == null ) {
-            return ServiceResult.fail(500, "no manager record !");
+            return ServiceResult.fail(500, "该茶农不存在!");
+        }
+        if(teaSaler.getState()==0){
+            return ServiceResult.fail(500, "暂未审核,请等待");
+        }
+        if(teaSaler.getState()==2){
+           return ServiceResult.fail(500, "审核不通过");
         }
         return ServiceResult.success(teaSaler);
     }
@@ -59,7 +65,7 @@ public class TeaSalerController extends ApiController{
         checkParameter(createTeaSalerModel !=null,"manager cannot be empty!");
         Account account = accountService.register(createTeaSalerModel.getTel(), createTeaSalerModel.getPassword(), 1);
         if (account == null){
-            return ServiceResult.fail(500, "register failed, the tel already has account!");
+            return ServiceResult.fail(500, "电话号码已经被注册");
         }
         TeaSaler teaSaler = teaSalerService.addTeaSaler(createTeaSalerModel, account);
         return ServiceResult.success(teaSaler);

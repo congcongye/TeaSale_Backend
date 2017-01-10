@@ -5,6 +5,7 @@ import com.cxtx.entity.*;
 import com.cxtx.model.CrowdSourcingModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.service.CrowdSourcingService;
+import com.cxtx.service.ManagerService;
 import com.cxtx.service.ProductService;
 import com.cxtx.service.impl.CrowdSourcingServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,8 @@ public class CrowdSourcingController extends ApiController{
     private ProductTypeDao productTypeDao;
     @Autowired
     private ProductService productService;
-
+    @Autowired
+    private ManagerService managerService;
     /**
      * 众包的新增
      * @param product_id
@@ -76,8 +78,9 @@ public class CrowdSourcingController extends ApiController{
 
         CrowdSourcing result = crowdSourcingService.newCrowdSourcing(cd);
         customer.getAccount().setMoney(customer.getAccount().getMoney()-totalMoney);
-
         accountDao.save(customer.getAccount());//扣除相应金额
+        Manager systemManager =managerService.getManager();
+        managerService.changeMoney(systemManager,totalMoney,0);
         return ServiceResult.success(result);
     }
 
@@ -112,6 +115,8 @@ public class CrowdSourcingController extends ApiController{
         Account account=customer.getAccount();
         account.setMoney(account.getMoney()+oldTotalMoney-totalMoney);
         accountDao.save(account);
+        Manager systemManager =managerService.getManager();
+        managerService.changeMoney(systemManager,oldTotalMoney-totalMoney,0);
         CrowdSourcing result = crowdSourcingDao.save(cd);
         return ServiceResult.success(result);
     }
@@ -152,6 +157,8 @@ public class CrowdSourcingController extends ApiController{
         account.setMoney(account.getMoney()+cs.getUnitMoney()*cs.getTotalNum());
         accountDao.save(account);
         CrowdSourcing result = crowdSourcingDao.save(cs);
+        Manager systemManager =managerService.getManager();
+        managerService.changeMoney(systemManager,cs.getUnitMoney()*cs.getTotalNum(),1);
         return ServiceResult.success("all succeed");
     }
 

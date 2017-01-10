@@ -37,28 +37,28 @@ public class AccountController extends  ApiController{
     @ResponseBody
     public ServiceResult uploadHeadPic(@RequestParam("picture") MultipartFile picture,
                                        @RequestParam(value = "accountId",defaultValue = "-1")Long accountId) throws IOException {//, HttpServletRequest request
-        checkParameter(picture!=null,"pictures are empty");
+        checkParameter(picture!=null,"图片不存在");
         Account account = accountService.findAliveAccount(accountId);
-        checkParameter(account!=null,"no account");
+        checkParameter(account!=null,"该账号不存在");
         int result = imageService.uploadHeadPic(picture,account);
         if (result ==0){
-            return ServiceResult.fail(500,"head pic upload fail");
+            return ServiceResult.fail(500,"头像图片获取失败");
         }
-        return ServiceResult.success("head pic upload succeed ");
+        return ServiceResult.success("头像上传成功");
     }
 
     @RequestMapping(value = "/account/recharge", method = RequestMethod.GET)//,produces = "text/plain;charset=UTF-8"
     @ResponseBody
     public  ServiceResult recharge(@RequestParam("money") double money,
                                    @RequestParam("accountId") long accountId){
-        checkParameter(accountId > 0 ,"invalid account id");
+        checkParameter(accountId > 0 ,"账号id不正确");
         Account account = accountService.findAliveAccount(accountId);
-        checkParameter(account!=null,"no account");
+        checkParameter(account!=null,"该账号不存在");
         account = accountService.recharge(money,accountId);
         if (account == null){
-            return ServiceResult.fail(500,"recharge fail");
+            return ServiceResult.fail(500,"充值失败");
         }
-        return  ServiceResult.success("recharge success");
+        return  ServiceResult.success("充值成功");
     }
 
 

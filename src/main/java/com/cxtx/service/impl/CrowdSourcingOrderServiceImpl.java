@@ -7,6 +7,7 @@ import com.cxtx.model.UpdateOrderModel;
 import com.cxtx.model.newCrowdSourcingOrderModel;
 import com.cxtx.service.CrowdSourcingOrderService;
 import com.cxtx.service.CrowdSourcingService;
+import com.cxtx.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +40,8 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
     private CrowdSourcingOrderDao crowdSourcingOrderDao;
     @Autowired
     private AccountDao accountDao;
+    @Autowired
+    private ManagerService managerService;
 
 
     /**
@@ -108,6 +111,8 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
             order.setConfirmDate(new Date());
             order.setIsConfirm(1);
             order.setState(2);
+            Manager manager=managerService.getManager();
+            managerService.changeMoney(manager,order.getTotalPrice(),1);
             return  crowdSourcingOrderDao.save(order);
         }
         return null;
@@ -124,6 +129,7 @@ public class CrowdSourcingOrderServiceImpl implements CrowdSourcingOrderService{
             order.setIsSend(1);
             order.setSendDate(new Date());
             order.setState(1);//改成已发货
+            order.setWuliu(updateOrderModel.wuliu);
             return  crowdSourcingOrderDao.save(order);
         }
         return null;

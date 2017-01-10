@@ -149,7 +149,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderEn confirmOrder(UpdateOrderModel updateOrderModel) {
         OrderEn orderEn = orderEnDao.findOne(updateOrderModel.orderId);
-        if (orderEn != null && orderEn.getAlive() == 1 && orderEn.getState() != 1){
+        if (orderEn != null && orderEn.getAlive() == 1 && orderEn.getIsSend() == 1){
             Account account = orderEn.getTeaSaler().getAccount();
             account.setMoney(account.getMoney() + orderEn.getTotalPrice());
             accountDao.save(account);
@@ -170,6 +170,7 @@ public class OrderServiceImpl implements OrderService {
         if (orderEn != null && orderEn.getAlive() == 1){
             orderEn.setIsSend(1);
             orderEn.setSendDate(new Date());
+            orderEn.setWuliu(updateOrderModel.wuliu);
             return  orderEnDao.save(orderEn);
         }
         return null;

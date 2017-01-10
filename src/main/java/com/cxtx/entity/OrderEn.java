@@ -77,6 +77,7 @@ public class OrderEn {
     @Column
     private String comment ;//评价
 
+
     /**
      * (未支付，全支付，部分支付)(0, 1, 2)
      */
@@ -100,6 +101,9 @@ public class OrderEn {
 
     @Column
     private int  alive ;//是否删除
+
+    @Column
+    private String wuliu="";
 
     public Long getId() {
         return id;
@@ -292,4 +296,13 @@ public class OrderEn {
     public void setAlive(int alive) {
         this.alive = alive;
     }
+
+    public String getWuliu() {
+        return wuliu;
+    }
+
+    public void setWuliu(String wuliu) {
+        this.wuliu = wuliu;
+    }
+
 }

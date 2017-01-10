@@ -31,7 +31,7 @@ public class ScheduledTasks {
     @Autowired
     private Recommend recommend;
 
-    @Scheduled(fixedRate = 6000000)
+    @Scheduled(cron ="0/60 * * * * ?}")
     public void reportCurrentTime() {
         crowdFundingService.checkNum();
         crowdFundingService.checkIsFinish();
@@ -57,7 +57,7 @@ public class ScheduledTasks {
      * @throws IOException
      * @throws BiffException
      */
-    @Scheduled(cron = "00 00 04 * * ?")//00 00 00 * * ?
+    @Scheduled(cron = "00 50 14 * * ?")//00 00 00 * * ?
     public void recommendTime() throws IOException, BiffException {
         recommend.deleteFile();
     }

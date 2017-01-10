@@ -46,11 +46,11 @@ public class ProductController extends ApiController {
     @RequestMapping(value = "/product/new", method = RequestMethod.POST)
     @ResponseBody
     public ServiceResult newProduct(@RequestBody Product product, @RequestParam (value="productType_id",defaultValue = "-1")Long productType_id, @RequestParam (value="teaSeller_id",defaultValue = "-1")Long teaSeller_id){
-        checkParameter(product!=null,"product is empty");
+        checkParameter(product!=null,"产品为空");
         ProductType pt =productTypeDao.findByIdAndAlive(productType_id,1);
         TeaSaler ts =teaSalerDao.findByIdAndStateAndAlive(teaSeller_id,1,1);//存在且审核通过的茶农
-        checkParameter(pt!=null,"productType doesn't exist");
-        checkParameter(ts!=null,"teaSeller doesn,t exist");
+        checkParameter(pt!=null,"产品类型不存在");
+        checkParameter(ts!=null,"茶农不存在");
         Product result=null;
         product.setProductType(pt);
         product.setUrl(pt.url);
@@ -61,7 +61,7 @@ public class ProductController extends ApiController {
             result = productService.newProduct(product);
             return ServiceResult.success(result);
         }else{
-            return ServiceResult.fail(500,"product has exist");
+            return ServiceResult.fail(500,"该产品已经重复");
         }
     }
 
@@ -74,11 +74,11 @@ public class ProductController extends ApiController {
     @RequestMapping(value = "/products/update", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult updateProduct(@RequestBody List<CreateProductModel> productList){
-        checkParameter(productList!=null&&!productList.isEmpty(),"products are empty");
+        checkParameter(productList!=null&&!productList.isEmpty(),"产品为空");
         List<Product> list= productService.updateProduct(productList);
         int succCount=list.size();
         if(succCount!=productList.size()){
-            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(productList.size()-succCount));
+            return ServiceResult.fail(500, "成功的数量是: "+succCount+" ; 失败的数量是: "+(productList.size()-succCount));
         }
         return ServiceResult.success(list);
     }
@@ -91,12 +91,12 @@ public class ProductController extends ApiController {
     @RequestMapping(value = "/products/startSell", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult startSell(@RequestBody List<StartSellProductModel> productList){
-        checkParameter(productList!=null&&!productList.isEmpty(),"products are empty");
+        checkParameter(productList!=null&&!productList.isEmpty(),"产品为空");
         int succCount = productService.startSell(productList);
         if(succCount!=productList.size()){
-            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(productList.size()-succCount));
+            return ServiceResult.fail(500, "成功的数量是: "+succCount+" ; 失败的数量是: "+(productList.size()-succCount));
         }
-        return ServiceResult.success("all succeed");
+        return ServiceResult.success("全部上架成功");
     }
 
     /**
@@ -144,7 +144,7 @@ public class ProductController extends ApiController {
         if (products != null && products.size() != 0){
             return ServiceResult.success(products);
         }
-        return ServiceResult.fail(500,"fail");
+        return ServiceResult.fail(500,"网络错误");
     }
 
     /**
@@ -172,7 +172,7 @@ public class ProductController extends ApiController {
     @ResponseBody
     public ServiceResult findByTeaSalerAndState(@RequestParam(value = "teaSaler_id",defaultValue = "-1")Long teaSaler_id,@RequestParam(value = "state",defaultValue = "-1")int state){
         TeaSaler teaSaler =teaSalerDao.findByIdAndStateAndAlive(teaSaler_id,1,1);
-        checkParameter(teaSaler!=null,"teaSaler is empty");
+        checkParameter(teaSaler!=null,"茶农不存在");
         List<Product> list =new ArrayList<Product>();
         if(state>-1){
             list =productDao.findByTeaSalerAndStateAndAliveAndType(teaSaler,state,1,0);
@@ -191,7 +191,7 @@ public class ProductController extends ApiController {
     @RequestMapping(value = "/products/delete", method = RequestMethod.PUT)
     @ResponseBody
     public ServiceResult deleteProduct(@RequestBody List<DeleteImageModel> list){
-        checkParameter(list!=null,"products are empty");
+        checkParameter(list!=null,"产品为空");
         int succCount=0;
         for(DeleteImageModel model:list){
             Product product =productDao.findByIdAndAlive(model.id,1);
@@ -202,9 +202,9 @@ public class ProductController extends ApiController {
             }
         }
         if(succCount!=list.size()){
-            return ServiceResult.fail(500, "the num of succeed is "+succCount+" ; the fail number is "+(list.size()-succCount));
+            return ServiceResult.fail(500, "成功的数量是: "+succCount+" ; 失败的数量是: "+(list.size()-succCount));
         }
-        return ServiceResult.success("all succeed");
+        return ServiceResult.success("全部删除成功");
     }
 
     /**
@@ -218,7 +218,7 @@ public class ProductController extends ApiController {
         checkParameter(id > 0,"invalid id");
         CommentModel commentModel = productService.getComment(id);
         if (commentModel == null){
-            return ServiceResult.fail(500, "fail to find comment");
+            return ServiceResult.fail(500, "该评价不存在");
         }
         return ServiceResult.success(commentModel);
     }
