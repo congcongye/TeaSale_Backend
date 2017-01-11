@@ -36,7 +36,8 @@ public class TeaSalerController extends ApiController{
     public ServiceResult login(@RequestBody Account account) throws Exception{
         checkParameter(account!=null,"茶农的账号不存在!");
         checkParameter(account.getTel()!=null,"电话号码为空!");
-        Account accountGet = accountService.login(account.getTel(),account.getPassword());
+        String newPassword=accountService.MD5Encode(account.getPassword());
+        Account accountGet = accountService.login(account.getTel(),newPassword);
         if (accountGet == null){
             return ServiceResult.fail(500, "该账号不存在!");
         }

@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.security.MessageDigest;
+
+import static com.cxtx.utils.MD5Util.byteArrayToHexString;
 
 /**
  * Created by jinchuyang on 16/11/12.
@@ -60,7 +63,5 @@ public class AccountController extends  ApiController{
         }
         return  ServiceResult.success("充值成功");
     }
-
-
 
 }

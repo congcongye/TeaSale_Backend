@@ -5,6 +5,11 @@ import com.cxtx.entity.Account;
 import com.cxtx.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.MessageDigest;
+
+import static com.cxtx.utils.MD5Util.byteArrayToHexString;
 
 /**
  * Created by jinchuyang on 16/10/26.
@@ -14,6 +19,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountDao accountDao;
+    @Autowired
+    private AccountService accountService;
 
     @Override
     public Account register(String tel, String password, int label) {
@@ -22,7 +29,8 @@ public class AccountServiceImpl implements AccountService {
             if (account == null || account.getId() == 0){
                 account = new Account();
                 account.setTel(tel);
-                account.setPassword(password);
+                String newPassword =accountService.MD5Encode(password);
+                account.setPassword(newPassword);
                 account.setAlive(1);
                 account.setLabel(label);
                 return accountDao.save(account);
@@ -57,5 +65,19 @@ public class AccountServiceImpl implements AccountService {
             return accountDao.save(account);
         }
         return null;
+    }
+
+    @Override
+    public  String MD5Encode(String origin) {
+        String resultString = null;
+        try {
+            resultString = new String(origin);
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            resultString = byteArrayToHexString(md.digest(resultString.getBytes()));
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return resultString;
     }
 }

@@ -7,6 +7,7 @@ import com.cxtx.entity.Customer;
 import com.cxtx.model.CreateCustomerModel;
 import com.cxtx.model.ServiceResult;
 import com.cxtx.model.UpdatePasswordModel;
+import com.cxtx.service.AccountService;
 import com.cxtx.service.CustomerService;
 import com.cxtx.utils.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,8 @@ public class CustomerServiceImpl implements CustomerService {
     private CustomerDao customerDao;
     @Autowired
     private AccountDao accountDao;
+    @Autowired
+    private AccountService accountService;
 
 
     @Override
@@ -84,7 +87,8 @@ public class CustomerServiceImpl implements CustomerService {
         Account account = accountDao.findByTelAndAlive(createCustomerModel.getTel(),1);
         if (account != null){
             if (createCustomerModel.getPassword() != null){
-                account.setPassword(createCustomerModel.getPassword());
+                String newpassword=accountService.MD5Encode(createCustomerModel.getPassword());
+                account.setPassword(newpassword);
                 accountDao.save(account);
             }
             Customer customer = customerDao.findByAccountAndAlive(account,1);
@@ -114,7 +118,8 @@ public class CustomerServiceImpl implements CustomerService {
         }
         String verificationCode = Constant.vCodes.get(tel);
         if (verificationCode != null && verificationCode.equals(vCode)){
-            account.setPassword(password);
+            String newPassword =accountService.MD5Encode(password);
+            account.setPassword(newPassword);
             accountDao.save(account);
             return ServiceResult.success("修改成功");
         }else {

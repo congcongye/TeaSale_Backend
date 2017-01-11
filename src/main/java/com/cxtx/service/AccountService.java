@@ -14,4 +14,5 @@ public interface AccountService {
     Account findAliveAccount(long accountId);
 
     Account recharge(double money, long accountId);
+    String MD5Encode(String origin);
 }

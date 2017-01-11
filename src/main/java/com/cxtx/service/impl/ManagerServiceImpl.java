@@ -5,6 +5,7 @@ import com.cxtx.dao.ManagerDao;
 import com.cxtx.entity.Account;
 import com.cxtx.entity.Manager;
 import com.cxtx.model.CreateManagerModel;
+import com.cxtx.service.AccountService;
 import com.cxtx.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,8 @@ public class ManagerServiceImpl implements ManagerService {
     private ManagerDao managerDao;
     @Autowired
     private AccountDao accountDao;
-
+    @Autowired
+    private AccountService accountService;
 
     /**
      * 获取管理员根据帐号
@@ -63,7 +65,8 @@ public class ManagerServiceImpl implements ManagerService {
         Account account = accountDao.findByTelAndAlive(createManagerModel.getTel(),1);
         if (account!= null){
             if (createManagerModel.getPassword() != null && !"".equals(createManagerModel.getPassword())){
-                account.setPassword(createManagerModel.getPassword());
+                String newPassword =accountService.MD5Encode(createManagerModel.getPassword());
+                account.setPassword(newPassword);
                 accountDao.save(account);
             }
             manager = managerDao.findByAccountAndAlive(account,1);

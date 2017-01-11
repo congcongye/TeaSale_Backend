@@ -38,7 +38,8 @@ public class CustomerController extends ApiController{
     public ServiceResult login(@RequestBody Account account) throws Exception{
         checkParameter(account!=null,"manager cannot be empty!");
         checkParameter(account.getTel()!=null,"tel cannot be empty!");
-        Account accountGet = accountService.login(account.getTel(),account.getPassword());
+        String newPassword =accountService.MD5Encode(account.getPassword());
+        Account accountGet = accountService.login(account.getTel(),newPassword);
         if (accountGet == null){
             return ServiceResult.fail(500, "no account record !");
         }
