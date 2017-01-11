@@ -415,7 +415,8 @@ public class Recommend {
 //                    user.name=customer.getNickname();
                     map1.put("id", entry.getKey());
                     map1.put("name",customer.getNickname());
-                    map1.put("sim",entry.getValue());
+                    java.text.DecimalFormat   df   =new   java.text.DecimalFormat("#.0000");
+                    map1.put("sim", df.format(entry.getValue()));
                     myList.add(map1);
                 }
                 temp.put(c.getId(),myList);
