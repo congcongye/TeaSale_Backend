@@ -5,6 +5,7 @@ import com.cxtx.dao.OrderItemDao;
 import com.cxtx.dao.ProductTypeDao;
 import com.cxtx.entity.*;
 import com.cxtx.model.ProductNumModel;
+import com.cxtx.model.UserNameAndId;
 import org.apache.commons.io.IOUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -405,10 +406,16 @@ public class Recommend {
             Map<Long,Object> temp =new HashMap<Long,Object>();
             for(Customer c:customers){
                 List<Map.Entry<Long,Double>> list =this.getMaxSimilarity(c);
-                List<HashMap<Long,Double>> myList=new ArrayList<HashMap<Long,Double>>();
+                List<HashMap<String,Object>> myList=new ArrayList<HashMap<String,Object>>();
                 for(Map.Entry<Long,Double> entry:list){
-                    HashMap<Long,Double> map1=new HashMap<Long,Double>();
-                    map1.put(entry.getKey(),entry.getValue());
+                    HashMap<String,Object> map1=new HashMap<String,Object>();
+//                    UserNameAndId user=new UserNameAndId();
+                    Customer customer=customerDao.findByIdAndAlive(entry.getKey(),1);
+//                    user.id=entry.getKey();
+//                    user.name=customer.getNickname();
+                    map1.put("id", entry.getKey());
+                    map1.put("name",customer.getNickname());
+                    map1.put("sim",entry.getValue());
                     myList.add(map1);
                 }
                 temp.put(c.getId(),myList);
