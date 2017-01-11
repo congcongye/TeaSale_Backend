@@ -21,9 +21,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by ycc on 16/11/12.
@@ -56,17 +54,24 @@ public class OrderServiceImpl implements OrderService {
      * @return
      */
     @Override
-    public List<OrderEn> insertOrders(List<CreateOrderModel> createOrderModels) {
+    public Map<String,Object> insertOrders(List<CreateOrderModel> createOrderModels) {
         List<OrderEn> orderEns = new ArrayList<OrderEn>();
+        Map<String,Object> result =new HashMap<String,Object>();
+        int index=1;
+        String msg="";
         for ( CreateOrderModel createOrderModel : createOrderModels){
             long customerId = createOrderModel.customerId;
             long teaSalerId = createOrderModel.teaSalerId;
             Customer customer = customerDao.findOne(customerId);
             TeaSaler teaSaler = teaSalerDao.findOne(teaSalerId);
-            if (customer == null || customer.getAlive() == 0 || teaSaler == null || teaSaler.getAlive() == 0){//无效判断
+            if (customer == null || customer.getAlive() == 0){//无效判断
+                msg=msg+"第"+index+"个订单的消费者不存在;\n";
                 continue;
             }
-
+            if( teaSaler == null || teaSaler.getAlive() == 0||teaSaler.getState()!=1){
+                msg=msg+"第"+index+"个订单的茶农不存在或审核未通过;\n";
+                continue;
+            }
             OrderEn orderEn = new OrderEn();
             orderEn.setTel(createOrderModel.tel);
             orderEn.setZip(createOrderModel.zip);
@@ -84,16 +89,19 @@ public class OrderServiceImpl implements OrderService {
             List<Product> products =  new ArrayList<Product>();//用于存储此订单内包含的产品,因为一个订单内产品是会合并的,所以不用担心重复
             double totalMoney = 0;//此订单总价
             double logistic = -1;//此订单包含的最高的运费
+            int productIndex=1;
             for (CreateOrderItemModel createOrderItemModel : createOrderItemModels){
                 long productId = createOrderItemModel.productId;
                 // long orderEnId = createOrderItemModel.orderEnId;
                 Product product = productDao.findOne(productId);
                 if (product == null || product.getAlive() == 0){
+                    msg=msg+"第"+index+"个订单的第"+productIndex+"个商品不存在;\n";
                     break;
                 }
                 OrderItem orderItem = new OrderItem();
                 orderItem.setAlive(1);
                 if (product.getStock() < createOrderItemModel.num){
+                    msg=msg+"第"+index+"个订单的第"+productIndex+"个商品的库存不足;\n";
                     break;
                 }
                 product.setStock(product.getStock()-createOrderItemModel.num);
@@ -111,6 +119,7 @@ public class OrderServiceImpl implements OrderService {
                 orderItem.setTotalPrice(createOrderItemModel.num * product.getPrice() * product.getDiscount());
                 totalMoney += createOrderItemModel.num * product.getPrice() * product.getDiscount();
                 orderItems.add(orderItem);
+                productIndex++;
             }
             if (orderItems.size()==createOrderItemModels.size() && customer.getAccount().getMoney() >((totalMoney + logistic))){
                 orderItemDao.save(orderItems);
@@ -130,15 +139,26 @@ public class OrderServiceImpl implements OrderService {
                         cartDao.save(cart);
                     }
                 }
-            }else{
-                orderItemDao.save(orderItems);
-                orderEn.setTotalPrice(totalMoney + logistic);
-                orderEn.setState(0);
-                orderEn = orderEnDao.save(orderEn);
+                orderEns.add(orderEn);
             }
-            orderEns.add(orderEn);
+//            else{
+//                orderItemDao.save(orderItems);
+//                orderEn.setTotalPrice(totalMoney + logistic);
+//                orderEn.setState(0);
+//                orderEn = orderEnDao.save(orderEn);
+//            }
+            index++;
         }
-        return orderEns;
+        if(createOrderModels.size()==orderEns.size()){
+            result.put("num",orderEns.size());
+            result.put("msg","全部创建成功");
+            result.put("content",orderEns);
+        }else{
+            result.put("num",orderEns.size());
+            result.put("msg",msg);
+            result.put("content",orderEns);
+        }
+        return result;
     }
 
     /**

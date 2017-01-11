@@ -7,6 +7,7 @@ import com.cxtx.model.UpdateOrderModel;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jinchuyang on 16/11/15.
@@ -19,7 +20,7 @@ public interface OrderService {
                          String tel, String beginDateStr, String endDateStr,
                          int pageIndex, int pageSize, String sortField, String sortOrder);
 
-    List<OrderEn> insertOrders(List<CreateOrderModel> createOrderModels);
+    Map<String,Object> insertOrders(List<CreateOrderModel> createOrderModels);
 
     OrderEn confirmOrder(UpdateOrderModel updateOrderModel);
 
