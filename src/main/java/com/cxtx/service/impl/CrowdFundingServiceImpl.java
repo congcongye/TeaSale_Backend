@@ -331,19 +331,25 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
 
     @Override
     public void checkIsFinish() {
-        List<CrowdFunding> oldcrowdFundingList = crowdFundingDao.findByStateAndAlive(0,1);
+        List<CrowdFunding> oldcrowdFundingList = new ArrayList<CrowdFunding>();
+        List<CrowdFunding> list3 = crowdFundingDao.findByStateAndAlive(3,1);
+        List<CrowdFunding> list4 = crowdFundingDao.findByStateAndAlive(4,1);
+        oldcrowdFundingList.addAll(list3);
+        oldcrowdFundingList.addAll(list4);
         List<CrowdFunding> newCrowdFundingList = new ArrayList<CrowdFunding>();
         for (CrowdFunding crowdFunding : oldcrowdFundingList){
             List<CrowdFundOrder> crowdFundOrders = crowdFundOrderDao.findByCrowdFundingAndAlive(crowdFunding,1);
-            boolean flag = true;
-            for (CrowdFundOrder crowdFundOrder : crowdFundOrders){
-                if (crowdFundOrder.getState() != 2){
-                    flag = false;
+            if (crowdFundOrders.size() != 0) {
+                boolean flag = true;
+                for (CrowdFundOrder crowdFundOrder : crowdFundOrders) {
+                    if (crowdFundOrder.getState() != 2) {
+                        flag = false;
+                    }
                 }
-            }
-            if (flag) {
-                crowdFunding.setState(1);
-                newCrowdFundingList.add(crowdFunding);
+                if (flag) {
+                    crowdFunding.setState(1);
+                    newCrowdFundingList.add(crowdFunding);
+                }
             }
         }
         crowdFundingDao.save(newCrowdFundingList);
