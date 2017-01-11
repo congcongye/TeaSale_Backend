@@ -225,7 +225,7 @@ public class ProductController extends ApiController {
 
     @RequestMapping(value = "/products/price/predicte", method = RequestMethod.GET)
     @ResponseBody
-    public ServiceResult getPrediction () throws IOException, BiffException {
+    public ServiceResult getPrediction() throws IOException, BiffException {
 
         //String json = com.alibaba.fastjson.JSON.toJSONString(list,true);
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
@@ -254,6 +254,48 @@ public class ProductController extends ApiController {
         List<List<TeaModel>> datas = parse(result);
         return ServiceResult.success(datas);
 
+    }
+
+    @RequestMapping(value = "/products/price/lastpredicte", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult getLastPrediction () throws IOException, BiffException {
+
+        //String json = com.alibaba.fastjson.JSON.toJSONString(list,true);
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("predicateFile");
+        File file=new File(folderPath);
+        if (!file.exists()){
+            new PredicateUtils().doPredicate();
+        }
+        StringBuffer sb = new StringBuffer();
+        BufferedReader reader = new BufferedReader(new FileReader(file));
+        String tempString = null;
+
+        // 一次读入一行，直到读入null为文件结束
+        while ((tempString = reader.readLine()) != null) {
+            sb.append(tempString);
+        }
+        reader.close();
+        String json = sb.toString();
+        List<TeaModel> result  = com.alibaba.fastjson.JSON.parseArray(json, TeaModel.class);
+        List<List<TeaModel>> datas = parse(result);
+        List<TeaModel> lastPredicate = getLastPre(datas);
+        return ServiceResult.success(lastPredicate);
+
+    }
+
+    private List<TeaModel> getLastPre(List<List<TeaModel>> datas) {
+        List<TeaModel> lastPredicate = new ArrayList<TeaModel>();
+        for (List<TeaModel> models : datas){
+            lastPredicate.add(models.get(models.size() -1));
+        }
+        return lastPredicate;
     }
 
 
