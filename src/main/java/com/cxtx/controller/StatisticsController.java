@@ -173,6 +173,12 @@ public class StatisticsController extends ApiController{
         recommend.deleteFile();
         return ServiceResult.success("删除成功");
     }
+    @RequestMapping(value = "/statistics/delete2", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ServiceResult deleteFile(){
+        recommend.deleteCountSimFile();
+        return ServiceResult.success("删除成功");
+    }
 
     @RequestMapping(value = "/statistics/countSim", method = RequestMethod.GET)
     @ResponseBody
@@ -188,7 +194,7 @@ public class StatisticsController extends ApiController{
         }else{
             return ServiceResult.fail(500,"网络错误");
         }
-
-
     }
+
+
 }
