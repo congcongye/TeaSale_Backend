@@ -230,8 +230,6 @@ public class Recommend {
     }
 
 
-
-
     public void deleteFile(){
         changeCustomerToVector();
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
@@ -242,6 +240,22 @@ public class Recommend {
             e1.printStackTrace();
         }
         String folderPath = p.getProperty("recommendFile");
+        File file=new File(folderPath);
+        if(file.exists()){
+            file.delete();
+        }
+    }
+
+    public void deleteCountSimFile(){
+        changeCustomerToVector();
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("simCustomerFile");
         File file=new File(folderPath);
         if(file.exists()){
             file.delete();
@@ -352,4 +366,61 @@ public class Recommend {
         return map;
     }
 
+    /**
+     * 将用户相似度进行计算,放到文件中
+     * @return
+     * @throws IOException
+     */
+    public Map<String,Object> countSim() throws IOException {
+        changeCustomerToVector();
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("cxtx.properties");
+        Properties p = new Properties();
+        try {
+            p.load(inputStream);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        String folderPath = p.getProperty("simCustomerFile");
+        File file=new File(folderPath);
+        if(!file.exists()){
+            file.createNewFile();
+        }
+        FileInputStream fileInputStream=new FileInputStream(file);
+        Map<String,Object> map =new HashMap<String,Object>();
+        com.alibaba.fastjson.JSONObject jsonObject = null;
+        try {
+            if(fileInputStream!=null){
+                jsonObject = com.alibaba.fastjson.JSON.parseObject(IOUtils.toString(fileInputStream, "UTF-8"));
+            }
+        } catch (IOException e) {
+            map.put("msg","JSON 格式不正确");
+            map.put("content","");
+            return map;
+        }
+        Object content=null;
+        Object object=jsonObject;
+        if(jsonObject==null){
+            FileWriter fileWriter=new FileWriter(file,true);
+            BufferedWriter bufferedWriter=new BufferedWriter(fileWriter);
+            Map<Long,Object> temp =new HashMap<Long,Object>();
+            for(Customer c:customers){
+                List<Map.Entry<Long,Double>> list =this.getMaxSimilarity(c);
+                List<HashMap<Long,Double>> myList=new ArrayList<HashMap<Long,Double>>();
+                for(Map.Entry<Long,Double> entry:list){
+                    HashMap<Long,Double> map1=new HashMap<Long,Double>();
+                    map1.put(entry.getKey(),entry.getValue());
+                    myList.add(map1);
+                }
+                temp.put(c.getId(),myList);
+            }
+            JSONObject jobject=new JSONObject(temp);
+            object=jobject;
+            bufferedWriter.write(jobject.toString());
+            bufferedWriter.flush();
+
+        }
+        map.put("msg","获取成功");
+        map.put("content",object);
+        return map;
+    }
 }

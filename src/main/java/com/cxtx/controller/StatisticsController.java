@@ -174,4 +174,21 @@ public class StatisticsController extends ApiController{
         return ServiceResult.success("删除成功");
     }
 
+    @RequestMapping(value = "/statistics/countSim", method = RequestMethod.GET)
+    @ResponseBody
+    public ServiceResult countSim(){
+        Map<String,Object> result=null;
+        try {
+            result =recommend.countSim();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(result!=null){
+           return  ServiceResult.success(result);
+        }else{
+            return ServiceResult.fail(500,"网络错误");
+        }
+
+
+    }
 }
