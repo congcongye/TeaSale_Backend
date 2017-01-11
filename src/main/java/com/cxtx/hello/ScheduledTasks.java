@@ -57,8 +57,10 @@ public class ScheduledTasks {
      * @throws IOException
      * @throws BiffException
      */
-    @Scheduled(cron = "00 50 14 * * ?")//00 00 00 * * ?
+    @Scheduled(cron = "00 00 04 * * ?")//00 00 00 * * ?
     public void recommendTime() throws IOException, BiffException {
         recommend.deleteFile();
+        recommend.deleteCountSimFile();
+
     }
 }

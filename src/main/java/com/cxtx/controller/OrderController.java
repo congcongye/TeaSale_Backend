@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by jinchuyang on 16/11/15.
@@ -48,12 +49,16 @@ public class OrderController extends ApiController{
     @RequestMapping(value = "/orders/add", method = RequestMethod.POST)
     @ResponseBody
     public ServiceResult insertOrders(@RequestBody List<CreateOrderModel> createOrderModels){
-        checkParameter(createOrderModels != null && createOrderModels.size()!=0, "order can't be empty");
-        List<OrderEn> orderEns = orderService.insertOrders(createOrderModels);
-        if (orderEns == null || orderEns.size() != createOrderModels.size()) {
-            return ServiceResult.fail(500, "形成订单失败,成功"+orderEns.size() +"个,失败"+(createOrderModels.size()-orderEns.size())+"个");
+        checkParameter(createOrderModels != null && createOrderModels.size()!=0, "订单数据未传入");
+        Map<String,Object> result = orderService.insertOrders(createOrderModels);
+//        if (orderEns == null || orderEns.size() != createOrderModels.size()) {
+//            return ServiceResult.fail(500, "形成订单失败,成功"+orderEns.size() +"个,失败"+(createOrderModels.size()-orderEns.size())+"个");
+//        }
+        if((int)result.get("num")!=createOrderModels.size()){
+            return ServiceResult.fail(500,result);
+        }else{
+            return ServiceResult.success(result);
         }
-        return ServiceResult.success(orderEns);
     }
 
 //    /**
