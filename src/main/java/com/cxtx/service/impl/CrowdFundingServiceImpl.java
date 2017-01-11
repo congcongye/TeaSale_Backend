@@ -352,7 +352,9 @@ public class CrowdFundingServiceImpl implements CrowdFundingService, SmartLifecy
                 }
             }
         }
-        crowdFundingDao.save(newCrowdFundingList);
+        if(newCrowdFundingList.size()!=0){
+            crowdFundingDao.save(newCrowdFundingList);
+        }
     }
 
     @Override
